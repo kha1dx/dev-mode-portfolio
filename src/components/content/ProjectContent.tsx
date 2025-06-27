@@ -77,7 +77,7 @@ export const ProjectContent = ({ projectId }: ProjectContentProps) => {
             </div>
             
             <div className="mb-4">
-              <span className="text-[#569cd6]">const</span> <span className="text-[#dcdcaa]">ProjectInfo</span> = <span className="text-[#cccccc]">() => {"{"}</span>
+              <span className="text-[#569cd6]">const</span> <span className="text-[#dcdcaa]">ProjectInfo</span> = <span className="text-[#cccccc]">() =&gt; {"{"}</span>
             </div>
             
             <div className="ml-4 space-y-2">

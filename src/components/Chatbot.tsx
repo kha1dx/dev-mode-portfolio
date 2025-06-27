@@ -24,7 +24,6 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showCursor, setShowCursor] = useState(true);
-  const [apiKey, setApiKey] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -36,8 +35,10 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
   }, [messages]);
 
   const generateResponse = async (userMessage: string): Promise<string> => {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    
     if (!apiKey) {
-      return "Please enter your Gemini API key in the input field at the bottom to start chatting!";
+      return "API key not configured. Please check your environment variables.";
     }
 
     try {
@@ -206,25 +207,6 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
 
       {/* Terminal Input Area */}
       <div className="border-t border-[#3e3e42] bg-[#1e1e1e] p-4">
-        {!apiKey && (
-          <div className="mb-3 p-3 bg-[#252526] border border-[#3e3e42] rounded-lg">
-            <div className="flex items-center space-x-2 mb-2">
-              <Terminal className="w-4 h-4 text-[#4ec9b0]" />
-              <span className="text-[#4ec9b0] text-sm font-mono">API Configuration Required</span>
-            </div>
-            <input
-              type="password"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              placeholder="Enter your Gemini API key..."
-              className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded px-3 py-2 text-[#cccccc] placeholder-[#6a9955] focus:border-[#4ec9b0] focus:outline-none text-sm font-mono"
-            />
-            <p className="text-xs text-[#6a9955] mt-1 font-mono">
-              Get your free API key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-[#4ec9b0] hover:underline">Google AI Studio</a>
-            </p>
-          </div>
-        )}
-        
         {/* Terminal-style input */}
         <div className="bg-[#0c0c0c] border border-[#3e3e42] rounded-lg p-3 font-mono">
           <div className="flex items-center space-x-2 mb-2">

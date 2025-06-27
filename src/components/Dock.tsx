@@ -44,7 +44,7 @@ export const Dock = ({ onNavigate }: DockProps) => {
   return (
     <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 pb-4">
       <div className="bg-white/20 backdrop-blur-xl border border-white/30 rounded-2xl px-3 py-2 shadow-2xl">
-        <div className="flex items-end space-x-1">
+        <div className="flex items-end space-x-3">
           {dockItems.map((item) => {
             const IconComponent = item.icon;
             return (

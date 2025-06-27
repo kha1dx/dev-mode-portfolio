@@ -165,3 +165,4 @@ export const ProjectContent = ({ projectId }: ProjectContentProps) => {
 
   return renderAsCode();
 };
+export default ProjectContent;

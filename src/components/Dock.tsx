@@ -1,6 +1,3 @@
-
-import { Mail, User, MessageCircle, Home, FolderOpen, Code2 } from 'lucide-react';
-
 interface DockProps {
   onNavigate: (action: string) => void;
 }
@@ -9,35 +6,29 @@ export const Dock = ({ onNavigate }: DockProps) => {
   const dockItems = [
     {
       id: 'contact',
-      icon: Mail,
+      image: '/mail.png',
       label: 'Contact',
-      action: 'contact',
-      bgColor: 'bg-blue-500',
-      iconColor: 'text-white'
+      action: 'contact'
+      
     },
     {
       id: 'home',
-      icon: Home,
+      image: '/home.png',
       label: 'Portfolio',
-      action: 'home',
-      bgColor: 'bg-green-500',
-      iconColor: 'text-white'
+      action: 'home'
+      
     },
     {
       id: 'projects',
-      icon: FolderOpen,
+      image: '/projects.png',
       label: 'Projects',
-      action: 'projects',
-      bgColor: 'bg-purple-500',
-      iconColor: 'text-white'
+      action: 'projects'
     },
     {
       id: 'chat',
-      icon: MessageCircle,
+      image: '/chatbot.png',
       label: 'Assistant',
-      action: 'chat',
-      bgColor: 'bg-orange-500',
-      iconColor: 'text-white'
+      action: 'chat'
     }
   ];
 
@@ -46,15 +37,18 @@ export const Dock = ({ onNavigate }: DockProps) => {
       <div className="bg-white/20 backdrop-blur-xl border border-white/30 rounded-2xl px-3 py-2 shadow-2xl">
         <div className="flex items-end space-x-3">
           {dockItems.map((item) => {
-            const IconComponent = item.icon;
             return (
               <button
                 key={item.id}
                 onClick={() => onNavigate(item.action)}
-                className={`group relative p-3 rounded-xl ${item.bgColor} transition-all duration-300 ease-out hover:scale-125 hover:-translate-y-3 active:scale-110 shadow-lg hover:shadow-xl`}
+                className={`group relative p-0 rounded-xl transition-all duration-300 ease-out hover:scale-125 hover:-translate-y-3 active:scale-110 shadow-lg hover:shadow-xl`}
                 title={item.label}
               >
-                <IconComponent className={`w-6 h-6 ${item.iconColor} transition-all duration-300`} />
+                <img 
+                  src={item.image} 
+                  alt={item.label}
+                  className="w-10 h-10 transition-all object-cover duration-300 "
+                />
                 
                 {/* Tooltip */}
                 <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
@@ -71,3 +65,5 @@ export const Dock = ({ onNavigate }: DockProps) => {
     </div>
   );
 };
+      
+

@@ -206,9 +206,9 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
       </div>
 
       {/* Terminal Input Area */}
-      <div className="border-t border-[#3e3e42] bg-[#1e1e1e] p-4">
+      <div className="border-t border-[#3e3e42] pb-20 bg-[#1e1e1e] p-4 ">
         {/* Terminal-style input */}
-        <div className="bg-[#0c0c0c] border border-[#3e3e42] rounded-lg p-3 font-mono">
+        <div className="bg-[#0c0c0c] border border-[#3e3e42] pb-10 rounded-lg p-3 font-mono">
           <div className="flex items-center space-x-2 mb-2">
             <span className="text-[#4ec9b0]">john@portfolio</span>
             <span className="text-[#cccccc]">:</span>

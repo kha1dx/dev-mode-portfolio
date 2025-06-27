@@ -6,6 +6,8 @@ import { TabBar } from "@/components/TabBar";
 import { Dock } from "@/components/Dock";
 import { Chatbot } from "@/components/Chatbot";
 import { Terminal } from "@/components/Terminal";
+import { ActivityBar } from "@/components/ActivityBar";
+import { SidePanel } from "@/components/SidePanel";
 
 export interface FileItem {
   id: string;
@@ -118,6 +120,7 @@ const Index = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
   const [showChatbot, setShowChatbot] = useState<boolean>(false);
   const [showTerminal, setShowTerminal] = useState<boolean>(true);
+  const [activePanel, setActivePanel] = useState<string>("explorer");
 
   const MAX_VISIBLE_TABS = 4;
 
@@ -182,6 +185,18 @@ const Index = () => {
     }
   };
 
+  const handleActivityChange = (panel: string) => {
+    if (panel === "chat") {
+      setShowChatbot(!showChatbot);
+    } else if (panel === "terminal") {
+      setShowTerminal(!showTerminal);
+    } else {
+      setActivePanel(panel);
+      setSidebarCollapsed(false);
+      setShowChatbot(false);
+    }
+  };
+
   const handleSearchResult = (content: string, fileId: string) => {
     handleFileSelect(fileId);
     setShowChatbot(false);
@@ -203,32 +218,25 @@ const Index = () => {
 
       {/* Main Content Container */}
       <div className="flex flex-1 overflow-hidden relative">
+        {/* Activity Bar */}
+        <ActivityBar
+          activePanel={activePanel}
+          onPanelChange={handleActivityChange}
+        />
+
         {/* Main Content */}
         <div className="flex flex-1 overflow-hidden">
-          {/* Sidebar */}
-          <div
-            className={`${
-              sidebarCollapsed ? "w-12" : "w-64"
-            } bg-[#252526] border-r border-[#2d2d30] flex flex-col transition-all duration-300`}
-          >
-            <div className="h-8 bg-[#2d2d30] flex items-center px-3 text-xs font-medium text-[#cccccc] border-b border-[#3e3e42]">
-              <button
-                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="mr-2 hover:bg-[#3e3e42] p-1 rounded"
-              >
-                {sidebarCollapsed ? "›" : "‹"}
-              </button>
-              {!sidebarCollapsed && "EXPLORER"}
-            </div>
-            <FileExplorer
-              files={portfolioFiles}
-              onFileSelect={handleFileSelect}
-              activeFile={activeFile}
-              expandedFolders={expandedFolders}
-              onToggleFolder={toggleFolder}
-              collapsed={sidebarCollapsed}
-            />
-          </div>
+          {/* Side Panel */}
+          <SidePanel
+            activePanel={activePanel}
+            portfolioFiles={portfolioFiles}
+            onFileSelect={handleFileSelect}
+            activeFile={activeFile}
+            expandedFolders={expandedFolders}
+            onToggleFolder={toggleFolder}
+            collapsed={sidebarCollapsed}
+            onSearchResult={handleSearchResult}
+          />
 
           {/* Editor Area */}
           <div className="flex-1 flex flex-col">
@@ -257,7 +265,7 @@ const Index = () => {
 
         {/* Terminal Overlay - positioned over the entire main content */}
         {!showChatbot && showTerminal && (
-          <div className="absolute bottom-0 left-0 right-0 z-10">
+          <div className="absolute bottom-0 left-12 right-0 z-10">
             <Terminal
               isVisible={showTerminal}
               onClose={() => setShowTerminal(false)}

@@ -1,63 +1,134 @@
 
+const skills = {
+  frontend: {
+    name: 'Frontend Development',
+    icon: '🎨',
+    skills: [
+      { name: 'React', level: 95 },
+      { name: 'TypeScript', level: 90 },
+      { name: 'Next.js', level: 85 },
+      { name: 'Tailwind CSS', level: 90 }
+    ]
+  },
+  backend: {
+    name: 'Backend Development',
+    icon: '⚙️',
+    skills: [
+      { name: 'Node.js', level: 90 },
+      { name: 'Python', level: 85 },
+      { name: 'PostgreSQL', level: 80 },
+      { name: 'MongoDB', level: 75 }
+    ]
+  },
+  devops: {
+    name: 'DevOps & Cloud',
+    icon: '☁️',
+    skills: [
+      { name: 'AWS', level: 80 },
+      { name: 'Docker', level: 85 },
+      { name: 'Kubernetes', level: 70 },
+      { name: 'CI/CD', level: 80 }
+    ]
+  }
+};
+
 export const SkillsContent = () => {
   return (
-    <div className="p-6 font-mono text-sm leading-relaxed">
-      <div className="text-[#cccccc]">
-        <div className="text-[#ce9178]">{"{"}</div>
-        <div className="ml-4">
-          <div className="mb-4">
-            <span className="text-[#92c5f7]">"frontend"</span>: {"{"}
-            <div className="ml-4 mt-2">
-              <div><span className="text-[#92c5f7]">"languages"</span>: [<span className="text-[#ce9178]">"JavaScript"</span>, <span className="text-[#ce9178]">"TypeScript"</span>, <span className="text-[#ce9178]">"HTML5"</span>, <span className="text-[#ce9178]">"CSS3"</span>],</div>
-              <div><span className="text-[#92c5f7]">"frameworks"</span>: [<span className="text-[#ce9178]">"React"</span>, <span className="text-[#ce9178]">"Vue.js"</span>, <span className="text-[#ce9178]">"Angular"</span>, <span className="text-[#ce9178]">"Next.js"</span>],</div>
-              <div><span className="text-[#92c5f7]">"styling"</span>: [<span className="text-[#ce9178]">"Tailwind CSS"</span>, <span className="text-[#ce9178]">"Styled Components"</span>, <span className="text-[#ce9178]">"SASS"</span>],</div>
-              <div><span className="text-[#92c5f7]">"tools"</span>: [<span className="text-[#ce9178]">"Webpack"</span>, <span className="text-[#ce9178]">"Vite"</span>, <span className="text-[#ce9178]">"ESLint"</span>, <span className="text-[#ce9178]">"Prettier"</span>]</div>
-            </div>
-            <div className="mt-2">{"}"}{","}</div>
-          </div>
+    <div className="min-h-full bg-gradient-to-br from-[#1e1e1e] via-[#252526] to-[#1e1e1e] p-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12 animate-fade-in">
+          <h1 className="text-4xl font-bold text-white mb-4">
+            My <span className="text-[#569cd6]">Skills</span>
+          </h1>
+          <p className="text-[#cccccc] text-lg">
+            Technologies and tools I use to bring ideas to life
+          </p>
+        </div>
 
-          <div className="mb-4">
-            <span className="text-[#92c5f7]">"backend"</span>: {"{"}
-            <div className="ml-4 mt-2">
-              <div><span className="text-[#92c5f7]">"languages"</span>: [<span className="text-[#ce9178]">"Node.js"</span>, <span className="text-[#ce9178]">"Python"</span>, <span className="text-[#ce9178]">"Java"</span>, <span className="text-[#ce9178]">"Go"</span>],</div>
-              <div><span className="text-[#92c5f7]">"frameworks"</span>: [<span className="text-[#ce9178]">"Express.js"</span>, <span className="text-[#ce9178]">"FastAPI"</span>, <span className="text-[#ce9178]">"Django"</span>, <span className="text-[#ce9178]">"Spring Boot"</span>],</div>
-              <div><span className="text-[#92c5f7]">"databases"</span>: [<span className="text-[#ce9178]">"PostgreSQL"</span>, <span className="text-[#ce9178]">"MongoDB"</span>, <span className="text-[#ce9178]">"Redis"</span>, <span className="text-[#ce9178]">"MySQL"</span>],</div>
-              <div><span className="text-[#92c5f7]">"apis"</span>: [<span className="text-[#ce9178]">"REST"</span>, <span className="text-[#ce9178]">"GraphQL"</span>, <span className="text-[#ce9178]">"WebSockets"</span>]</div>
+        {/* Skills Categories */}
+        <div className="space-y-8">
+          {Object.entries(skills).map(([key, category], index) => (
+            <div
+              key={key}
+              className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 hover:border-[#569cd6] transition-all duration-300 animate-fade-in"
+              style={{ animationDelay: `${index * 200}ms` }}
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <span className="text-2xl">{category.icon}</span>
+                <h2 className="text-xl font-semibold text-white">{category.name}</h2>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-4">
+                {category.skills.map((skill, skillIndex) => (
+                  <div
+                    key={skill.name}
+                    className="animate-fade-in"
+                    style={{ animationDelay: `${(index * 200) + (skillIndex * 100)}ms` }}
+                  >
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-[#cccccc] font-medium">{skill.name}</span>
+                      <span className="text-[#569cd6] text-sm">{skill.level}%</span>
+                    </div>
+                    <div className="w-full bg-[#1e1e1e] rounded-full h-2">
+                      <div
+                        className="bg-gradient-to-r from-[#569cd6] to-[#4ec9b0] h-2 rounded-full transition-all duration-1000 ease-out"
+                        style={{ 
+                          width: `${skill.level}%`,
+                          animationDelay: `${(index * 200) + (skillIndex * 100) + 500}ms`
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="mt-2">{"}"}{","}</div>
-          </div>
+          ))}
+        </div>
 
-          <div className="mb-4">
-            <span className="text-[#92c5f7]">"devops"</span>: {"{"}
-            <div className="ml-4 mt-2">
-              <div><span className="text-[#92c5f7]">"cloud"</span>: [<span className="text-[#ce9178]">"AWS"</span>, <span className="text-[#ce9178]">"Google Cloud"</span>, <span className="text-[#ce9178]">"Azure"</span>],</div>
-              <div><span className="text-[#92c5f7]">"containers"</span>: [<span className="text-[#ce9178]">"Docker"</span>, <span className="text-[#ce9178]">"Kubernetes"</span>],</div>
-              <div><span className="text-[#92c5f7]">"cicd"</span>: [<span className="text-[#ce9178]">"GitHub Actions"</span>, <span className="text-[#ce9178]">"Jenkins"</span>, <span className="text-[#ce9178]">"GitLab CI"</span>],</div>
-              <div><span className="text-[#92c5f7]">"monitoring"</span>: [<span className="text-[#ce9178]">"Grafana"</span>, <span className="text-[#ce9178]">"Prometheus"</span>, <span className="text-[#ce9178]">"ELK Stack"</span>]</div>
-            </div>
-            <div className="mt-2">{"}"}{","}</div>
-          </div>
-
-          <div className="mb-4">
-            <span className="text-[#92c5f7]">"tools"</span>: {"{"}
-            <div className="ml-4 mt-2">
-              <div><span className="text-[#92c5f7]">"versionControl"</span>: [<span className="text-[#ce9178]">"Git"</span>, <span className="text-[#ce9178]">"GitHub"</span>, <span className="text-[#ce9178]">"GitLab"</span>],</div>
-              <div><span className="text-[#92c5f7]">"editors"</span>: [<span className="text-[#ce9178]">"VS Code"</span>, <span className="text-[#ce9178]">"WebStorm"</span>, <span className="text-[#ce9178]">"Vim"</span>],</div>
-              <div><span className="text-[#92c5f7]">"design"</span>: [<span className="text-[#ce9178]">"Figma"</span>, <span className="text-[#ce9178]">"Adobe XD"</span>, <span className="text-[#ce9178]">"Sketch"</span>],</div>
-              <div><span className="text-[#92c5f7]">"testing"</span>: [<span className="text-[#ce9178]">"Jest"</span>, <span className="text-[#ce9178]">"Cypress"</span>, <span className="text-[#ce9178]">"Playwright"</span>]</div>
-            </div>
-            <div className="mt-2">{"}"}</div>
+        {/* Additional Skills */}
+        <div className="mt-12 bg-[#252526] border border-[#3e3e42] rounded-lg p-6">
+          <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+            <span>🛠️</span> Additional Tools & Technologies
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            {[
+              'Git', 'GitHub', 'VS Code', 'Figma', 'Jest', 'Cypress',
+              'Redis', 'GraphQL', 'REST APIs', 'Microservices', 'Linux', 'Nginx'
+            ].map((tool, index) => (
+              <div
+                key={tool}
+                className="bg-[#1e1e1e] border border-[#3e3e42] rounded-lg p-3 text-center text-[#cccccc] hover:border-[#569cd6] hover:text-[#569cd6] transition-all duration-300 hover:scale-105 animate-fade-in"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                {tool}
+              </div>
+            ))}
           </div>
         </div>
-        <div className="text-[#ce9178]">{"}"}</div>
-      </div>
 
-      <div className="mt-6 text-[#6a9955]">
-        <div>// Proficiency levels:</div>
-        <div>// ⭐⭐⭐⭐⭐ Expert</div>
-        <div>// ⭐⭐⭐⭐   Advanced</div>
-        <div>// ⭐⭐⭐     Intermediate</div>
-        <div>// ⭐⭐       Beginner</div>
+        {/* Certifications */}
+        <div className="mt-8 bg-[#252526] border border-[#3e3e42] rounded-lg p-6">
+          <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+            <span>🏆</span> Certifications
+          </h3>
+          <div className="space-y-3">
+            {[
+              'AWS Certified Solutions Architect',
+              'Google Cloud Professional Developer',
+              'Certified Kubernetes Administrator (CKA)'
+            ].map((cert, index) => (
+              <div
+                key={cert}
+                className="flex items-center gap-3 text-[#cccccc] animate-fade-in"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="w-2 h-2 bg-[#4ec9b0] rounded-full"></div>
+                {cert}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

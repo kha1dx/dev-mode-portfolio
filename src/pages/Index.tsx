@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { FileExplorer } from '@/components/FileExplorer';
 import { CodeEditor } from '@/components/CodeEditor';
@@ -16,6 +15,30 @@ export interface FileItem {
 }
 
 const portfolioFiles: FileItem[] = [
+  {
+    id: 'main',
+    name: 'main',
+    type: 'folder',
+    icon: '📁',
+    children: [
+      {
+        id: 'about-main',
+        name: 'about.tsx',
+        type: 'file',
+        icon: '👋',
+        language: 'typescript',
+        content: 'about-main'
+      },
+      {
+        id: 'projects-main',
+        name: 'projects.tsx',
+        type: 'file',
+        icon: '🚀',
+        language: 'typescript',
+        content: 'projects-main'
+      }
+    ]
+  },
   {
     id: 'about',
     name: 'about.md',
@@ -83,9 +106,9 @@ const portfolioFiles: FileItem[] = [
 ];
 
 const Index = () => {
-  const [activeFile, setActiveFile] = useState<string>('about');
-  const [openTabs, setOpenTabs] = useState<string[]>(['about']);
-  const [expandedFolders, setExpandedFolders] = useState<string[]>(['projects']);
+  const [activeFile, setActiveFile] = useState<string>('about-main');
+  const [openTabs, setOpenTabs] = useState<string[]>(['about-main']);
+  const [expandedFolders, setExpandedFolders] = useState<string[]>(['main', 'projects']);
 
   const handleFileSelect = (fileId: string) => {
     setActiveFile(fileId);

@@ -1,68 +1,175 @@
 
+import { useState } from 'react';
+import { Mail, Github, Linkedin, MapPin, Phone, Send, Copy, CheckCircle } from 'lucide-react';
+
 export const ContactContent = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const [copied, setCopied] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real app, you'd send this to your backend
+    console.log('Form submitted:', formData);
+    alert('Thanks for your message! I\'ll get back to you soon.');
+    setFormData({ name: '', email: '', subject: '', message: '' });
+  };
+
+  const copyToClipboard = (text: string, type: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(type);
+    setTimeout(() => setCopied(''), 2000);
+  };
+
   return (
-    <div className="p-6 font-mono text-sm leading-relaxed">
-      <div className="text-[#6a9955]">&lt;!-- Contact Information --&gt;</div>
-      <div className="mt-4 text-[#cccccc]">
-        <div>&lt;!<span className="text-[#569cd6]">DOCTYPE</span> <span className="text-[#92c5f7]">html</span>&gt;</div>
-        <div>&lt;<span className="text-[#569cd6]">html</span> <span className="text-[#92c5f7]">lang</span>=<span className="text-[#ce9178]">"en"</span>&gt;</div>
-        <div>&lt;<span className="text-[#569cd6]">head</span>&gt;</div>
-        <div className="ml-4">
-          <div>&lt;<span className="text-[#569cd6]">meta</span> <span className="text-[#92c5f7]">charset</span>=<span className="text-[#ce9178]">"UTF-8"</span>&gt;</div>
-          <div>&lt;<span className="text-[#569cd6]">title</span>&gt;Contact John Doe&lt;/<span className="text-[#569cd6]">title</span>&gt;</div>
+    <div className="min-h-full bg-gradient-to-br from-[#1e1e1e] via-[#252526] to-[#1e1e1e] p-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12 animate-fade-in">
+          <h1 className="text-4xl font-bold text-white mb-4">
+            Get In <span className="text-[#569cd6]">Touch</span>
+          </h1>
+          <p className="text-[#cccccc] text-lg">
+            Let's discuss your next project or just say hello!
+          </p>
         </div>
-        <div>&lt;/<span className="text-[#569cd6]">head</span>&gt;</div>
-        
-        <div>&lt;<span className="text-[#569cd6]">body</span>&gt;</div>
-        <div className="ml-4 space-y-4">
-          <div>&lt;<span className="text-[#569cd6]">div</span> <span className="text-[#92c5f7]">class</span>=<span className="text-[#ce9178]">"contact-container"</span>&gt;</div>
-          
-          <div className="ml-4 space-y-3">
-            <div>&lt;<span className="text-[#569cd6]">h1</span>&gt;Let's Get In Touch!&lt;/<span className="text-[#569cd6]">h1</span>&gt;</div>
-            
-            <div>&lt;<span className="text-[#569cd6]">div</span> <span className="text-[#92c5f7]">class</span>=<span className="text-[#ce9178]">"contact-info"</span>&gt;</div>
-            <div className="ml-4 space-y-2">
-              <div>&lt;<span className="text-[#569cd6]">p</span>&gt;📧 <span className="text-[#92c5f7]">Email</span>: &lt;<span className="text-[#569cd6]">a</span> <span className="text-[#92c5f7]">href</span>=<span className="text-[#ce9178]">"mailto:john.doe@example.com"</span>&gt;john.doe@example.com&lt;/<span className="text-[#569cd6]">a</span>&gt;&lt;/<span className="text-[#569cd6]">p</span>&gt;</div>
-              <div>&lt;<span className="text-[#569cd6]">p</span>&gt;💼 <span className="text-[#92c5f7]">LinkedIn</span>: &lt;<span className="text-[#569cd6]">a</span> <span className="text-[#92c5f7]">href</span>=<span className="text-[#ce9178]">"https://linkedin.com/in/johndoe"</span>&gt;linkedin.com/in/johndoe&lt;/<span className="text-[#569cd6]">a</span>&gt;&lt;/<span className="text-[#569cd6]">p</span>&gt;</div>
-              <div>&lt;<span className="text-[#569cd6]">p</span>&gt;🐙 <span className="text-[#92c5f7]">GitHub</span>: &lt;<span className="text-[#569cd6]">a</span> <span className="text-[#92c5f7]">href</span>=<span className="text-[#ce9178]">"https://github.com/johndoe"</span>&gt;github.com/johndoe&lt;/<span className="text-[#569cd6]">a</span>&gt;&lt;/<span className="text-[#569cd6]">p</span>&gt;</div>
-              <div>&lt;<span className="text-[#569cd6]">p</span>&gt;🐦 <span className="text-[#92c5f7]">Twitter</span>: &lt;<span className="text-[#569cd6]">a</span> <span className="text-[#92c5f7]">href</span>=<span className="text-[#ce9178]">"https://twitter.com/johndoe"</span>&gt;@johndoe&lt;/<span className="text-[#569cd6]">a</span>&gt;&lt;/<span className="text-[#569cd6]">p</span>&gt;</div>
-              <div>&lt;<span className="text-[#569cd6]">p</span>&gt;📱 <span className="text-[#92c5f7]">Phone</span>: &lt;<span className="text-[#569cd6]">a</span> <span className="text-[#92c5f7]">href</span>=<span className="text-[#ce9178]">"tel:+1234567890"</span>&gt;+1 (234) 567-8900&lt;/<span className="text-[#569cd6]">a</span>&gt;&lt;/<span className="text-[#569cd6]">p</span>&gt;</div>
-              <div>&lt;<span className="text-[#569cd6]">p</span>&gt;📍 <span className="text-[#92c5f7]">Location</span>: San Francisco, CA&lt;/<span className="text-[#569cd6]">p</span>&gt;</div>
-            </div>
-            <div>&lt;/<span className="text-[#569cd6]">div</span>&gt;</div>
-            
-            <div>&lt;<span className="text-[#569cd6]">div</span> <span className="text-[#92c5f7]">class</span>=<span className="text-[#ce9178]">"contact-form"</span>&gt;</div>
-            <div className="ml-4 space-y-2">
-              <div>&lt;<span className="text-[#569cd6]">h2</span>&gt;Send me a message&lt;/<span className="text-[#569cd6]">h2</span>&gt;</div>
-              <div>&lt;<span className="text-[#569cd6]">form</span> <span className="text-[#92c5f7]">action</span>=<span className="text-[#ce9178]">"#"</span> <span className="text-[#92c5f7]">method</span>=<span className="text-[#ce9178]">"POST"</span>&gt;</div>
-              <div className="ml-4 space-y-2">
-                <div>&lt;<span className="text-[#569cd6]">input</span> <span className="text-[#92c5f7]">type</span>=<span className="text-[#ce9178]">"text"</span> <span className="text-[#92c5f7]">name</span>=<span className="text-[#ce9178]">"name"</span> <span className="text-[#92c5f7]">placeholder</span>=<span className="text-[#ce9178]">"Your Name"</span> <span className="text-[#92c5f7]">required</span>&gt;</div>
-                <div>&lt;<span className="text-[#569cd6]">input</span> <span className="text-[#92c5f7]">type</span>=<span className="text-[#ce9178]">"email"</span> <span className="text-[#92c5f7]">name</span>=<span className="text-[#ce9178]">"email"</span> <span className="text-[#92c5f7]">placeholder</span>=<span className="text-[#ce9178]">"your.email@example.com"</span> <span className="text-[#92c5f7]">required</span>&gt;</div>
-                <div>&lt;<span className="text-[#569cd6]">input</span> <span className="text-[#92c5f7]">type</span>=<span className="text-[#ce9178]">"text"</span> <span className="text-[#92c5f7]">name</span>=<span className="text-[#ce9178]">"subject"</span> <span className="text-[#92c5f7]">placeholder</span>=<span className="text-[#ce9178]">"Subject"</span> <span className="text-[#92c5f7]">required</span>&gt;</div>
-                <div>&lt;<span className="text-[#569cd6]">textarea</span> <span className="text-[#92c5f7]">name</span>=<span className="text-[#ce9178]">"message"</span> <span className="text-[#92c5f7]">rows</span>=<span className="text-[#ce9178]">"5"</span> <span className="text-[#92c5f7]">placeholder</span>=<span className="text-[#ce9178]">"Your message here..."</span> <span className="text-[#92c5f7]">required</span>&gt;&lt;/<span className="text-[#569cd6]">textarea</span>&gt;</div>
-                <div>&lt;<span className="text-[#569cd6]">button</span> <span className="text-[#92c5f7]">type</span>=<span className="text-[#ce9178]">"submit"</span>&gt;Send Message&lt;/<span className="text-[#569cd6]">button</span>&gt;</div>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Contact Info */}
+          <div className="space-y-6">
+            <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
+              <h3 className="text-xl font-semibold text-white mb-4">Contact Information</h3>
+              
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 group cursor-pointer" onClick={() => copyToClipboard('john.doe@example.com', 'email')}>
+                  <Mail className="text-[#569cd6] w-5 h-5" />
+                  <span className="text-[#cccccc] group-hover:text-[#569cd6] transition-colors">john.doe@example.com</span>
+                  {copied === 'email' ? <CheckCircle className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-[#6a9955] opacity-0 group-hover:opacity-100 transition-opacity" />}
+                </div>
+                
+                <div className="flex items-center gap-3 group cursor-pointer" onClick={() => copyToClipboard('+1 (234) 567-8900', 'phone')}>
+                  <Phone className="text-[#569cd6] w-5 h-5" />
+                  <span className="text-[#cccccc] group-hover:text-[#569cd6] transition-colors">+1 (234) 567-8900</span>
+                  {copied === 'phone' ? <CheckCircle className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-[#6a9955] opacity-0 group-hover:opacity-100 transition-opacity" />}
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <MapPin className="text-[#569cd6] w-5 h-5" />
+                  <span className="text-[#cccccc]">San Francisco, CA</span>
+                </div>
               </div>
-              <div>&lt;/<span className="text-[#569cd6]">form</span>&gt;</div>
             </div>
-            <div>&lt;/<span className="text-[#569cd6]">div</span>&gt;</div>
-            
-            <div>&lt;<span className="text-[#569cd6]">div</span> <span className="text-[#92c5f7]">class</span>=<span className="text-[#ce9178]">"availability"</span>&gt;</div>
-            <div className="ml-4">
-              <div>&lt;<span className="text-[#569cd6]">p</span>&gt;🟢 <span className="text-[#92c5f7]">Status</span>: Available for new opportunities&lt;/<span className="text-[#569cd6]">p</span>&gt;</div>
-              <div>&lt;<span className="text-[#569cd6]">p</span>&gt;⏰ <span className="text-[#92c5f7]">Response Time</span>: Usually within 24 hours&lt;/<span className="text-[#569cd6]">p</span>&gt;</div>
-              <div>&lt;<span className="text-[#569cd6]">p</span>&gt;🤝 <span className="text-[#92c5f7]">Open to</span>: Full-time, Contract, and Consulting work&lt;/<span className="text-[#569cd6]">p</span>&gt;</div>
+
+            {/* Social Links */}
+            <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 hover:border-[#569cd6] transition-all duration-300 animate-fade-in" style={{ animationDelay: '100ms' }}>
+              <h3 className="text-xl font-semibold text-white mb-4">Connect With Me</h3>
+              
+              <div className="flex gap-4">
+                <a
+                  href="https://github.com/johndoe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-[#1e1e1e] border border-[#3e3e42] rounded-lg p-3 hover:border-[#569cd6] hover:text-[#569cd6] text-[#cccccc] transition-all duration-300 hover:scale-105"
+                >
+                  <Github className="w-5 h-5" />
+                  GitHub
+                </a>
+                
+                <a
+                  href="https://linkedin.com/in/johndoe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-[#1e1e1e] border border-[#3e3e42] rounded-lg p-3 hover:border-[#569cd6] hover:text-[#569cd6] text-[#cccccc] transition-all duration-300 hover:scale-105"
+                >
+                  <Linkedin className="w-5 h-5" />
+                  LinkedIn
+                </a>
+              </div>
             </div>
-            <div>&lt;/<span className="text-[#569cd6]">div</span>&gt;</div>
+
+            {/* Availability */}
+            <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 hover:border-[#569cd6] transition-all duration-300 animate-fade-in" style={{ animationDelay: '200ms' }}>
+              <h3 className="text-xl font-semibold text-white mb-4">Availability</h3>
+              
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-[#cccccc]">Available for new opportunities</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span className="text-[#cccccc]">Response within 24 hours</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  <span className="text-[#cccccc]">Open to remote work</span>
+                </div>
+              </div>
+            </div>
           </div>
-          
-          <div>&lt;/<span className="text-[#569cd6]">div</span>&gt;</div>
-        </div>
-        <div>&lt;/<span className="text-[#569cd6]">body</span>&gt;</div>
-        <div>&lt;/<span className="text-[#569cd6]">html</span>&gt;</div>
-        
-        <div className="mt-6 text-[#6a9955]">
-          <div>&lt;!-- Feel free to reach out! I'm always interested in --&gt;</div>
-          <div>&lt;!-- discussing new opportunities and collaborations --&gt;</div>
+
+          {/* Contact Form */}
+          <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 hover:border-[#569cd6] transition-all duration-300 animate-fade-in" style={{ animationDelay: '300ms' }}>
+            <h3 className="text-xl font-semibold text-white mb-4">Send Message</h3>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded-lg p-3 text-[#cccccc] placeholder-[#6a9955] focus:border-[#569cd6] focus:outline-none transition-colors"
+                  required
+                />
+              </div>
+              
+              <div>
+                <input
+                  type="email"
+                  placeholder="your.email@example.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded-lg p-3 text-[#cccccc] placeholder-[#6a9955] focus:border-[#569cd6] focus:outline-none transition-colors"
+                  required
+                />
+              </div>
+              
+              <div>
+                <input
+                  type="text"
+                  placeholder="Subject"
+                  value={formData.subject}
+                  onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                  className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded-lg p-3 text-[#cccccc] placeholder-[#6a9955] focus:border-[#569cd6] focus:outline-none transition-colors"
+                  required
+                />
+              </div>
+              
+              <div>
+                <textarea
+                  placeholder="Your message here..."
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  rows={5}
+                  className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded-lg p-3 text-[#cccccc] placeholder-[#6a9955] focus:border-[#569cd6] focus:outline-none transition-colors resize-none"
+                  required
+                />
+              </div>
+              
+              <button
+                type="submit"
+                className="w-full bg-[#007acc] hover:bg-[#005a9e] text-white p-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 hover:scale-105"
+              >
+                <Send className="w-4 h-4" />
+                Send Message
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

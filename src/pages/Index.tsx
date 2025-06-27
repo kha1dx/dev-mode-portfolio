@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { FileExplorer } from '@/components/FileExplorer';
 import { CodeEditor } from '@/components/CodeEditor';
@@ -119,6 +118,7 @@ const Index = () => {
 
   const handleFileSelect = (fileId: string) => {
     setActiveFile(fileId);
+    setShowChatbot(false); // Close chatbot when selecting a file
     
     // Handle tab management - limit to 4 most recent
     const newTabs = [...openTabs];
@@ -165,6 +165,9 @@ const Index = () => {
       case 'home':
         handleFileSelect('about-main');
         break;
+      case 'projects':
+        handleFileSelect('projects-main');
+        break;
       case 'chat':
         setShowChatbot(!showChatbot);
         break;
@@ -172,7 +175,7 @@ const Index = () => {
   };
 
   return (
-    <div className="h-screen bg-[#1e1e1e] text-[#cccccc] flex flex-col overflow-hidden">
+    <div className="h-screen bg-[#1e1e1e] text-[#cccccc] flex flex-col overflow-hidden pb-20">
       {/* Title Bar */}
       <div className="h-8 bg-[#323233] flex items-center px-2 text-xs border-b border-[#2d2d30]">
         <div className="flex items-center space-x-1">
@@ -211,7 +214,10 @@ const Index = () => {
           <TabBar
             tabs={openTabs}
             activeTab={activeFile}
-            onTabSelect={setActiveFile}
+            onTabSelect={(fileId) => {
+              setActiveFile(fileId);
+              setShowChatbot(false);
+            }}
             onTabClose={handleTabClose}
             portfolioFiles={portfolioFiles}
           />

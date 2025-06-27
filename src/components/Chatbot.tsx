@@ -1,6 +1,5 @@
-
 import { useState, useRef, useEffect } from 'react';
-import { Send, X, Bot, User } from 'lucide-react';
+import { Send, X, Bot, User, Terminal } from 'lucide-react';
 
 interface ChatMessage {
   id: string;
@@ -24,6 +23,7 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [showCursor, setShowCursor] = useState(true);
   const [apiKey, setApiKey] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -131,24 +131,31 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
     }
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 500);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="flex-1 bg-[#1e1e1e] flex flex-col">
       {/* Chat Header */}
       <div className="h-12 bg-[#2d2d30] border-b border-[#3e3e42] flex items-center justify-between px-4">
         <div className="flex items-center space-x-2">
-          <Bot className="w-5 h-5 text-[#569cd6]" />
-          <span className="text-[#cccccc] font-medium">Portfolio Assistant</span>
+          <Terminal className="w-5 h-5 text-[#4ec9b0]" />
+          <span className="text-[#cccccc] font-medium">Portfolio Assistant Terminal</span>
         </div>
         <button
           onClick={onClose}
-          className="text-[#cccccc] hover:text-[#ffffff] hover:bg-[#3e3e42] p-1 rounded"
+          className="text-[#cccccc] hover:text-[#ffffff] hover:bg-[#3e3e42] p-1 rounded transition-colors"
         >
           <X className="w-4 h-4" />
         </button>
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 chat-scroll">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -158,7 +165,7 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
           >
             <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
               message.sender === 'user' 
-                ? 'bg-[#569cd6]' 
+                ? 'bg-[#007acc]' 
                 : 'bg-[#4ec9b0]'
             }`}>
               {message.sender === 'user' ? (
@@ -169,7 +176,7 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
             </div>
             <div className={`max-w-[70%] rounded-lg px-4 py-2 ${
               message.sender === 'user'
-                ? 'bg-[#569cd6] text-white'
+                ? 'bg-[#007acc] text-white'
                 : 'bg-[#252526] border border-[#3e3e42] text-[#cccccc]'
             }`}>
               <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -187,9 +194,9 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
             </div>
             <div className="bg-[#252526] border border-[#3e3e42] rounded-lg px-4 py-2">
               <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-[#cccccc] rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-[#cccccc] rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-[#cccccc] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <div className="w-2 h-2 bg-[#4ec9b0] rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-[#4ec9b0] rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 bg-[#4ec9b0] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               </div>
             </div>
           </div>
@@ -197,40 +204,57 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
-      <div className="border-t border-[#3e3e42] bg-[#252526] p-4">
+      {/* Terminal Input Area */}
+      <div className="border-t border-[#3e3e42] bg-[#1e1e1e] p-4">
         {!apiKey && (
-          <div className="mb-3">
+          <div className="mb-3 p-3 bg-[#252526] border border-[#3e3e42] rounded-lg">
+            <div className="flex items-center space-x-2 mb-2">
+              <Terminal className="w-4 h-4 text-[#4ec9b0]" />
+              <span className="text-[#4ec9b0] text-sm font-mono">API Configuration Required</span>
+            </div>
             <input
               type="password"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
               placeholder="Enter your Gemini API key..."
-              className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded-lg px-3 py-2 text-[#cccccc] placeholder-[#6a9955] focus:border-[#569cd6] focus:outline-none text-sm"
+              className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded px-3 py-2 text-[#cccccc] placeholder-[#6a9955] focus:border-[#4ec9b0] focus:outline-none text-sm font-mono"
             />
-            <p className="text-xs text-[#6a9955] mt-1">
-              Get your free API key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-[#569cd6] hover:underline">Google AI Studio</a>
+            <p className="text-xs text-[#6a9955] mt-1 font-mono">
+              Get your free API key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-[#4ec9b0] hover:underline">Google AI Studio</a>
             </p>
           </div>
         )}
         
-        <div className="flex space-x-2">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Ask me about John's portfolio..."
-            className="flex-1 bg-[#1e1e1e] border border-[#3e3e42] rounded-lg px-4 py-2 text-[#cccccc] placeholder-[#6a9955] focus:border-[#569cd6] focus:outline-none"
-            disabled={isTyping}
-          />
-          <button
-            onClick={handleSendMessage}
-            disabled={!inputValue.trim() || isTyping}
-            className="bg-[#569cd6] hover:bg-[#4a90e2] disabled:bg-[#3e3e42] disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-2"
-          >
-            <Send className="w-4 h-4" />
-          </button>
+        {/* Terminal-style input */}
+        <div className="bg-[#0c0c0c] border border-[#3e3e42] rounded-lg p-3 font-mono">
+          <div className="flex items-center space-x-2 mb-2">
+            <span className="text-[#4ec9b0]">john@portfolio</span>
+            <span className="text-[#cccccc]">:</span>
+            <span className="text-[#569cd6]">~/assistant</span>
+            <span className="text-[#cccccc]">$</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Type your message..."
+              className="flex-1 bg-transparent border-none text-[#cccccc] placeholder-[#6a9955] focus:outline-none font-mono"
+              disabled={isTyping}
+            />
+            {showCursor && (
+              <span className="text-[#4ec9b0] animate-pulse">|</span>
+            )}
+            <button
+              onClick={handleSendMessage}
+              disabled={!inputValue.trim() || isTyping}
+              className="bg-[#4ec9b0] hover:bg-[#3a9b87] disabled:bg-[#3e3e42] disabled:cursor-not-allowed text-[#1e1e1e] px-3 py-1 rounded transition-colors duration-200 flex items-center space-x-1 text-sm font-mono"
+            >
+              <Send className="w-3 h-3" />
+              <span>Send</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

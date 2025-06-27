@@ -1,8 +1,11 @@
+
 import { useState } from 'react';
 import { FileExplorer } from '@/components/FileExplorer';
 import { CodeEditor } from '@/components/CodeEditor';
 import { StatusBar } from '@/components/StatusBar';
 import { TabBar } from '@/components/TabBar';
+import { Dock } from '@/components/Dock';
+import { Chatbot } from '@/components/Chatbot';
 
 export interface FileItem {
   id: string;
@@ -109,12 +112,33 @@ const Index = () => {
   const [activeFile, setActiveFile] = useState<string>('about-main');
   const [openTabs, setOpenTabs] = useState<string[]>(['about-main']);
   const [expandedFolders, setExpandedFolders] = useState<string[]>(['main', 'projects']);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
+  const [showChatbot, setShowChatbot] = useState<boolean>(false);
+
+  const MAX_VISIBLE_TABS = 4;
 
   const handleFileSelect = (fileId: string) => {
     setActiveFile(fileId);
-    if (!openTabs.includes(fileId)) {
-      setOpenTabs([...openTabs, fileId]);
+    
+    // Handle tab management - limit to 4 most recent
+    const newTabs = [...openTabs];
+    const existingIndex = newTabs.findIndex(tab => tab === fileId);
+    
+    if (existingIndex !== -1) {
+      // Move existing tab to end (most recent position)
+      newTabs.splice(existingIndex, 1);
+      newTabs.push(fileId);
+    } else {
+      // Add new tab
+      newTabs.push(fileId);
+      
+      // Remove oldest tab if we exceed the limit
+      if (newTabs.length > MAX_VISIBLE_TABS) {
+        newTabs.shift();
+      }
     }
+    
+    setOpenTabs(newTabs);
   };
 
   const handleTabClose = (fileId: string) => {
@@ -133,6 +157,20 @@ const Index = () => {
     }
   };
 
+  const handleDockNavigation = (action: string) => {
+    switch (action) {
+      case 'contact':
+        handleFileSelect('contact');
+        break;
+      case 'home':
+        handleFileSelect('about-main');
+        break;
+      case 'chat':
+        setShowChatbot(!showChatbot);
+        break;
+    }
+  };
+
   return (
     <div className="h-screen bg-[#1e1e1e] text-[#cccccc] flex flex-col overflow-hidden">
       {/* Title Bar */}
@@ -148,9 +186,15 @@ const Index = () => {
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-        <div className="w-64 bg-[#252526] border-r border-[#2d2d30] flex flex-col">
+        <div className={`${sidebarCollapsed ? 'w-12' : 'w-64'} bg-[#252526] border-r border-[#2d2d30] flex flex-col transition-all duration-300`}>
           <div className="h-8 bg-[#2d2d30] flex items-center px-3 text-xs font-medium text-[#cccccc] border-b border-[#3e3e42]">
-            EXPLORER
+            <button
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className="mr-2 hover:bg-[#3e3e42] p-1 rounded"
+            >
+              {sidebarCollapsed ? '›' : '‹'}
+            </button>
+            {!sidebarCollapsed && 'EXPLORER'}
           </div>
           <FileExplorer
             files={portfolioFiles}
@@ -158,6 +202,7 @@ const Index = () => {
             activeFile={activeFile}
             expandedFolders={expandedFolders}
             onToggleFolder={toggleFolder}
+            collapsed={sidebarCollapsed}
           />
         </div>
 
@@ -170,15 +215,22 @@ const Index = () => {
             onTabClose={handleTabClose}
             portfolioFiles={portfolioFiles}
           />
-          <CodeEditor
-            activeFile={activeFile}
-            portfolioFiles={portfolioFiles}
-          />
+          {showChatbot ? (
+            <Chatbot onClose={() => setShowChatbot(false)} />
+          ) : (
+            <CodeEditor
+              activeFile={activeFile}
+              portfolioFiles={portfolioFiles}
+            />
+          )}
         </div>
       </div>
 
       {/* Status Bar */}
       <StatusBar activeFile={activeFile} portfolioFiles={portfolioFiles} />
+
+      {/* Dock */}
+      <Dock onNavigate={handleDockNavigation} />
     </div>
   );
 };

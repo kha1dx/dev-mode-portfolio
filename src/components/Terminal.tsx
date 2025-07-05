@@ -25,7 +25,7 @@ export const Terminal = ({
   portfolioFiles,
   onSearchResult,
 }: TerminalProps) => {
-  const [height, setHeight] = useState(300);
+  const [height, setHeight] = useState(200);
   const [inputValue, setInputValue] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);

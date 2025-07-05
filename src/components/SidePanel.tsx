@@ -1,6 +1,7 @@
 import { FileExplorer } from "./FileExplorer";
 import { SearchPanel } from "./panels/SearchPanel";
 import { GitPanel } from "./panels/GitPanel";
+import { SidePanelResizeHandle } from "./SidePanelResizeHandle";
 import { FileItem } from "../pages/Index";
 
 interface SidePanelProps {
@@ -12,6 +13,8 @@ interface SidePanelProps {
   onToggleFolder: (folderId: string) => void;
   collapsed: boolean;
   onSearchResult: (content: string, fileId: string) => void;
+  width: number;
+  onWidthChange: (width: number) => void;
 }
 
 export const SidePanel = ({
@@ -23,6 +26,8 @@ export const SidePanel = ({
   onToggleFolder,
   collapsed,
   onSearchResult,
+  width,
+  onWidthChange,
 }: SidePanelProps) => {
   const getPanelTitle = () => {
     switch (activePanel) {
@@ -86,14 +91,22 @@ export const SidePanel = ({
   }
 
   return (
-    <div className="w-64 bg-[#252526] border-r border-[#2d2d30] flex flex-col">
-      {/* Panel Header */}
-      <div className="h-8 bg-[#2d2d30] flex items-center px-3 text-xs font-medium text-[#cccccc] border-b border-[#3e3e42]">
-        {getPanelTitle()}
+    <div className="flex">
+      <div
+        className="bg-[#252526] border-r border-[#2d2d30] flex flex-col"
+        style={{ width: `${width}px` }}
+      >
+        {/* Panel Header */}
+        <div className="h-8 bg-[#2d2d30] flex items-center px-3 text-xs font-medium text-[#cccccc] border-b border-[#3e3e42]">
+          {getPanelTitle()}
+        </div>
+
+        {/* Panel Content */}
+        <div className="flex-1 overflow-hidden">{renderPanelContent()}</div>
       </div>
 
-      {/* Panel Content */}
-      <div className="flex-1 overflow-hidden">{renderPanelContent()}</div>
+      {/* Resize Handle */}
+      <SidePanelResizeHandle onResize={onWidthChange} currentWidth={width} />
     </div>
   );
 };

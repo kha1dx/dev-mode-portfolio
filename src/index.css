@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -204,4 +203,26 @@
 /* Skill bar animation */
 .skill-progress {
   animation: skill-bar 1.5s ease-out forwards;
+}
+
+/* Resize handle styles */
+.resize-handle-active {
+  cursor: col-resize !important;
+}
+
+.resize-handle-active * {
+  cursor: col-resize !important;
+}
+
+/* Prevent text selection during resize */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Side panel resize transition */
+.side-panel-resize {
+  transition: width 0.1s ease-out;
 }

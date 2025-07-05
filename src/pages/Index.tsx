@@ -119,8 +119,9 @@ const Index = () => {
   ]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
   const [showChatbot, setShowChatbot] = useState<boolean>(false);
-  const [showTerminal, setShowTerminal] = useState<boolean>(true);
+  const [showTerminal, setShowTerminal] = useState<boolean>(false);
   const [activePanel, setActivePanel] = useState<string>("explorer");
+  const [sidePanelWidth, setSidePanelWidth] = useState<number>(300);
 
   const MAX_VISIBLE_TABS = 4;
 
@@ -191,15 +192,26 @@ const Index = () => {
     } else if (panel === "terminal") {
       setShowTerminal(!showTerminal);
     } else {
-      setActivePanel(panel);
-      setSidebarCollapsed(false);
-      setShowChatbot(false);
+      // Check if clicking the same panel that's already active
+      if (activePanel === panel && !sidebarCollapsed) {
+        // Same panel clicked while open - collapse it
+        setSidebarCollapsed(true);
+      } else {
+        // Different panel or reopening collapsed panel
+        setActivePanel(panel);
+        setSidebarCollapsed(false);
+        setShowChatbot(false);
+      }
     }
   };
 
   const handleSearchResult = (content: string, fileId: string) => {
     handleFileSelect(fileId);
     setShowChatbot(false);
+  };
+
+  const handleSidePanelResize = (newWidth: number) => {
+    setSidePanelWidth(newWidth);
   };
 
   return (
@@ -236,6 +248,8 @@ const Index = () => {
             onToggleFolder={toggleFolder}
             collapsed={sidebarCollapsed}
             onSearchResult={handleSearchResult}
+            width={sidePanelWidth}
+            onWidthChange={handleSidePanelResize}
           />
 
           {/* Editor Area */}

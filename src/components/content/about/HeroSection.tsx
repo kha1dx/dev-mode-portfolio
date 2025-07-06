@@ -113,22 +113,22 @@ export const HeroSection = () => {
                   className="absolute inset-0 pointer-events-none"
                 >
                   {/* Top Left Cloud - Even larger and closer */}
-                  <div className="absolute -top-12 -left-12 text-[10rem] opacity-90">
+                  <div className="absolute -top-12 -left-12 text-[10rem] opacity-90 z-[-1]">
                     ☁️
                   </div>
 
                   {/* Top Right Cloud - Even larger and closer */}
-                  <div className="absolute -top-16 -right-8 text-[11rem] opacity-85 z-[-1]">
+                  <div className="absolute -top-16 -right-8 text-[11rem] opacity-85 ">
                     ☁️
                   </div>
 
                   {/* Bottom Left Cloud (behind avatar) - Larger and closer */}
-                  <div className="absolute -bottom-40 w-100 h-100 text-[9rem] opacity-85 z-[-100000]">
+                  <div className="absolute -bottom-40 right-140 top-82 w-100 h-100 text-[12rem] opacity-95 ">
                     ☁️
                   </div>
 
                   {/* Bottom Right Cloud (behind avatar) - Larger and closer */}
-                  <div className="absolute -bottom-35 -right-20 text-[10rem] opacity-80 ">
+                  <div className="absolute -bottom-40 top-70 -right-20 text-[10rem] opacity-80 z-[-1] ">
                     ☁️
                   </div>
                 </div>
@@ -138,12 +138,12 @@ export const HeroSection = () => {
         </div>
 
         {/* Skills Tags at Bottom */}
-        <div className="mt-16">
-          <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+        <div className="mt-16 z-10">
+          <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide z-10">
             {skills.map((skill, index) => (
               <Badge
                 key={skill}
-                className="bg-[#1C1C1C]/80 text-white hover:bg-[#2D2A8C]/50 hover:border-[#FFB000] backdrop-blur-sm border border-[#585858] px-4 py-2 text-sm whitespace-nowrap flex items-center transition-all duration-300"
+                className="bg-[#1C1C1C]/80 text-white hover:bg-[#2D2A8C]/50 hover:border-[#FFB000] z-10 backdrop-blur-sm border border-[#585858] px-4 py-2 text-sm whitespace-nowrap flex items-center transition-all duration-300"
               >
                 <span className="mr-2">✨</span>
                 {skill}

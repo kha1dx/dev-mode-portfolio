@@ -143,7 +143,7 @@ export const HeroSection = () => {
       x: 12,
       y: -10,
       rotation: 1,
-      duration: 4.5,
+      duration: 3.5,
       yoyo: true,
       repeat: -1,
       ease: "power1.inOut",
@@ -165,7 +165,7 @@ export const HeroSection = () => {
       x: -15,
       y: 8,
       rotation: -2,
-      duration: 3.5,
+      duration: 2.5,
       yoyo: true,
       repeat: -1,
       ease: "power1.inOut",
@@ -210,9 +210,9 @@ export const HeroSection = () => {
             <div>
               <h1
                 ref={titleRef}
-                className="text-6xl lg:text-7xl font-bold text-white mb-6"
+                className="text-9xl lg:text-7xl font-bold text-white mb-6"
               >
-                <span className="italic text-[#FFB000]">I'm</span>
+                <span className="italic text-[#FFB000] text-5xl">I'm</span>
                 <br />
                 Khaled
                 <br />
@@ -226,16 +226,21 @@ export const HeroSection = () => {
                 crafting interfaces that not only engage but enchant.
               </p>
               <div ref={buttonsRef} className="flex gap-4">
-                <Button className="bg-[#585858] hover:bg-[#2E2E2E] text-white px-8 py-3 rounded-xl transition-all duration-300 hover:scale-105 border border-[#585858]">
-                  <span className="mr-2">📱</span>
-                  Hire Me
+                <Button className="w-60 h-[77px] rounded-[17.26px] border-none bg-[linear-gradient(179deg,rgba(255,255,255,0.5)_0%,rgba(58,58,58,0.5)_100%)] relative text-white px-8 py-3 transition-all duration-300 hover:scale-105">
+                  <span className="text-[33.2px] font-normal text-center text-white">
+                    Hire Me
+                  </span>
+                  <span className="absolute top-[-10px] right-[-20px] rotate-[-13.76deg] text-[40.3px]">
+                    💼
+                  </span>
                 </Button>
-                <Button
-                  variant="outline"
-                  className="border-[#585858] text-white hover:bg-[#2E2E2E] hover:border-[#FFB000] px-8 py-3 rounded-xl transition-all duration-300 hover:scale-105"
-                >
-                  <span className="mr-2">✏️</span>
-                  My Story
+                <Button className="w-60 h-[77px] rounded-[17.26px] border-none bg-[linear-gradient(179deg,rgba(255,255,255,0.5)_0%,rgba(58,58,58,0.5)_100%)] relative text-white px-8 py-3 transition-all duration-300 hover:scale-105">
+                  <span className="text-[33.2px] font-normal text-center text-white">
+                    My Story
+                  </span>
+                  <span className="absolute top-[30px] right-[-15px] rotate-[-3.08deg] text-[40.3px]">
+                    🎤
+                  </span>
                 </Button>
               </div>
             </div>
@@ -321,20 +326,49 @@ export const HeroSection = () => {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Skills Tags at Bottom */}
-        <div className="mt-16 z-10">
-          <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide z-10">
+      {/* Skills Tags at Bottom - Full width and moved down */}
+      <div className="absolute bottom-8 left-0 right-0 z-10">
+        <div className="w-full overflow-hidden">
+          {/* Scrolling container */}
+          <div className="flex animate-scroll gap-6 py-4">
+            {/* First set of skills */}
             {skills.map((skill, index) => (
               <Badge
-                key={skill}
-                className="bg-[#1C1C1C]/80 text-white hover:bg-[#2D2A8C]/50 hover:border-[#FFB000] z-10 backdrop-blur-sm border border-[#585858] px-4 py-2 text-sm whitespace-nowrap flex items-center transition-all duration-300"
+                key={`first-${skill}-${index}`}
+                className="bg-[#1C1C1C]/80 text-white hover:bg-[#2D2A8C]/50 hover:border-[#FFB000] z-10 backdrop-blur-sm border border-[#585858] px-4 py-2 text-sm whitespace-nowrap flex items-center transition-all duration-300 flex-shrink-0"
+              >
+                <span className="mr-2">✨</span>
+                {skill}
+              </Badge>
+            ))}
+
+            {/* Duplicate set for seamless scrolling */}
+            {skills.map((skill, index) => (
+              <Badge
+                key={`second-${skill}-${index}`}
+                className="bg-[#1C1C1C]/80 text-white hover:bg-[#2D2A8C]/50 hover:border-[#FFB000] z-10 backdrop-blur-sm border border-[#585858] px-4 py-2 text-sm whitespace-nowrap flex items-center transition-all duration-300 flex-shrink-0"
+              >
+                <span className="mr-2">✨</span>
+                {skill}
+              </Badge>
+            ))}
+
+            {/* Third set for extra smooth scrolling */}
+            {skills.map((skill, index) => (
+              <Badge
+                key={`third-${skill}-${index}`}
+                className="bg-[#1C1C1C]/80 text-white hover:bg-[#2D2A8C]/50 hover:border-[#FFB000] z-10 backdrop-blur-sm border border-[#585858] px-4 py-2 text-sm whitespace-nowrap flex items-center transition-all duration-300 flex-shrink-0"
               >
                 <span className="mr-2">✨</span>
                 {skill}
               </Badge>
             ))}
           </div>
+
+          {/* Fade gradients on edges */}
+          <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-black to-transparent z-20 pointer-events-none"></div>
         </div>
       </div>
     </div>

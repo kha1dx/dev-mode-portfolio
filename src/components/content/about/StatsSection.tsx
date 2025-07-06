@@ -3,17 +3,17 @@ export const StatsSection = () => {
     {
       number: "5+",
       label: "Years of Design Experience",
-      color: "from-pink-500 to-purple-600",
+      color: "from-[#FF589C] to-[#5B6CFF]",
     },
     {
       number: "50+",
       label: "Overall Global Customers",
-      color: "from-purple-500 to-pink-600",
+      color: "from-[#FFB000] to-[#FF589C]",
     },
     {
       number: "90+",
       label: "Projects I Have Worked on",
-      color: "from-pink-600 to-purple-500",
+      color: "from-[#5B6CFF] to-[#FFB000]",
     },
   ];
 
@@ -28,7 +28,7 @@ export const StatsSection = () => {
               >
                 {stat.number}
               </div>
-              <p className="text-gray-300 text-lg">{stat.label}</p>
+              <p className="text-[#9F9F9F] text-lg">{stat.label}</p>
             </div>
           ))}
         </div>

@@ -14,7 +14,7 @@ export const Dock = ({ onNavigate }: DockProps) => {
     {
       id: 'home',
       image: '/home.png',
-      label: 'Portfolio',
+      label: 'Home',
       action: 'home'
       
     },

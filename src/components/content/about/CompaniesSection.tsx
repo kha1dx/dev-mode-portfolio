@@ -23,16 +23,16 @@ export const CompaniesSection = () => {
           {companies.map((company, index) => (
             <div
               key={index}
-              className="group relative overflow-hidden rounded-full border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:scale-105 backdrop-blur-sm"
+              className="group relative overflow-hidden rounded-full border border-[#585858]/50 hover:border-[#FFB000]/50 transition-all duration-300 hover:scale-105 backdrop-blur-sm bg-[#1C1C1C]/50"
             >
               <div className="px-6 py-3 text-center">
-                <span className="text-gray-300 group-hover:text-white transition-colors duration-300 text-sm">
+                <span className="text-[#9F9F9F] group-hover:text-white transition-colors duration-300 text-sm">
                   {company}
                 </span>
               </div>
 
               {/* Hover overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-pink-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#FF589C]/10 to-[#5B6CFF]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"></div>
             </div>
           ))}
         </div>

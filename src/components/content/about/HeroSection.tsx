@@ -1,11 +1,15 @@
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import gsap from "gsap";
 
 export const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
   const cloudsRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const descriptionRef = useRef<HTMLParagraphElement>(null);
+  const buttonsRef = useRef<HTMLDivElement>(null);
 
   const skills = [
     "Visual Design",
@@ -16,7 +20,182 @@ export const HeroSection = () => {
   ];
 
   useEffect(() => {
-    // Add any animations here if needed
+    if (!cloudsRef.current || !avatarRef.current || !titleRef.current) return;
+
+    // Create GSAP timeline for entrance animations
+    const tl = gsap.timeline();
+
+    // Set initial states
+    gsap.set(titleRef.current, { opacity: 0, y: 50 });
+    gsap.set(descriptionRef.current, { opacity: 0, y: 30 });
+    gsap.set(buttonsRef.current, { opacity: 0, y: 20 });
+    gsap.set(avatarRef.current, { opacity: 0, scale: 0.8, rotation: -5 });
+    gsap.set(cloudsRef.current.children, { opacity: 0, scale: 0.5 });
+
+    // Entrance animations
+    tl.to(titleRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 1.2,
+      ease: "power3.out",
+    })
+      .to(
+        descriptionRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+        },
+        "-=0.8"
+      )
+      .to(
+        buttonsRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        },
+        "-=0.6"
+      )
+      .to(
+        avatarRef.current,
+        {
+          opacity: 1,
+          scale: 1,
+          rotation: 0,
+          duration: 1.5,
+          ease: "back.out(1.2)",
+        },
+        "-=1.2"
+      )
+      .to(
+        cloudsRef.current.children,
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.8,
+          stagger: 0.2,
+          ease: "back.out(1.7)",
+        },
+        "-=1"
+      );
+
+    // Continuous floating animations
+    // Hero image gentle floating
+    gsap.to(avatarRef.current, {
+      y: -15,
+      duration: 3,
+      yoyo: true,
+      repeat: -1,
+      ease: "power1.inOut",
+    });
+
+    // Clouds floating animations with different patterns including x-axis movement
+    const clouds = cloudsRef.current.children;
+
+    // Cloud 1 - Top left (enhanced with x-axis movement)
+    gsap.to(clouds[0], {
+      x: 15,
+      y: -8,
+      rotation: 2,
+      duration: 4,
+      yoyo: true,
+      repeat: -1,
+      ease: "power1.inOut",
+    });
+
+    // Additional x-axis drift for Cloud 1
+    gsap.to(clouds[0], {
+      x: "+=25",
+      duration: 8,
+      yoyo: true,
+      repeat: -1,
+      ease: "sine.inOut",
+      delay: 0.5,
+    });
+
+    // Cloud 2 - Top right (enhanced with x-axis movement)
+    gsap.to(clouds[1], {
+      x: -18,
+      y: 6,
+      rotation: -1,
+      duration: 5,
+      yoyo: true,
+      repeat: -1,
+      ease: "power1.inOut",
+      delay: 1,
+    });
+
+    // Additional x-axis drift for Cloud 2
+    gsap.to(clouds[1], {
+      x: "-=30",
+      duration: 10,
+      yoyo: true,
+      repeat: -1,
+      ease: "sine.inOut",
+      delay: 1.5,
+    });
+
+    // Cloud 3 - Bottom left (enhanced with x-axis movement)
+    gsap.to(clouds[2], {
+      x: 12,
+      y: -10,
+      rotation: 1,
+      duration: 4.5,
+      yoyo: true,
+      repeat: -1,
+      ease: "power1.inOut",
+      delay: 2,
+    });
+
+    // Additional x-axis drift for Cloud 3
+    gsap.to(clouds[2], {
+      x: "+=20",
+      duration: 7,
+      yoyo: true,
+      repeat: -1,
+      ease: "sine.inOut",
+      delay: 2.5,
+    });
+
+    // Cloud 4 - Bottom right (enhanced with x-axis movement)
+    gsap.to(clouds[3], {
+      x: -15,
+      y: 8,
+      rotation: -2,
+      duration: 3.5,
+      yoyo: true,
+      repeat: -1,
+      ease: "power1.inOut",
+      delay: 0.5,
+    });
+
+    // Additional x-axis drift for Cloud 4
+    gsap.to(clouds[3], {
+      x: "-=22",
+      duration: 6,
+      yoyo: true,
+      repeat: -1,
+      ease: "sine.inOut",
+      delay: 1,
+    });
+
+    // Title subtle breathing animation
+    gsap.to(titleRef.current, {
+      scale: 1.02,
+      duration: 4,
+      yoyo: true,
+      repeat: -1,
+      ease: "power1.inOut",
+    });
+
+    // Cleanup function
+    return () => {
+      tl.kill();
+      gsap.killTweensOf([avatarRef.current, titleRef.current, clouds]);
+    };
   }, []);
 
   return (
@@ -29,18 +208,24 @@ export const HeroSection = () => {
           {/* Left Content */}
           <div className="space-y-8">
             <div>
-              <h1 className="text-6xl lg:text-7xl font-bold text-white mb-6">
+              <h1
+                ref={titleRef}
+                className="text-6xl lg:text-7xl font-bold text-white mb-6"
+              >
                 <span className="italic text-[#FFB000]">I'm</span>
                 <br />
                 Khaled
                 <br />
                 Salleh
               </h1>
-              <p className="text-xl text-[#9F9F9F] mb-8 max-w-lg leading-relaxed">
+              <p
+                ref={descriptionRef}
+                className="text-xl text-[#9F9F9F] mb-8 max-w-lg leading-relaxed"
+              >
                 An aspiring UI/UX Designer: Who breathes life into pixels,
                 crafting interfaces that not only engage but enchant.
               </p>
-              <div className="flex gap-4">
+              <div ref={buttonsRef} className="flex gap-4">
                 <Button className="bg-[#585858] hover:bg-[#2E2E2E] text-white px-8 py-3 rounded-xl transition-all duration-300 hover:scale-105 border border-[#585858]">
                   <span className="mr-2">📱</span>
                   Hire Me

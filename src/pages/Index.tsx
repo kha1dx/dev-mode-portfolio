@@ -117,7 +117,7 @@ const Index = () => {
     "main",
     "projects",
   ]);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(true);
   const [showChatbot, setShowChatbot] = useState<boolean>(false);
   const [showTerminal, setShowTerminal] = useState<boolean>(false);
   const [activePanel, setActivePanel] = useState<string>("explorer");

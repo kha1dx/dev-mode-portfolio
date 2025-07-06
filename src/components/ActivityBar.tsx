@@ -35,22 +35,29 @@ export const ActivityBar = ({
   }: {
     activity: (typeof activities)[0];
   }) => (
-    <button
-      onClick={() => onPanelChange(activity.id)}
-      className={`w-12 h-12 flex items-center justify-center relative group transition-colors ${
-        activePanel === activity.id
-          ? "text-white bg-[#007acc] border-l-2 border-white"
-          : "text-[#858585] hover:text-white"
-      }`}
-      title={activity.label}
-    >
-      <activity.icon className="w-6 h-6" />
+    <div className="w-12 h-12 flex items-center justify-center relative group">
+      <button
+        onClick={() => onPanelChange(activity.id)}
+        className={`w-8 h-8 flex items-center justify-center rounded transition-colors ${
+          activePanel === activity.id
+            ? "text-white bg-[#007acc]"
+            : "text-[#858585] hover:text-white hover:bg-[#3e3e42]"
+        }`}
+        title={activity.label}
+      >
+        <activity.icon className="w-6 h-6" />
+      </button>
+
+      {/* Active indicator */}
+      {activePanel === activity.id && (
+        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-6 bg-white rounded-r" />
+      )}
 
       {/* Tooltip */}
-      <div className="absolute left-12 bg-[#2c2c2c] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity z-50 whitespace-nowrap">
+      <div className="absolute left-12 bg-[#2c2c2c] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity z-50 whitespace-nowrap pointer-events-none">
         {activity.label}
       </div>
-    </button>
+    </div>
   );
 
   return (

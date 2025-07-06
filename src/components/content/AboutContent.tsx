@@ -1,5 +1,5 @@
-
 import { HeroSection } from "./about/HeroSection";
+import { HeaderSection } from "./about/HeaderSection";
 import { AboutMeSection } from "./about/AboutMeSection";
 import { StatsSection } from "./about/StatsSection";
 import { ProjectsSection } from "./about/ProjectsSection";
@@ -8,7 +8,8 @@ import { FooterSection } from "./about/FooterSection";
 
 export const AboutContent = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-y-auto">
+    <div className="min-h-screen bg-gradient-to-br from-black via-purple-900/20 to-orange-900/20 text-white overflow-y-auto">
+      <HeaderSection />
       <HeroSection />
       <AboutMeSection />
       <StatsSection />

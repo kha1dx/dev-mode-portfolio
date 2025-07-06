@@ -1,83 +1,105 @@
-
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
-
 export const FooterSection = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const avatarRef = useRef<HTMLDivElement>(null);
+  const professionalLinks = [
+    { name: "LinkedIn", href: "#" },
+    { name: "Behance", href: "#" },
+    { name: "Dribbble", href: "#" },
+    { name: "Figma", href: "#" },
+  ];
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(".footer-content",
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          stagger: 0.2,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 80%",
-          }
-        }
-      );
+  const quickMenuLinks = [
+    { name: "Home", href: "#home" },
+    { name: "About", href: "#about" },
+    { name: "Work", href: "#work" },
+    { name: "Contact", href: "#contact" },
+  ];
 
-      gsap.fromTo(avatarRef.current,
-        { scale: 0, rotation: 180 },
-        {
-          scale: 1,
-          rotation: 0,
-          duration: 1,
-          ease: "back.out(1.7)",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 80%",
-          }
-        }
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const socialLinks = [
+    { name: "Facebook", icon: "📘", href: "#" },
+    { name: "Instagram", icon: "📷", href: "#" },
+    { name: "Twitter", icon: "🐦", href: "#" },
+  ];
 
   return (
-    <div ref={sectionRef} className="px-8 py-16">
-      <div className="max-w-6xl mx-auto text-center">
-        <div className="footer-content mb-8">
-          <div ref={avatarRef} className="text-6xl mb-4 hover:scale-110 transition-transform duration-300 cursor-pointer">
-            👨‍💻
-          </div>
-          <p className="text-gray-400 mb-8">Follow me</p>
-        </div>
-        
-        <div className="footer-content grid grid-cols-2 gap-8 max-w-2xl mx-auto mb-12">
-          <div>
-            <h3 className="text-xl font-bold mb-4 text-purple-300">Professional Links</h3>
-            <div className="space-y-2 text-gray-400">
-              <div className="hover:text-white transition-colors cursor-pointer">LinkedIn</div>
-              <div className="hover:text-white transition-colors cursor-pointer">Dribbble</div>
-              <div className="hover:text-white transition-colors cursor-pointer">GitHub</div>
-              <div className="hover:text-white transition-colors cursor-pointer">Figma</div>
-            </div>
-          </div>
-          <div>
-            <h3 className="text-xl font-bold mb-4 text-purple-300">Quick Menu</h3>
-            <div className="space-y-2 text-gray-400">
-              <div className="hover:text-white transition-colors cursor-pointer">Home</div>
-              <div className="hover:text-white transition-colors cursor-pointer">About</div>
-              <div className="hover:text-white transition-colors cursor-pointer">Work</div>
-              <div className="hover:text-white transition-colors cursor-pointer">Contact</div>
-            </div>
+    <footer className="py-20 px-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <div className="inline-block relative">
+            <div className="text-2xl font-bold text-white mb-4">Follow me</div>
+            <div className="absolute -top-2 -left-4 text-xl">•</div>
+            <div className="absolute -top-2 -right-4 text-xl">•</div>
           </div>
         </div>
-        
-        <div className="footer-content mt-12 pt-8 border-t border-gray-800 text-gray-500 text-sm">
-          © 2024 Shaun Murphy. All rights reserved.
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
+          {/* Left - Avatar */}
+          <div className="flex justify-center lg:justify-start">
+            <div className="relative">
+              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600 flex items-center justify-center relative overflow-hidden shadow-2xl">
+                <div className="text-4xl">👨‍💻</div>
+              </div>
+              {/* Laptop */}
+              <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-2xl">
+                💻
+              </div>
+            </div>
+          </div>
+
+          {/* Center - Professional Links */}
+          <div className="text-center">
+            <h3 className="text-white font-bold mb-4">Professional Links</h3>
+            <div className="space-y-2">
+              {professionalLinks.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.href}
+                  className="block text-gray-300 hover:text-white transition-colors duration-300"
+                >
+                  {link.name}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Right - Quick Menu */}
+          <div className="text-center">
+            <h3 className="text-white font-bold mb-4">Quick Menu</h3>
+            <div className="space-y-2">
+              {quickMenuLinks.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.href}
+                  className="block text-gray-300 hover:text-white transition-colors duration-300"
+                >
+                  {link.name}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+        <div className="mt-16 pt-8 border-t border-gray-800/50">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400 text-sm mb-4 md:mb-0">
+              © 2024 Shaun Murphy. All Rights Reserved.
+            </p>
+
+            {/* Social Links */}
+            <div className="flex space-x-4">
+              {socialLinks.map((social, index) => (
+                <a
+                  key={index}
+                  href={social.href}
+                  className="w-10 h-10 rounded-full bg-gray-800/50 flex items-center justify-center hover:bg-gray-700/50 transition-colors duration-300 backdrop-blur-sm"
+                  title={social.name}
+                >
+                  <span className="text-lg">{social.icon}</span>
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 };

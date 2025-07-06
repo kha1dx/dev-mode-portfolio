@@ -17,7 +17,7 @@ export const CodeEditor = ({ activeFile }: CodeEditorProps) => {
   const renderContent = () => {
     switch (activeFile) {
       case 'about-main':
-        return <AboutLanding />;
+        return <AboutContent />;
       case 'projects-main':
         return <ProjectsOverview />;
       case 'about':
@@ -33,7 +33,7 @@ export const CodeEditor = ({ activeFile }: CodeEditorProps) => {
       case 'contact':
         return <ContactContent />;
       default:
-        return <AboutLanding />;
+        return <AboutContent />;
     }
   };
 

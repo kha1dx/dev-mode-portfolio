@@ -1,61 +1,98 @@
-export const ProjectsSection = () => {
-  const projects = [
+import React, { useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import { ProjectCard } from "./ProjectCard"; // Ensure the path is correct
+
+// Register the GSAP plugins to be used
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+const projectsData = [
     {
       title: "Vicario",
       image: "💻",
       description: "Video conferencing platform",
-      className: "col-span-1 md:col-span-2",
+      className: "col-span-1",
+      isProject: true,
     },
     {
       title: "BeFit",
       image: "📱",
       description: "Fitness mobile app",
       className: "col-span-1",
-    },
-    {
-      title: "BRAVO",
-      image: "🏢",
-      description: "Corporate website",
-      className: "col-span-1 md:col-span-3",
+      isProject: true,
     },
     {
       title: "TASTIFY",
       image: "🍔",
       description: "Food delivery app",
       className: "col-span-1",
+      isProject: true,
     },
     {
-      title: "AI Platform",
-      image: "🤖",
-      description: "AI-powered dashboard",
-      className: "col-span-1 md:col-span-2",
+      title: "Go to all projects",
+      image: "🚀",
+      description: "View my complete portfolio",
+      className: "col-span-1",
+      isProject: false,
     },
-  ];
+];
+
+export const ProjectsSection = () => {
+  const container = useRef(null);
+
+  // useGSAP is the modern way to use GSAP in React.
+  // It automatically handles cleanup.
+  useGSAP(
+    () => {
+      // Animate the section heading
+      gsap.from(".section-heading", {
+        scrollTrigger: {
+          trigger: ".section-heading",
+          start: "top 85%", // Animation starts when the top of the heading is 85% down the viewport
+          toggleActions: "play none none none",
+        },
+        opacity: 0,
+        y: 40,
+        duration: 0.8,
+        ease: "power3.out",
+      });
+
+      // Animate the project cards
+      gsap.from(".project-card", {
+        scrollTrigger: {
+          trigger: container.current,
+          start: "top 80%",
+          toggleActions: "play reverse play reverse", // This makes the animation reversible on scroll
+        },
+        // 'autoAlpha' animates opacity and visibility, which is great for performance.
+        autoAlpha: 0,
+        y: 60,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: 0.15, // Creates a beautiful cascading effect for each card
+      });
+    },
+    { scope: container } // Scope the GSAP selectors to our container for better performance
+  );
 
   return (
-    <section className="py-20 px-8">
+    <section ref={container} className="py-24 px-8 overflow-hidden">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold text-white mb-12">Projects</h2>
+        <h2 className="section-heading text-4xl font-bold text-white mb-16 text-center">
+          What I've Built
+        </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {projects.map((project, index) => (
-            <div
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {projectsData.map((project, index) => (
+            <ProjectCard
               key={index}
-              className={`${project.className} group relative overflow-hidden rounded-2xl bg-gradient-to-br from-black/80 to-[#2D2A8C]/30 border border-[#585858]/50 hover:border-[#FFB000]/50 transition-all duration-300 hover:scale-105 backdrop-blur-sm`}
-            >
-              <div className="p-8 h-full flex flex-col justify-between min-h-[200px]">
-                <div>
-                  <div className="text-4xl mb-4">{project.image}</div>
-                  <h3 className="text-2xl font-bold text-white mb-2">
-                    {project.title}
-                  </h3>
-                  <p className="text-[#9F9F9F]">{project.description}</p>
-                </div>
-
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#FF589C]/10 to-[#5B6CFF]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </div>
-            </div>
+              title={project.title}
+              image={project.image}
+              description={project.description}
+              className={project.className}
+              isProject={project.isProject}
+            />
           ))}
         </div>
       </div>

@@ -27,7 +27,7 @@ export const AboutMeSection = () => {
       id="about"
       className="py-16 lg:py-24 relative overflow-hidden"
     >
-      <div className="max-w-6xl mx-auto px-8">
+      <div className="max-w-7xl mx-auto px-8">
         {/* Section Header */}
         <div className="mb-12 lg:mb-16">
           <h2 className="font-clash-display font-semibold text-white text-4xl md:text-5xl lg:text-6xl tracking-tight leading-tight mb-4">
@@ -43,7 +43,7 @@ export const AboutMeSection = () => {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Image Section */}
           <div
             className={`relative flex justify-center lg:justify-start transform transition-all duration-1000 ${
@@ -102,13 +102,13 @@ export const AboutMeSection = () => {
 
           {/* Text Content */}
           <div
-            className={`flex flex-col justify-center transform transition-all duration-1000 delay-300 ${
+            className={`flex flex-col justify-start -mt-16 transform transition-all duration-1000 delay-300 ${
               isVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-8 opacity-0"
             }`}
           >
-            <div className="space-y-6">
+            <div className="space-y-6 ">
               {/* Main intro text */}
               <p className="font-clash-display font-normal text-white text-2xl md:text-3xl lg:text-4xl leading-relaxed">
                 Hey there! I'm{" "}

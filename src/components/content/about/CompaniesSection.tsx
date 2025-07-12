@@ -1,96 +1,139 @@
-import React from "react";
+import React, { useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 
-export const CompaniesSection = () => {
-  const companies = [
-    "Zeus Learning",
-    "LinkedIn", 
-    "Zepto",
-    "Swiggy",
-    "YO!",
-    "Union Living",
-    "My Captain",
-    "Accenture",
-    "Brurada",
-    "Others",
-  ];
+// Register GSAP plugins
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
+// --- Data for Testimonials ---
+const testimonialsData = [
+  {
+    quote:
+      "Working with them was a game-changer. Their expertise in frontend development is unparalleled, delivering a product that exceeded all our expectations.",
+    name: "Sarah Johnson",
+    role: "CEO at Tech Innovators",
+    avatar: "👩‍💻",
+  },
+  {
+    quote:
+      "The attention to detail and commitment to quality was incredible. They are not just developers; they are true partners in building a vision.",
+    name: "Michael Chen",
+    role: "Product Manager at NextGen Solutions",
+    avatar: "👨‍💼",
+  },
+  {
+    quote:
+      "An absolute pleasure to collaborate with. The final result was not only visually stunning but also incredibly performant and scalable. Highly recommended!",
+    name: "Emily Rodriguez",
+    role: "Lead Designer at Creative Minds",
+    avatar: "🎨",
+  },
+];
+
+// --- Reusable Testimonial Card Component ---
+const TestimonialCard = ({ quote, name, role, avatar }) => {
   return (
-    <section className="relative py-24 px-8 overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.02]">
-        <div className="absolute top-0 left-0 w-full h-full">
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-800/10 via-transparent to-cyan-900/10"></div>
+    <div className="testimonial-card group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-slate-700/50 p-8 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-cyan-400/60 bg-slate-900/40 hover:bg-slate-900/60">
+      {/* Glow Effects */}
+      <div className="absolute -right-12 -top-12 z-0 h-32 w-32 rounded-full bg-cyan-500/10 blur-3xl transition-all duration-700 group-hover:h-40 group-hover:w-40" />
+      <div className="absolute -left-12 -bottom-12 z-0 h-32 w-32 rounded-full bg-blue-500/10 blur-3xl transition-all duration-700 group-hover:h-40 group-hover:w-40" />
+      <div className="absolute inset-0 z-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-gradient-to-br from-slate-800/20 via-transparent to-cyan-900/20" />
+
+      {/* Content */}
+      <div className="relative z-10 flex h-full flex-col">
+        <div className="flex-grow">
+          <p className="text-xl text-slate-300 transition-colors duration-300 group-hover:text-slate-100">
+            “{quote}”
+          </p>
+        </div>
+        <div className="mt-8 flex items-center gap-4 border-t border-slate-700/50 pt-6">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-800 text-2xl">
+            {avatar}
+          </div>
+          <div>
+            <h4 className="font-bold text-white transition-colors duration-300 group-hover:text-cyan-300">
+              {name}
+            </h4>
+            <p className="text-sm text-slate-400">{role}</p>
+          </div>
         </div>
       </div>
+    </div>
+  );
+};
 
-      <div className="max-w-6xl mx-auto relative">
+// --- Main Testimonials Section Component ---
+export const CompaniesSection = () => {
+  const container = useRef(null);
+
+  // GSAP animations for scroll-triggered reveal
+  useGSAP(
+    () => {
+      gsap.from(".section-title, .section-subtitle", {
+        scrollTrigger: {
+          trigger: ".section-title",
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
+        opacity: 1,
+        y: 40,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: 0.2,
+      });
+
+      gsap.from(".testimonial-card", {
+        scrollTrigger: {
+          trigger: ".testimonials-grid",
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+        },
+        opacity: 1,
+        y: 50,
+        stagger: 0.2,
+        duration: 0.8,
+        ease: "power3.out",
+      });
+    },
+    { scope: container }
+  );
+
+  return (
+    <section ref={container} className="relative py-32 px-8">
+      {/* Background Decorative Elements */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/10 to-transparent opacity-50" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
+      <div
+        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"
+        style={{ animationDelay: "2s" }}
+      />
+
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 mb-6">
-            <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-            <span className="text-cyan-400 text-sm font-medium">Trusted by Industry Leaders</span>
-          </div>
-          
-          <h2 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent mb-4">
-            Companies I've
+        <div className="text-center mb-20">
+          <h2 className="section-title text-5xl md:text-6xl font-bold bg-gradient-to-b from-purple-400 to-pink-400 to-orange bg-clip-text text-transparent mb-4">
+            What People Are Saying
           </h2>
-          <h2 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Worked With
-          </h2>
-          
-          <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full mx-auto mt-8"></div>
+          <p className="section-subtitle text-lg text-slate-400 max-w-2xl mx-auto">
+            Real feedback from clients and collaborators I've had the pleasure
+            to work with.
+          </p>
+          <div className="w-28 h-1 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full mx-auto mt-16"></div>
         </div>
 
-        {/* Companies Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {companies.map((company, index) => (
-            <div
+        {/* Testimonials Grid */}
+        <div className="testimonials-grid grid grid-cols-1 lg:grid-cols-3 gap-8 auto-rows-fr">
+          {testimonialsData.map((testimonial, index) => (
+            <TestimonialCard
               key={index}
-              className="group relative overflow-hidden rounded-2xl border border-slate-700/50 hover:border-cyan-400/60 transition-all duration-500 hover:scale-105 backdrop-blur-xl bg-slate-900/40 hover:bg-slate-900/60"
-              style={{
-                animationDelay: `${index * 100}ms`,
-              }}
-            >
-              {/* Animated Background Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-slate-800/20 via-transparent to-cyan-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              {/* Content */}
-              <div className="relative z-10 px-6 py-4 text-center">
-                <span className="text-slate-400 group-hover:text-cyan-300 transition-all duration-300 text-sm font-medium">
-                  {company}
-                </span>
-              </div>
-
-              {/* Glow Effects */}
-              <div className="absolute -right-8 -top-8 z-0 h-16 w-16 rounded-2xl blur-2xl transition-all duration-700 group-hover:h-20 group-hover:w-20 group-hover:blur-xl bg-cyan-500/15" />
-              <div className="absolute -left-6 -bottom-6 z-0 h-12 w-12 rounded-2xl blur-2xl transition-all duration-700 group-hover:h-16 group-hover:w-16 bg-blue-500/10" />
-              
-              {/* Subtle Inner Glow */}
-              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-transparent via-cyan-500/5 to-transparent" />
-              
-              {/* Hover Border Effect */}
-              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-lg shadow-cyan-500/20" />
-            </div>
+              quote={testimonial.quote}
+              name={testimonial.name}
+              role={testimonial.role}
+              avatar={testimonial.avatar}
+            />
           ))}
         </div>
-
-        {/* Bottom Floating Elements */}
-        <div className="flex justify-center mt-16">
-          <div className="flex items-center gap-4 px-8 py-4 rounded-full bg-gradient-to-r from-slate-800/50 to-slate-900/50 border border-slate-700/50 backdrop-blur-xl">
-            <div className="flex -space-x-2">
-              <div className="w-3 h-3 bg-cyan-400 rounded-full animate-pulse"></div>
-              <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-              <div className="w-3 h-3 bg-purple-400 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-            </div>
-            <span className="text-slate-400 text-sm">
-              Building products that scale globally
-            </span>
-          </div>
-        </div>
-
-        {/* Decorative Elements */}
-        <div className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 left-20 w-40 h-40 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
       </div>
     </section>
   );

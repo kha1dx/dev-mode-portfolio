@@ -1,3 +1,6 @@
+import { Card, CardContent } from "../../ui/card";
+import { Separator } from "../../ui/separator";
+
 export const FooterSection = () => {
   const professionalLinks = [
     { name: "LinkedIn", href: "#" },
@@ -13,92 +16,129 @@ export const FooterSection = () => {
     { name: "Contact", href: "#contact" },
   ];
 
-  const socialLinks = [
-    { name: "Facebook", icon: "📘", href: "#" },
-    { name: "Instagram", icon: "📷", href: "#" },
-    { name: "Twitter", icon: "🐦", href: "#" },
-  ];
-
   return (
-    <footer className="py-20 px-8">
+    <footer className="py-16 px-8 relative">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <div className="inline-block relative">
-            <div className="text-2xl font-bold text-white mb-4">Follow me</div>
-            <div className="absolute -top-2 -left-4 text-xl">•</div>
-            <div className="absolute -top-2 -right-4 text-xl">•</div>
+        {/* Circular "Follow me" text */}
+        <div className="absolute w-[509px] h-[457px] top-[114px] left-[85px] rotate-[-48.95deg] opacity-20">
+          <div className="absolute w-full h-full">
+            {Array.from({ length: 16 }).map((_, i) => (
+              <div
+                key={i}
+                className="absolute font-clash-display font-normal text-white/40 text-[44.8px]"
+                style={{
+                  transform: `rotate(${i * 22.5}deg) translateY(-180px)`,
+                  transformOrigin: "center center",
+                }}
+              >
+                {i === 0
+                  ? "F"
+                  : i === 1
+                  ? "o"
+                  : i === 2
+                  ? "l"
+                  : i === 3
+                  ? "l"
+                  : i === 4
+                  ? "o"
+                  : i === 5
+                  ? "w"
+                  : i === 6
+                  ? " "
+                  : i === 7
+                  ? "m"
+                  : i === 8
+                  ? "e"
+                  : i === 9
+                  ? "•"
+                  : i === 10
+                  ? "F"
+                  : i === 11
+                  ? "o"
+                  : i === 12
+                  ? "l"
+                  : i === 13
+                  ? "l"
+                  : i === 14
+                  ? "o"
+                  : i === 15
+                  ? "w"
+                  : ""}
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
-          {/* Left - Avatar */}
-          <div className="flex justify-center lg:justify-start">
-            <div className="relative">
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600 flex items-center justify-center relative overflow-hidden shadow-2xl">
-                <div className="text-4xl">👨‍💻</div>
-              </div>
-              {/* Laptop */}
-              <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-2xl">
-                💻
-              </div>
+        <Card className="w-full rounded-[25px] overflow-hidden backdrop-blur-[21px] backdrop-brightness-[100%] [-webkit-backdrop-filter:blur(21px)_brightness(100%)] bg-[linear-gradient(180deg,rgba(0,0,0,0.8)_1%,rgba(20,20,20,0.9)_100%)] border border-white/10 mt-20">
+          <CardContent className="p-16 grid grid-cols-3 gap-8">
+            <div className="col-span-1">
+              <img
+                className="w-[500px] h-[500px] object-cover filter drop-shadow-lg"
+                alt="Khaled 3D avatar"
+                src="/footer.png"
+              />
             </div>
-          </div>
 
-          {/* Center - Professional Links */}
-          <div className="text-center">
-            <h3 className="text-white font-bold mb-4">Professional Links</h3>
-            <div className="space-y-2">
-              {professionalLinks.map((link, index) => (
+            <div className="col-span-1 text-right">
+              <h3 className="font-clash-display font-semibold text-white text-[31.5px] mb-8 drop-shadow-sm">
+                Professional Links
+              </h3>
+              {professionalLinks.map((link) => (
                 <a
-                  key={index}
+                  key={link.name}
                   href={link.href}
-                  className="block text-gray-300 hover:text-white transition-colors duration-300"
+                  className="block font-clash-display font-light text-white/90 text-[31.5px] text-right mb-4 hover:text-white hover:scale-105 transition-all duration-300 drop-shadow-sm"
                 >
                   {link.name}
                 </a>
               ))}
             </div>
-          </div>
 
-          {/* Right - Quick Menu */}
-          <div className="text-center">
-            <h3 className="text-white font-bold mb-4">Quick Menu</h3>
-            <div className="space-y-2">
-              {quickMenuLinks.map((link, index) => (
+            <div className="col-span-1 text-right">
+              <h3 className="font-clash-display font-semibold text-white text-[31.5px] mb-8 drop-shadow-sm">
+                Quick Menu
+              </h3>
+              {quickMenuLinks.map((link) => (
                 <a
-                  key={index}
+                  key={link.name}
                   href={link.href}
-                  className="block text-gray-300 hover:text-white transition-colors duration-300"
+                  className="block font-clash-display font-light text-white/90 text-[31.5px] text-right mb-4 hover:text-white hover:scale-105 transition-all duration-300 drop-shadow-sm"
                 >
                   {link.name}
                 </a>
               ))}
             </div>
-          </div>
-        </div>
 
-        {/* Bottom Section */}
-        <div className="mt-16 pt-8 border-t border-gray-800/50">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm mb-4 md:mb-0">
-              © 2024 Shaun Murphy. All Rights Reserved.
-            </p>
-
-            {/* Social Links */}
-            <div className="flex space-x-4">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={index}
-                  href={social.href}
-                  className="w-10 h-10 rounded-full bg-gray-800/50 flex items-center justify-center hover:bg-gray-700/50 transition-colors duration-300 backdrop-blur-sm"
-                  title={social.name}
-                >
-                  <span className="text-lg">{social.icon}</span>
-                </a>
-              ))}
+            <div className="col-span-3 mt-8">
+              <Separator className="mb-8 bg-white/30" />
+              <div className="flex justify-between items-center">
+                <span className="font-clash-display font-light text-white/80 text-[12.6px] drop-shadow-sm">
+                  © 2024 Khaled. All Rights Reserved.
+                </span>
+                <div className="flex space-x-4">
+                  <a
+                    href="#"
+                    className="w-10 h-10 rounded-full border-2 border-white/50 bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 hover:border-white/70 hover:scale-110 transition-all duration-300"
+                  >
+                    <span className="text-white text-lg filter drop-shadow-sm">📘</span>
+                  </a>
+                  <a
+                    href="#"
+                    className="w-10 h-10 rounded-full border-2 border-white/50 bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 hover:border-white/70 hover:scale-110 transition-all duration-300"
+                  >
+                    <span className="text-white text-lg filter drop-shadow-sm">📷</span>
+                  </a>
+                  <a
+                    href="#"
+                    className="w-10 h-10 rounded-full border-2 border-white/50 bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 hover:border-white/70 hover:scale-110 transition-all duration-300"
+                  >
+                    <span className="text-white text-lg filter drop-shadow-sm">🐦</span>
+                  </a>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </footer>
   );

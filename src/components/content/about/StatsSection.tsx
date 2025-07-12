@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 import { Separator } from "../../ui/separator";
 
 // --- Data Definition ---
-// It's good practice to define data outside the component if it's static.
 const statsData = [
   { value: 5, suffix: "+", description: "Years of Design Experience" },
   { value: 50, suffix: "+", description: "Overall Global Customers" },
@@ -13,22 +12,9 @@ const statsData = [
 const lerp = (start, end, factor) => start + (end - start) * factor;
 const easeOutQuart = (x) => 1 - Math.pow(1 - x, 4);
 
-/**
- * Super Advanced Custom Hook: useScrollDrivenAnimations
- *
- * This hook encapsulates all the complex logic for the scroll-driven animation.
- * It uses a combination of Intersection Observer for performance and direct DOM
- * manipulation for buttery-smooth 60fps animations, bypassing React's render cycle.
- *
- * @param {React.RefObject<HTMLElement>} sectionRef - Ref to the container section.
- * @param {Array<object>} stats - The array of stat objects.
- * @returns {Array<React.RefObject<HTMLElement>>} An array of refs to be attached to the animated elements.
- */
 const useScrollDrivenAnimations = (sectionRef, stats) => {
   const numberRefs = useRef([]);
   const progressBarRefs = useRef([]);
-
-  // Use refs for values that change frequently to avoid re-renders.
   const animationFrameId = useRef(null);
   const currentValues = useRef(stats.map(() => 0));
   const hasCompleted = useRef(stats.map(() => false));
@@ -36,6 +22,7 @@ const useScrollDrivenAnimations = (sectionRef, stats) => {
 
   useEffect(() => {
     const sectionElement = sectionRef.current;
+    let lastUpdate = 0;
 
     // --- Dynamic CSS Injection for Sparkles ---
     const styleId = "sparkle-animations";
@@ -52,7 +39,13 @@ const useScrollDrivenAnimations = (sectionRef, stats) => {
     }
 
     // --- Animation & DOM Update Logic ---
-    const updateCounters = () => {
+    const updateCounters = (timestamp) => {
+      if (timestamp - lastUpdate < 16) { // Limit to ~60fps
+        animationFrameId.current = requestAnimationFrame(updateCounters);
+        return;
+      }
+      lastUpdate = timestamp;
+
       if (!sectionElement) return;
 
       const rect = sectionElement.getBoundingClientRect();
@@ -72,7 +65,6 @@ const useScrollDrivenAnimations = (sectionRef, stats) => {
 
         if (!numberEl || !progressBarEl) return;
 
-        // Interpolate the value smoothly for a fluid motion.
         const animatedValue = lerp(
           currentValues.current[index],
           targetValue * easedProgress,
@@ -80,13 +72,9 @@ const useScrollDrivenAnimations = (sectionRef, stats) => {
         );
         currentValues.current[index] = animatedValue;
 
-        // --- Direct DOM Manipulation ---
-        // This is the key to performance. We update the text content directly,
-        // which is much faster than triggering a React re-render.
         numberEl.textContent = `${Math.round(animatedValue)}${stat.suffix}`;
         progressBarEl.style.width = `${(animatedValue / targetValue) * 100}%`;
 
-        // --- Celebration Effect ---
         if (
           animatedValue >= targetValue * 0.99 &&
           !hasCompleted.current[index]
@@ -94,41 +82,29 @@ const useScrollDrivenAnimations = (sectionRef, stats) => {
           hasCompleted.current[index] = true;
           triggerCelebration(numberEl);
         } else if (animatedValue < targetValue * 0.9) {
-          hasCompleted.current[index] = false; // Reset if user scrolls up
+          hasCompleted.current[index] = false;
         }
       });
 
-      // Continue the animation loop if the section is still in view.
       if (isInView.current) {
         animationFrameId.current = requestAnimationFrame(updateCounters);
       }
     };
 
-    // --- Scroll Handler ---
-    const onScroll = () => {
-      // Start the animation loop only when needed.
-      if (isInView.current && !animationFrameId.current) {
-        animationFrameId.current = requestAnimationFrame(updateCounters);
-      }
-    };
-
     // --- Intersection Observer ---
-    // This is more performant than listening to scroll events all the time.
     const observer = new IntersectionObserver(
       ([entry]) => {
         isInView.current = entry.isIntersecting;
         if (entry.isIntersecting) {
-          window.addEventListener("scroll", onScroll, { passive: true });
-          onScroll(); // Start animation immediately if in view
+          animationFrameId.current = requestAnimationFrame(updateCounters);
         } else {
-          window.removeEventListener("scroll", onScroll);
           if (animationFrameId.current) {
             cancelAnimationFrame(animationFrameId.current);
             animationFrameId.current = null;
           }
         }
       },
-      { threshold: 0.1 } // Trigger when 10% of the section is visible
+      { threshold: 0.3 }
     );
 
     if (sectionElement) {
@@ -137,7 +113,6 @@ const useScrollDrivenAnimations = (sectionRef, stats) => {
 
     // --- Cleanup ---
     return () => {
-      window.removeEventListener("scroll", onScroll);
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current);
       }
@@ -145,7 +120,7 @@ const useScrollDrivenAnimations = (sectionRef, stats) => {
         observer.unobserve(sectionElement);
       }
     };
-  }, [sectionRef, stats]); // Dependencies are stable.
+  }, [sectionRef, stats]);
 
   return [numberRefs, progressBarRefs];
 };
@@ -222,6 +197,7 @@ export const StatsSection = () => {
                   ref={(el) => (numberRefs.current[index] = el)}
                   className="stat-number relative z-10 bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-400 bg-clip-text text-transparent font-clash-display font-bold text-[80px] lg:text-[120px] text-center whitespace-nowrap transition-transform duration-300 group-hover:scale-105"
                   aria-label={`${stat.value}${stat.suffix} ${stat.description}`}
+                  style={{ willChange: "transform, opacity" }}
                 >
                   0{stat.suffix}
                 </div>

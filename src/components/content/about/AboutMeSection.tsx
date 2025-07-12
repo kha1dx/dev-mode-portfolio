@@ -11,7 +11,7 @@ export const AboutMeSection = () => {
           setIsVisible(true);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.3 }
     );
 
     if (aboutRef.current) {
@@ -51,6 +51,7 @@ export const AboutMeSection = () => {
                 ? "translate-y-0 opacity-100"
                 : "translate-y-8 opacity-0"
             }`}
+            style={{ willChange: "transform, opacity" }}
           >
             {/* Decorative elements behind the image */}
             <div className="absolute w-[320px] sm:w-[403px] h-[70px] sm:h-[87px] top-[80px] sm:top-[105px] left-[-40px] sm:left-[-50px] rounded-[201.5px/43.5px] border border-solid border-white/40 rotate-[-15.31deg] z-0 animate-pulse" />
@@ -107,6 +108,7 @@ export const AboutMeSection = () => {
                 ? "translate-y-0 opacity-100"
                 : "translate-y-8 opacity-0"
             }`}
+            style={{ willChange: "transform, opacity" }}
           >
             <div className="space-y-6 ">
               {/* Main intro text */}

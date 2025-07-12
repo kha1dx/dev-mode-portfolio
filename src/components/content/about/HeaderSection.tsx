@@ -6,30 +6,40 @@ export const HeaderSection = () => {
       <div className="max-w-6xl mx-auto px-8 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="text-2xl font-bold text-white">
-            LOGO
-          </div>
-          
+          <div className="text-2xl font-bold text-white">LOGO</div>
+
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#home" className="text-white hover:text-purple-400 transition-colors">
+            <a
+              href="#home"
+              className="text-white hover:text-purple-400 transition-colors"
+            >
               Home
             </a>
-            <a href="#about" className="text-white hover:text-purple-400 transition-colors">
+            <a
+              href="#about"
+              className="text-white hover:text-purple-400 transition-colors"
+            >
               About
             </a>
-            <a href="#work" className="text-white hover:text-purple-400 transition-colors">
+            <a
+              href="#work"
+              className="text-white hover:text-purple-400 transition-colors"
+            >
               Work
             </a>
-            <a href="#contact" className="text-white hover:text-purple-400 transition-colors">
+            <a
+              href="#contact"
+              className="text-white hover:text-purple-400 transition-colors"
+            >
               Contact
             </a>
           </nav>
-          
+
           {/* Resume Button */}
-          <Button 
-            variant="outline" 
-            className="border-white text-white hover:bg-white hover:text-black transition-all duration-300"
+          <Button
+            variant="outline"
+            className=" bg-black text-white hover:bg-white hover:text-black hover:border-black transition-all duration-300"
           >
             Resume ↓
           </Button>
@@ -37,6 +47,4 @@ export const HeaderSection = () => {
       </div>
     </header>
   );
-
 };
-

@@ -48,22 +48,22 @@ export const ContactContent = () => {
     {
       icon: Mail,
       label: 'Email',
-      value: 'john.doe@example.com',
-      href: 'mailto:john.doe@example.com',
+      value: 'khaledmohamedsalleh@gmail.com',
+      href: 'mailto:khaledmohamedsalleh@gmail.com',
       color: 'text-[#4ec9b0]'
     },
     {
       icon: Phone,
       label: 'Phone',
-      value: '+1 (555) 123-4567',
-      href: 'tel:+15551234567',
+      value: '+20 1014334387',
+      href: 'tel:+201014334387',
       color: 'text-[#569cd6]'
     },
     {
       icon: MapPin,
       label: 'Location',
-      value: 'San Francisco, CA',
-      href: 'https://maps.google.com/?q=San+Francisco,+CA',
+      value: 'Cairo, Egypt',
+      href: 'https://maps.google.com/?q=Cairo,+Egypt',
       color: 'text-[#ce9178]'
     }
   ];
@@ -72,19 +72,19 @@ export const ContactContent = () => {
     {
       icon: Github,
       label: 'GitHub',
-      href: 'https://github.com/johndoe',
+      href: 'https://github.com/kha1dx',
       color: 'hover:text-[#ffffff]'
     },
     {
       icon: Linkedin,
       label: 'LinkedIn',
-      href: 'https://linkedin.com/in/johndoe',
+      href: 'https://linkedin.com/in/khal1dx',
       color: 'hover:text-[#0077b5]'
     },
     {
       icon: Twitter,
       label: 'Twitter',
-      href: 'https://twitter.com/johndoe',
+      href: 'https://twitter.com/khal1dx',
       color: 'hover:text-[#1da1f2]'
     }
   ];

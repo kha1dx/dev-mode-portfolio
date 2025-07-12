@@ -4,48 +4,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { debounce } from "lodash";
 import { ProjectCard } from "./ProjectCard";
+import { projectsData } from "../../../data/projectsData";
 
 // Register the GSAP plugins to be used
 gsap.registerPlugin(ScrollTrigger, useGSAP);
-
-const projectsData = [
-  {
-    title: "Vicario",
-    image: "💻",
-    description:
-      "Advanced video conferencing platform with real-time collaboration features",
-    className: "col-span-1 md:col-span-2 lg:col-span-2",
-    size: "large" as const,
-  },
-  {
-    title: "BeFit",
-    image: "📱",
-    description: "Personalized fitness tracking mobile application",
-    className: "col-span-1",
-    size: "medium" as const,
-  },
-  {
-    title: "BRAVO",
-    image: "🏢",
-    description: "Modern corporate website with dynamic content management",
-    className: "col-span-1 md:col-span-3 lg:col-span-3",
-    size: "wide" as const,
-  },
-  {
-    title: "TASTIFY",
-    image: "🍔",
-    description: "Smart food delivery app with AI recommendations",
-    className: "col-span-1",
-    size: "medium" as const,
-  },
-  {
-    title: "AI Platform",
-    image: "🤖",
-    description: "Intelligent dashboard with machine learning analytics",
-    className: "col-span-1 md:col-span-2 lg:col-span-2",
-    size: "large" as const,
-  },
-] as const;
 
 export const ProjectsSection = () => {
   const container = useRef(null);
@@ -131,12 +93,16 @@ export const ProjectsSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8 auto-rows-fr">
           {memoizedProjectsData.map((project, index) => (
             <ProjectCard
-              key={index}
+              key={project.id}
               title={project.title}
+              icon={project.icon}
               image={project.image}
               description={project.description}
               className={project.className}
               size={project.size}
+              technologies={project.technologies}
+              liveUrl={project.liveUrl}
+              githubUrl={project.githubUrl}
             />
           ))}
         </div>
@@ -145,11 +111,11 @@ export const ProjectsSection = () => {
         <div className="text-center mt-48">
           <div className="w-full max-w-4xl mx-auto mt-16 px-6 py-8 rounded-2xl shadow-xl border border-white/10 backdrop-blur-md bg-gradient-to-r from-[#0f172a]/70 to-[#1e293b]/70 text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-white">
-              Got an idea? Let’s make it real.
+              Got an idea? Let's make it real.
             </h2>
             <p className="mt-2 text-neutral-300 text-sm md:text-base">
               I design, build, and scale full-stack web experiences. Tell me
-              what you need — I’ll handle the rest.
+              what you need — I'll handle the rest.
             </p>
             <div className="mt-6">
               <a

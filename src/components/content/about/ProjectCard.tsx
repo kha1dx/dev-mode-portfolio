@@ -3,15 +3,30 @@ import Tilt from "react-parallax-tilt";
 
 interface ProjectCardProps {
   title: string;
-  image: React.ReactNode;
+  icon: React.ReactNode;
+  image?: string; // Project showcase image
   description: string;
   className?: string;
   isProject?: boolean;
   size?: "small" | "medium" | "large" | "wide";
+  technologies?: string[];
+  liveUrl?: string;
+  githubUrl?: string;
 }
 
 export const ProjectCard = React.memo(
-  ({ title, image, description, className, isProject = true, size }: ProjectCardProps) => {
+  ({
+    title,
+    icon,
+    image,
+    description,
+    className,
+    isProject = true,
+    size = "medium",
+    technologies,
+    liveUrl,
+    githubUrl,
+  }: ProjectCardProps) => {
     const sizeClasses = {
       small: "min-h-[320px]",
       medium: "min-h-[380px]",
@@ -29,7 +44,18 @@ export const ProjectCard = React.memo(
           sizeClasses[size]
         } flex flex-col
       hover:shadow-2xl hover:shadow-cyan-500/20 hover:bg-slate-900/60`}
+        style={{
+          backgroundImage: image && isProject ? `url(${image})` : "none",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
       >
+        {/* Project Image Background Overlay */}
+        {image && isProject && (
+          <div className=" absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/70 to-slate-900/40" />
+        )}
+
         {/* Animated Background Gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-800/20 via-transparent to-cyan-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -43,35 +69,73 @@ export const ProjectCard = React.memo(
                 isProject ? "text-5xl" : "text-6xl"
               }`}
             >
-              {image}
+              {icon}
             </div>
 
             {/* Title */}
             <h3
               className={`mb-4 font-bold text-white transition-all duration-300 group-hover:text-cyan-300 ${
                 isProject ? "text-2xl" : "text-3xl"
-              }`}
+              } drop-shadow-lg`}
             >
               {title}
             </h3>
 
             {/* Description */}
             <p
-              className={`transition-all duration-300 ${
+              className={`transition-all duration-300 mb-4 drop-shadow-md ${
                 isProject
-                  ? "text-slate-400 text-base group-hover:text-slate-300"
+                  ? "text-slate-100 text-base group-hover:text-slate-50"
                   : "text-cyan-300 text-lg font-medium group-hover:text-cyan-200"
               }`}
             >
               {description}
             </p>
+
+            {/* Technologies */}
+            {technologies && technologies.length > 0 && (
+              <div className="flex flex-wrap gap-2 justify-center mb-4">
+                {technologies.slice(0, 3).map((tech, index) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1 text-xs bg-cyan-400/20 text-cyan-300 rounded-full border border-cyan-400/30 backdrop-blur-sm"
+                  >
+                    {tech}
+                  </span>
+                ))}
+                {technologies.length > 3 && (
+                  <span className="px-3 py-1 text-xs bg-slate-700/60 text-slate-300 rounded-full backdrop-blur-sm">
+                    +{technologies.length - 3}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
 
-          {/* Action Button */}
+          {/* Action Buttons */}
           {isProject ? (
-            <button className="mt-6 self-center rounded-3xl bg-cyan-400/10 border border-cyan-400/20 px-6 py-3 text-sm font-medium text-cyan-400 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:bg-cyan-400/20 group-hover:border-cyan-400/40 hover:scale-105">
-              View Project →
-            </button>
+            <div className="flex gap-2 justify-center opacity-0 transition-all duration-500 group-hover:opacity-100">
+              {liveUrl && (
+                <a
+                  href={liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 bg-cyan-400/20 border border-cyan-400/30 text-cyan-300 text-sm rounded-2xl hover:bg-cyan-400/30 hover:border-cyan-400/50 transition-all duration-300 backdrop-blur-sm"
+                >
+                  Live Demo
+                </a>
+              )}
+              {githubUrl && (
+                <a
+                  href={githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 bg-slate-700/60 border border-slate-600/60 text-slate-200 text-sm rounded-2xl hover:bg-slate-600/60 hover:border-slate-500/60 transition-all duration-300 backdrop-blur-sm"
+                >
+                  Code
+                </a>
+              )}
+            </div>
           ) : (
             <div className="mt-6 self-center rounded-3xl bg-gradient-to-r from-cyan-400 to-blue-400 px-8 py-4 text-base font-semibold text-slate-900 transition-all duration-500 group-hover:from-cyan-300 group-hover:to-blue-300 hover:scale-105 shadow-lg shadow-cyan-500/30">
               View All →
@@ -121,3 +185,6 @@ export const ProjectCard = React.memo(
     );
   }
 );
+
+ProjectCard.displayName = "ProjectCard";
+

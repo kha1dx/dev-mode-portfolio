@@ -300,7 +300,7 @@ export const HeroSection = () => {
                   alt="Khaled Salleh - UI/UX Designer"
                   className="w-full h-full object-contain px-2 sm:px-3 lg:px-4"
                   onError={(e) => {
-                    // Fallback to the attached image style if hero-avatar doesn't load
+                    // Fallback to the attached image style if hero-avatar Sallehsn't load
                     console.log("Hero avatar not found, using fallback");
                   }}
                 />

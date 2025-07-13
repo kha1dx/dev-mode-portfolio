@@ -120,7 +120,7 @@ export const Terminal = ({
       listFiles(portfolioFiles);
       addToOutput("");
     } else if (cmd === "whoami") {
-      addToOutput("John Doe - Full Stack Developer");
+      addToOutput("Khaled Salleh - Full Stack Developer");
       addToOutput("5+ years experience in React, TypeScript, Node.js");
       addToOutput("50+ projects serving 1M+ users");
       addToOutput("");
@@ -204,7 +204,7 @@ export const Terminal = ({
 
         {/* Terminal Input Line */}
         <div className="flex items-center space-x-2 mt-2">
-          <span className="text-[#4ec9b0]">john@portfolio</span>
+          <span className="text-[#4ec9b0]">Khaled@portfolio</span>
           <span className="text-[#cccccc]">:</span>
           <span className="text-[#569cd6]">~/terminal</span>
           <span className="text-[#cccccc]">$</span>

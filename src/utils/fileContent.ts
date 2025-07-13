@@ -47,9 +47,9 @@ Here is a summary of my technical expertise, which I continuously work to expand
 
 I am currently open to new opportunities and collaborations.
 
-- **Email**: john.doe@example.com
-- **LinkedIn**: [linkedin.com/in/johndoe](https://linkedin.com/in/johndoe)
-- **GitHub**: [github.com/johndoe](https://github.com/johndoe)
+- **Email**: Khaled.Salleh@example.com
+- **LinkedIn**: [linkedin.com/in/KhaledSalleh](https://linkedin.com/in/KhaledSalleh)
+- **GitHub**: [github.com/KhaledSalleh](https://github.com/KhaledSalleh)
 
 For pricing inquiries regarding freelance projects or to discuss a potential role, please reach out via email. I look forward to hearing from you.
   `,
@@ -77,7 +77,7 @@ export function initializeApp(containerId: string) {
     createDashboard(container, {
       apiEndpoint: 'wss://api.example.com/data',
       theme: 'dark',
-      user: 'john.doe'
+      user: 'Khaled.Salleh'
     });
     console.log('Dashboard initialized with React and TypeScript.');
   }
@@ -140,7 +140,7 @@ export const About = () => {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
-            John Doe
+            Khaled Salleh
           </h1>
           <p className="text-xl text-gray-300 mb-6">Full Stack Developer</p>
           <div className="flex justify-center items-center space-x-4 text-gray-400">
@@ -184,7 +184,7 @@ const projects = [
     title: "E-Commerce Platform",
     description: "A full-featured e-commerce platform built with React, Node.js, and PostgreSQL",
     tech: ["React", "TypeScript", "Node.js", "PostgreSQL", "Stripe"],
-    github: "https://github.com/johndoe/ecommerce",
+    github: "https://github.com/KhaledSalleh/ecommerce",
     live: "https://myecommerce.demo.com",
     image: "/api/placeholder/400/250"
   },
@@ -193,7 +193,7 @@ const projects = [
     title: "Task Management App",
     description: "A collaborative task management application with real-time updates",
     tech: ["Python", "Django", "WebSockets", "React", "PostgreSQL"],
-    github: "https://github.com/johndoe/taskmanager",
+    github: "https://github.com/KhaledSalleh/taskmanager",
     live: "https://taskmanager.demo.com",
     image: "/api/placeholder/400/250"
   },
@@ -202,7 +202,7 @@ const projects = [
     title: "Weather API Service",
     description: "RESTful API service providing weather data with caching and rate limiting",
     tech: ["Node.js", "Express", "Redis", "MongoDB", "Docker"],
-    github: "https://github.com/johndoe/weather-api",
+    github: "https://github.com/KhaledSalleh/weather-api",
     live: "https://api.weather.demo.com",
     image: "/api/placeholder/400/250"
   }

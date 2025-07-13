@@ -224,7 +224,7 @@ const Index = () => {
           <div className="w-3 h-3 rounded-full bg-[#28ca42]"></div>
         </div>
         <div className="ml-4 text-[#cccccc]">
-          John Doe - Portfolio - Visual Studio Code
+          Khaled Salleh - Portfolio - Visual Studio Code
         </div>
       </div>
 

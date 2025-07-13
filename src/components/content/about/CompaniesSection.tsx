@@ -5,7 +5,7 @@ const testimonialsData = [
   {
     quote:
       "Working with them was a game-changer. Their expertise in frontend development is unparalleled, delivering a product that exceeded all our expectations.",
-    name: "Sarah Johnson",
+    name: "Sarah Khaledson",
     role: "CEO at Tech Innovators",
     avatar: "👩‍💻",
   },

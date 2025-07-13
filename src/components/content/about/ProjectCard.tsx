@@ -4,7 +4,7 @@ import Tilt from "react-parallax-tilt";
 interface ProjectCardProps {
   title: string;
   icon: React.ReactNode;
-  image?: string; // Project showcase image
+  image?: string;
   description: string;
   className?: string;
   isProject?: boolean;
@@ -12,6 +12,7 @@ interface ProjectCardProps {
   technologies?: string[];
   liveUrl?: string;
   githubUrl?: string;
+  index?: number;
 }
 
 export const ProjectCard = React.memo(
@@ -26,6 +27,7 @@ export const ProjectCard = React.memo(
     technologies,
     liveUrl,
     githubUrl,
+    index = 0,
   }: ProjectCardProps) => {
     const sizeClasses = {
       small: "min-h-[320px]",
@@ -34,25 +36,31 @@ export const ProjectCard = React.memo(
       wide: "min-h-[320px]",
     };
 
-    const cardContent = (
-      <div
-        className={`group relative h-full w-full overflow-hidden rounded-3xl ${
-          isProject
-            ? "bg-slate-900/40 border-slate-700/50 hover:border-cyan-400/60"
-            : "bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-cyan-400/50 hover:border-cyan-400 "
-        } border backdrop-blur-xl transition-all duration-500 ${
-          sizeClasses[size]
-        } flex flex-col
-      hover:shadow-2xl hover:shadow-cyan-500/20 hover:bg-slate-900/60 `}
-        style={{
-          backgroundImage: image && isProject ? `url(${image})` : "none",
+    const hasBackgroundImage = image && isProject;
+    const backgroundStyle = hasBackgroundImage
+      ? {
+          backgroundImage: `url(${image})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+        }
+      : {};
+
+    const cardContent = (
+      <div
+        className={`project-card opacity-100 translate-y-8 transition-all duration-700 ease-out group relative h-full w-full overflow-hidden rounded-3xl ${
+          isProject
+            ? "bg-slate-900/40 border-slate-700/50 hover:border-cyan-400/60"
+            : "bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-cyan-400/50 hover:border-cyan-400"
+        } border backdrop-blur-xl hover:scale-105 ${
+          sizeClasses[size]
+        } flex flex-col hover:shadow-2xl hover:shadow-cyan-500/20 hover:bg-slate-900/60`}
+        style={{
+          ...backgroundStyle
         }}
       >
-        {/* Project Image Background Overlay */}
-        {image && isProject && (
+        {/* Project Image Background Overlay - Only render if needed */}
+        {hasBackgroundImage && (
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-slate-900/30 group-hover:from-slate-900/70 group-hover:via-slate-900/30 group-hover:to-slate-900/20 transition-all duration-500" />
         )}
 
@@ -76,7 +84,7 @@ export const ProjectCard = React.memo(
             <h3
               className={`mb-4 font-bold text-white transition-all duration-300 group-hover:text-cyan-300 ${
                 isProject ? "text-2xl" : "text-3xl"
-              } drop-shadow-lg`}
+              }`}
             >
               {title}
             </h3>
@@ -92,7 +100,7 @@ export const ProjectCard = React.memo(
               {description}
             </p>
 
-            {/* Technologies - Hidden initially, shown on hover */}
+            {/* Technologies - Only render if technologies exist */}
             {technologies && technologies.length > 0 && (
               <div className="flex flex-wrap gap-2 justify-center mb-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100">
                 {technologies.slice(0, 3).map((tech, index) => (
@@ -166,7 +174,7 @@ export const ProjectCard = React.memo(
     );
 
     return (
-      <div className={`${className} project-card`}>
+      <div className={className}>
         <Tilt
           className="h-full w-full rounded-3xl overflow-hidden"
           perspective={1000}

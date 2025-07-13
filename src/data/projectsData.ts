@@ -17,7 +17,7 @@ export const projectsData: readonly ProjectData[] = [
     id: "Movies",
     title: "Movies",
     icon: "💻",
-    image: "project1.png", // Placeholder for project image
+    image: "project1.jpeg", // Placeholder for project image
     description: "Advanced video conferencing platform with real-time collaboration features",
     className: "col-span-1 md:col-span-2 lg:col-span-2 z-10",
     size: "large",
@@ -29,7 +29,7 @@ export const projectsData: readonly ProjectData[] = [
     id: "HabitKit",
     title: "HabitKit",
     icon: "📱",
-    image: "project2.png", // Placeholder for project image
+    image: "project2.jpeg", // Placeholder for project image
     description: "Personalized fitness tracking mobile application",
     className: "col-span-1",
     size: "medium",
@@ -37,23 +37,12 @@ export const projectsData: readonly ProjectData[] = [
     liveUrl: "https://befit-app.com",
     githubUrl: "https://github.com/username/befit"
   },
-  {
-    id: "SCAD",
-    title: "SCAD Internships",
-    icon: "🏢",
-    image: "project3.png", // Placeholder for project image
-    description: "Modern corporate website with dynamic content management",
-    className: "col-span-1 md:col-span-3 lg:col-span-3",
-    size: "wide",
-    technologies: ["Next.js", "Sanity CMS", "Tailwind CSS"],
-    liveUrl: "https://bravo-corp.com",
-    githubUrl: "https://github.com/username/bravo"
-  },
+  
   {
     id: "KAI",
     title: "KAI",
     icon: "🤖",
-    image: "project4.png", // Placeholder for project image
+    image: "project4.jpeg", // Placeholder for project image
     description: "Smart food delivery app with AI recommendations",
     className: "col-span-1",
     size: "medium",
@@ -62,13 +51,25 @@ export const projectsData: readonly ProjectData[] = [
     githubUrl: "https://github.com/username/tastify"
   },
   {
+    id: "SCAD",
+    title: "SCAD Internships",
+    icon: "🏢",
+    image: "project3.png", // Placeholder for project image
+    description: "Modern corporate website with dynamic content management",
+    className: "col-span-1 md:col-span-2 lg:col-span-2 z-10",
+    size: "large",
+    technologies: ["Next.js", "Sanity CMS", "Tailwind CSS"],
+    liveUrl: "https://bravo-corp.com",
+    githubUrl: "https://github.com/username/bravo"
+  },
+  {
     id: "ai-platform",
     title: "AI Platform",
     icon: "🤖",
     image: "see-more.png", // Placeholder for project image
     description: "Intelligent dashboard with machine learning analytics",
-    className: "col-span-1 md:col-span-2 lg:col-span-2",
-    size: "large",
+    className: "col-span-1 md:col-span-3 lg:col-span-3",
+    size: "wide",
     technologies: ["React", "Python", "FastAPI", "MongoDB"],
     liveUrl: "https://ai-platform-demo.com",
     githubUrl: "https://github.com/username/ai-platform"

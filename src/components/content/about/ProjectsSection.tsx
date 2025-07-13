@@ -1,12 +1,61 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef, useEffect } from "react";
 import { ProjectCard } from "./ProjectCard";
 import { projectsData } from "../../../data/projectsData";
 
 export const ProjectsSection = () => {
+  const container = useRef<HTMLElement>(null);
   const memoizedProjectsData = useMemo(() => projectsData, []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const target = entry.target as HTMLElement;
+
+            if (target.classList.contains("section-heading")) {
+              target.style.opacity = "1";
+              target.style.transform = "translateY(0)";
+            }
+
+            if (target.classList.contains("section-subtitle")) {
+              setTimeout(() => {
+                target.style.opacity = "1";
+                target.style.transform = "translateY(0)";
+              }, 200);
+            }
+
+            if (target.classList.contains("project-card")) {
+              target.style.opacity = "1";
+              target.style.transform = "translateY(0)";
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
+
+    setTimeout(() => {
+      const elementsToObserve = [
+        ".section-heading",
+        ".section-subtitle",
+        ".project-card",
+      ];
+
+      elementsToObserve.forEach((selector) => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach((el) => observer.observe(el));
+      });
+    }, 100);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="py-32 px-8 overflow-hidden relative">
+    <section ref={container} className="py-32 px-8 overflow-hidden relative">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/20 to-transparent" />
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
@@ -14,10 +63,10 @@ export const ProjectsSection = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
         <div className="text-center mb-20">
-          <h2 className="section-heading text-5xl md:text-6xl font-bold text-white mb-6 bg-gradient-to-r from-white via-cyan-300 to-white bg-clip-text text-transparent">
+          <h2 className="section-heading opacity-0 translate-y-8 transition-all duration-700 ease-out text-5xl md:text-6xl font-bold text-white mb-6 bg-gradient-to-r from-white via-cyan-300 to-white bg-clip-text text-transparent">
             Featured Projects
           </h2>
-          <p className="section-subtitle text-xl text-slate-400 max-w-2xl mx-auto">
+          <p className="section-subtitle opacity-0 translate-y-8 transition-all duration-700 ease-out text-xl text-slate-400 max-w-2xl mx-auto">
             Explore our latest work showcasing innovation, creativity, and
             technical excellence
           </p>
@@ -37,6 +86,7 @@ export const ProjectsSection = () => {
               technologies={project.technologies}
               liveUrl={project.liveUrl}
               githubUrl={project.githubUrl}
+              index={index}
             />
           ))}
         </div>
@@ -65,6 +115,3 @@ export const ProjectsSection = () => {
     </section>
   );
 };
-
-
-

@@ -19,7 +19,7 @@ export const projectsData: readonly ProjectData[] = [
     icon: "💻",
     image: "project1.png", // Placeholder for project image
     description: "Advanced video conferencing platform with real-time collaboration features",
-    className: "col-span-1 md:col-span-2 lg:col-span-2",
+    className: "col-span-1 md:col-span-2 lg:col-span-2 z-10",
     size: "large",
     technologies: ["React", "WebRTC", "Node.js", "Socket.io"],
     liveUrl: "https://vicario-demo.com",

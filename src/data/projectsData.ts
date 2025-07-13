@@ -14,22 +14,22 @@ export interface ProjectData {
 
 export const projectsData: readonly ProjectData[] = [
   {
-    id: "vicario",
-    title: "Vicario",
+    id: "Movies",
+    title: "Movies",
     icon: "💻",
-    image: "hero.png", // Placeholder for project image
+    image: "project1.png", // Placeholder for project image
     description: "Advanced video conferencing platform with real-time collaboration features",
     className: "col-span-1 md:col-span-2 lg:col-span-2",
     size: "large",
     technologies: ["React", "WebRTC", "Node.js", "Socket.io"],
     liveUrl: "https://vicario-demo.com",
-    githubUrl: "https://github.com/username/vicario"
+    githubUrl: "https://github.com/kha1dx/Movie-app"
   },
   {
     id: "befit",
     title: "BeFit",
     icon: "📱",
-    image: "/projects/befit-showcase.png", // Placeholder for project image
+    image: "project2.png", // Placeholder for project image
     description: "Personalized fitness tracking mobile application",
     className: "col-span-1",
     size: "medium",
@@ -41,7 +41,7 @@ export const projectsData: readonly ProjectData[] = [
     id: "bravo",
     title: "BRAVO",
     icon: "🏢",
-    image: "/projects/bravo-showcase.png", // Placeholder for project image
+    image: "project3.png", // Placeholder for project image
     description: "Modern corporate website with dynamic content management",
     className: "col-span-1 md:col-span-3 lg:col-span-3",
     size: "wide",
@@ -53,7 +53,7 @@ export const projectsData: readonly ProjectData[] = [
     id: "tastify",
     title: "TASTIFY",
     icon: "🍔",
-    image: "/projects/tastify-showcase.png", // Placeholder for project image
+    image: "project4.png", // Placeholder for project image
     description: "Smart food delivery app with AI recommendations",
     className: "col-span-1",
     size: "medium",
@@ -65,7 +65,7 @@ export const projectsData: readonly ProjectData[] = [
     id: "ai-platform",
     title: "AI Platform",
     icon: "🤖",
-    image: "/projects/ai-platform-showcase.png", // Placeholder for project image
+    image: "see-more.png", // Placeholder for project image
     description: "Intelligent dashboard with machine learning analytics",
     className: "col-span-1 md:col-span-2 lg:col-span-2",
     size: "large",

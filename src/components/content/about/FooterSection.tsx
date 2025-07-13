@@ -73,7 +73,7 @@ export const FooterSection = () => {
           <CardContent className="p-6 sm:p-8 lg:p-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             <div className="col-span-1 flex justify-center lg:justify-start">
               <img
-                className="w-full max-w-[300px] sm:max-w-[400px] lg:max-w-[500px] h-auto object-cover filter drop-shadow-lg"
+                className="w-80 max-w-[460px] sm:max-w-[400px] lg:max-w-[550px] h-auto object-cover filter drop-shadow-lg"
                 alt="Khaled 3D avatar"
                 src="/footer.png"
               />

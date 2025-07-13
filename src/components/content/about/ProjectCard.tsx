@@ -39,11 +39,11 @@ export const ProjectCard = React.memo(
         className={`group relative h-full w-full overflow-hidden rounded-3xl ${
           isProject
             ? "bg-slate-900/40 border-slate-700/50 hover:border-cyan-400/60"
-            : "bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-cyan-400/50 hover:border-cyan-400"
+            : "bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-cyan-400/50 hover:border-cyan-400 "
         } border backdrop-blur-xl transition-all duration-500 ${
           sizeClasses[size]
         } flex flex-col
-      hover:shadow-2xl hover:shadow-cyan-500/20 hover:bg-slate-900/60`}
+      hover:shadow-2xl hover:shadow-cyan-500/20 hover:bg-slate-900/60 `}
         style={{
           backgroundImage: image && isProject ? `url(${image})` : "none",
           backgroundSize: "cover",
@@ -53,7 +53,7 @@ export const ProjectCard = React.memo(
       >
         {/* Project Image Background Overlay */}
         {image && isProject && (
-          <div className=" absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/70 to-slate-900/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-slate-900/30 group-hover:from-slate-900/70 group-hover:via-slate-900/30 group-hover:to-slate-900/20 transition-all duration-500" />
         )}
 
         {/* Animated Background Gradient */}
@@ -81,9 +81,9 @@ export const ProjectCard = React.memo(
               {title}
             </h3>
 
-            {/* Description */}
+            {/* Description - Hidden initially, shown on hover */}
             <p
-              className={`transition-all duration-300 mb-4 drop-shadow-md ${
+              className={`transition-all duration-500 mb-4 drop-shadow-md opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 ${
                 isProject
                   ? "text-slate-100 text-base group-hover:text-slate-50"
                   : "text-cyan-300 text-lg font-medium group-hover:text-cyan-200"
@@ -92,9 +92,9 @@ export const ProjectCard = React.memo(
               {description}
             </p>
 
-            {/* Technologies */}
+            {/* Technologies - Hidden initially, shown on hover */}
             {technologies && technologies.length > 0 && (
-              <div className="flex flex-wrap gap-2 justify-center mb-4">
+              <div className="flex flex-wrap gap-2 justify-center mb-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100">
                 {technologies.slice(0, 3).map((tech, index) => (
                   <span
                     key={index}
@@ -112,9 +112,9 @@ export const ProjectCard = React.memo(
             )}
           </div>
 
-          {/* Action Buttons */}
+          {/* Action Buttons - Hidden initially, shown on hover */}
           {isProject ? (
-            <div className="flex gap-2 justify-center opacity-0 transition-all duration-500 group-hover:opacity-100">
+            <div className="flex gap-2 justify-center opacity-0 translate-y-4 transition-all duration-500 delay-200 group-hover:opacity-100 group-hover:translate-y-0">
               {liveUrl && (
                 <a
                   href={liveUrl}
@@ -187,4 +187,3 @@ export const ProjectCard = React.memo(
 );
 
 ProjectCard.displayName = "ProjectCard";
-

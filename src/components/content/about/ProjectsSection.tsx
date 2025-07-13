@@ -1,78 +1,12 @@
-import React, { useRef, useMemo } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-import { debounce } from "lodash";
+import React, { useMemo } from "react";
 import { ProjectCard } from "./ProjectCard";
 import { projectsData } from "../../../data/projectsData";
 
-// Register the GSAP plugins to be used
-gsap.registerPlugin(ScrollTrigger, useGSAP);
-
 export const ProjectsSection = () => {
-  const container = useRef(null);
-
   const memoizedProjectsData = useMemo(() => projectsData, []);
 
-  useGSAP(
-    () => {
-      gsap.set(".project-card", {
-        transformOrigin: "center center",
-      });
-
-      // Batch ScrollTrigger animations for project cards
-      ScrollTrigger.batch(".project-card", {
-        onEnter: (elements) =>
-          gsap.from(elements, {
-            opacity: 0,
-            y: 50,
-            stagger: 0.2,
-            duration: 0.8,
-            ease: "power3.out",
-          }),
-        start: "top 80%",
-      });
-
-      // Add debounced hover animations for project cards
-      const projectCards = document.querySelectorAll(".project-card");
-      const handleMouseEnter = debounce((card) => {
-        gsap.to(card, {
-          y: -10,
-          scale: 1.02,
-          rotationX: -5,
-          rotationY: 5,
-          duration: 0.3,
-          ease: "power2.out",
-        });
-      }, 100);
-      const handleMouseLeave = debounce((card) => {
-        gsap.to(card, {
-          y: 0,
-          scale: 1,
-          rotationX: 0,
-          rotationY: 0,
-          duration: 0.3,
-          ease: "power2.out",
-        });
-      }, 100);
-
-      projectCards.forEach((card) => {
-        card.addEventListener("mouseenter", () => handleMouseEnter(card));
-        card.addEventListener("mouseleave", () => handleMouseLeave(card));
-      });
-
-      return () => {
-        projectCards.forEach((card) => {
-          card.removeEventListener("mouseenter", handleMouseEnter);
-          card.removeEventListener("mouseleave", handleMouseLeave);
-        });
-      };
-    },
-    { scope: container }
-  );
-
   return (
-    <section ref={container} className="py-32 px-8 overflow-hidden relative">
+    <section className="py-32 px-8 overflow-hidden relative">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/20 to-transparent" />
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
@@ -131,3 +65,4 @@ export const ProjectsSection = () => {
     </section>
   );
 };
+

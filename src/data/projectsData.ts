@@ -26,8 +26,8 @@ export const projectsData: readonly ProjectData[] = [
     githubUrl: "https://github.com/kha1dx/Movie-app"
   },
   {
-    id: "befit",
-    title: "BeFit",
+    id: "HabitKit",
+    title: "HabitKit",
     icon: "📱",
     image: "project2.png", // Placeholder for project image
     description: "Personalized fitness tracking mobile application",
@@ -38,8 +38,8 @@ export const projectsData: readonly ProjectData[] = [
     githubUrl: "https://github.com/username/befit"
   },
   {
-    id: "bravo",
-    title: "BRAVO",
+    id: "SCAD",
+    title: "SCAD Internships",
     icon: "🏢",
     image: "project3.png", // Placeholder for project image
     description: "Modern corporate website with dynamic content management",
@@ -50,9 +50,9 @@ export const projectsData: readonly ProjectData[] = [
     githubUrl: "https://github.com/username/bravo"
   },
   {
-    id: "tastify",
-    title: "TASTIFY",
-    icon: "🍔",
+    id: "KAI",
+    title: "KAI",
+    icon: "🤖",
     image: "project4.png", // Placeholder for project image
     description: "Smart food delivery app with AI recommendations",
     className: "col-span-1",

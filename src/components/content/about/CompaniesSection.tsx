@@ -1,10 +1,4 @@
-import React, { useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-// Register GSAP plugins
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+import React, { useRef, useEffect } from "react";
 
 // --- Data for Testimonials ---
 const testimonialsData = [
@@ -31,73 +25,97 @@ const testimonialsData = [
   },
 ];
 
-// --- Reusable Testimonial Card Component ---
-const TestimonialCard = ({ quote, name, role, avatar }) => {
-  return (
-    <div className="testimonial-card group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-slate-700/50 p-8 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-cyan-400/60 bg-slate-900/40 hover:bg-slate-900/60">
-      {/* Glow Effects */}
-      <div className="absolute -right-12 -top-12 z-0 h-32 w-32 rounded-full bg-cyan-500/10 blur-3xl transition-all duration-700 group-hover:h-40 group-hover:w-40" />
-      <div className="absolute -left-12 -bottom-12 z-0 h-32 w-32 rounded-full bg-blue-500/10 blur-3xl transition-all duration-700 group-hover:h-40 group-hover:w-40" />
-      <div className="absolute inset-0 z-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-gradient-to-br from-slate-800/20 via-transparent to-cyan-900/20" />
+// --- Optimized Testimonial Card Component ---
+const TestimonialCard = React.memo(
+  ({ quote, name, role, avatar, index }: any) => {
+    return (
+      <div
+        className="testimonial-card opacity-0 translate-y-8 transition-all duration-700 ease-out group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-slate-700/50 p-8 backdrop-blur-xl hover:scale-105 hover:border-cyan-400/60 bg-slate-900/40 hover:bg-slate-900/60"
+        style={{ transitionDelay: `${index * 200}ms` }}
+      >
+        {/* Glow Effects */}
+        <div className="absolute -right-12 -top-12 z-0 h-32 w-32 rounded-full bg-cyan-500/10 blur-3xl transition-all duration-700 group-hover:h-40 group-hover:w-40" />
+        <div className="absolute -left-12 -bottom-12 z-0 h-32 w-32 rounded-full bg-blue-500/10 blur-3xl transition-all duration-700 group-hover:h-40 group-hover:w-40" />
+        <div className="absolute inset-0 z-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-gradient-to-br from-slate-800/20 via-transparent to-cyan-900/20" />
 
-      {/* Content */}
-      <div className="relative z-10 flex h-full flex-col">
-        <div className="flex-grow">
-          <p className="text-xl text-slate-300 transition-colors duration-300 group-hover:text-slate-100">
-            “{quote}”
-          </p>
-        </div>
-        <div className="mt-8 flex items-center gap-4 border-t border-slate-700/50 pt-6">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-800 text-2xl">
-            {avatar}
+        {/* Content */}
+        <div className="relative z-10 flex h-full flex-col">
+          <div className="flex-grow">
+            <p className="text-xl text-slate-300 transition-colors duration-300 group-hover:text-slate-100">
+              "{quote}"
+            </p>
           </div>
-          <div>
-            <h4 className="font-bold text-white transition-colors duration-300 group-hover:text-cyan-300">
-              {name}
-            </h4>
-            <p className="text-sm text-slate-400">{role}</p>
+          <div className="mt-8 flex items-center gap-4 border-t border-slate-700/50 pt-6">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-800 text-2xl">
+              {avatar}
+            </div>
+            <div>
+              <h4 className="font-bold text-white transition-colors duration-300 group-hover:text-cyan-300">
+                {name}
+              </h4>
+              <p className="text-sm text-slate-400">{role}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
+
+TestimonialCard.displayName = "TestimonialCard";
 
 // --- Main Testimonials Section Component ---
 export const CompaniesSection = () => {
-  const container = useRef(null);
+  const container = useRef<HTMLElement>(null);
 
-  // GSAP animations for scroll-triggered reveal
-  useGSAP(
-    () => {
-      gsap.from(".section-title, .section-subtitle", {
-        scrollTrigger: {
-          trigger: ".section-title",
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        },
-        opacity: 1,
-        y: 40,
-        duration: 0.8,
-        ease: "power3.out",
-        stagger: 0.2,
-      });
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const target = entry.target as HTMLElement;
 
-      gsap.from(".testimonial-card", {
-        scrollTrigger: {
-          trigger: ".testimonials-grid",
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-        opacity: 1,
-        y: 50,
-        stagger: 0.2,
-        duration: 0.8,
-        ease: "power3.out",
+            if (target.classList.contains("section-title")) {
+              target.style.opacity = "1";
+              target.style.transform = "translateY(0)";
+            }
+
+            if (target.classList.contains("section-subtitle")) {
+              setTimeout(() => {
+                target.style.opacity = "1";
+                target.style.transform = "translateY(0)";
+              }, 200);
+            }
+
+            if (target.classList.contains("testimonial-card")) {
+              target.style.opacity = "1";
+              target.style.transform = "translateY(0)";
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
+
+    // Start observing after a short delay
+    setTimeout(() => {
+      const elementsToObserve = [
+        ".section-title",
+        ".section-subtitle",
+        ".testimonial-card",
+      ];
+
+      elementsToObserve.forEach((selector) => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach((el) => observer.observe(el));
       });
-    },
-    { scope: container }
-  );
+    }, 100);
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section ref={container} className="relative py-32 px-8">
@@ -112,10 +130,10 @@ export const CompaniesSection = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
         <div className="text-center mb-20">
-          <h2 className="section-title text-5xl md:text-6xl font-bold bg-gradient-to-b from-purple-400 to-pink-400 to-orange bg-clip-text text-transparent mb-4">
+          <h2 className="section-title opacity-0 translate-y-8 transition-all duration-700 ease-out text-5xl md:text-6xl font-bold bg-gradient-to-b from-purple-400 to-pink-400 to-orange bg-clip-text text-transparent mb-4">
             What People Are Saying
           </h2>
-          <p className="section-subtitle text-lg text-slate-400 max-w-2xl mx-auto">
+          <p className="section-subtitle opacity-0 translate-y-8 transition-all duration-700 ease-out text-lg text-slate-400 max-w-2xl mx-auto">
             Real feedback from clients and collaborators I've had the pleasure
             to work with.
           </p>
@@ -127,6 +145,7 @@ export const CompaniesSection = () => {
           {testimonialsData.map((testimonial, index) => (
             <TestimonialCard
               key={index}
+              index={index}
               quote={testimonial.quote}
               name={testimonial.name}
               role={testimonial.role}

@@ -1,7 +1,6 @@
 
 import { FileItem } from '@/pages/Index';
 import { AboutContent } from './content/AboutContent';
-import { AboutLanding } from './content/AboutLanding';
 import { ProjectsOverview } from './content/ProjectsOverview';
 import { SkillsContent } from './content/SkillsContent';
 import { ProjectContent } from './content/ProjectContent';

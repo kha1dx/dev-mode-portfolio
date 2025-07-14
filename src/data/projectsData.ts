@@ -1,4 +1,10 @@
 export interface ProjectData {
+
+
+  //wide:col-span-1 md:col-span-3 lg:col-span-3
+  //large:col-span-1 md:col-span-2 lg:col-span-2 z-10
+  //medium:col-span-1
+
     
   id: string;
   title: string;
@@ -19,8 +25,8 @@ export const projectsData: readonly ProjectData[] = [
     icon: "🎬",
     image: "project1.jpeg",
     description: "A modern movie discovery app with ratings, reviews, and watchlist features",
-    className: "col-span-1 md:col-span-2 lg:col-span-2 z-10",
-    size: "large",
+    className: "col-span-1 md:col-span-2 lg:col-span-1 z-10",
+    size: "medium",
     technologies: ["React", "TypeScript", "TMDb API", "Tailwind CSS"],
     liveUrl: "https://kha1dx-movies.netlify.app",
     githubUrl: "https://github.com/kha1dx/Movie-app"
@@ -55,8 +61,8 @@ export const projectsData: readonly ProjectData[] = [
     icon: "🎓",
     image: "project3.png",
     description: "University internship portal with application tracking and company matching",
-    className: "col-span-1 md:col-span-2 lg:col-span-2 z-10",
-    size: "large",
+    className: "col-span-1 md:col-span-3 lg:col-span-3",
+    size: "wide",
     technologies: ["Next.js", "Node.js", "MongoDB", "Tailwind CSS"],
     liveUrl: "https://scad-internships.com",
     githubUrl: "https://github.com/kha1dx/SCAD-Internships"

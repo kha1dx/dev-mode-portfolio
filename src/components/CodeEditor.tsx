@@ -1,4 +1,3 @@
-
 import { FileItem } from '@/pages/Index';
 import { AboutContent } from './content/AboutContent';
 import { ProjectsOverview } from './content/ProjectsOverview';
@@ -10,17 +9,18 @@ import { ContactContent } from './content/ContactContent';
 interface CodeEditorProps {
   activeFile: string;
   portfolioFiles: FileItem[];
+  onNavigate?: (action: string) => void;
 }
 
-export const CodeEditor = ({ activeFile }: CodeEditorProps) => {
+export const CodeEditor = ({ activeFile, portfolioFiles, onNavigate }: CodeEditorProps) => {
   const renderContent = () => {
     switch (activeFile) {
       case 'about-main':
-        return <AboutContent />;
+        return <AboutContent onNavigate={onNavigate} />;
       case 'projects-main':
         return <ProjectsOverview />;
       case 'about':
-        return <AboutContent />;
+        return <AboutContent onNavigate={onNavigate} />;
       case 'skills':
         return <SkillsContent />;
       case 'project1':
@@ -32,7 +32,7 @@ export const CodeEditor = ({ activeFile }: CodeEditorProps) => {
       case 'contact':
         return <ContactContent />;
       default:
-        return <AboutContent />;
+        return <AboutContent onNavigate={onNavigate} />;
     }
   };
 

@@ -20,6 +20,8 @@ export const HeaderSection = ({ onNavigate }: HeaderSectionProps) => {
   const handleNavigation = (section: string) => {
     if (section === "contact" && onNavigate) {
       onNavigate("contact");
+    } else if (onNavigate) {
+      onNavigate(section);
     } else {
       // Fallback for other sections - scroll behavior
       const element = document.getElementById(section);

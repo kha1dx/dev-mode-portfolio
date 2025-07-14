@@ -271,6 +271,7 @@ const Index = () => {
                 <CodeEditor
                   activeFile={activeFile}
                   portfolioFiles={portfolioFiles}
+                  onNavigate={handleDockNavigation}
                 />
               )}
             </div>

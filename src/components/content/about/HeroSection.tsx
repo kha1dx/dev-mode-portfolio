@@ -40,11 +40,6 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
   const handleContactClick = () => {
     if (onNavigate) {
       onNavigate("contact");
-    } else {
-      // Fallback for when onNavigate is not available
-      document
-        .getElementById("contact")
-        ?.scrollIntoView({ behavior: "smooth" });
     }
   };
 

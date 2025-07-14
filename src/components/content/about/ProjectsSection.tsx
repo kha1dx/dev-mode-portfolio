@@ -56,7 +56,11 @@ export const ProjectsSection = () => {
   }, []);
 
   return (
-    <section ref={container} className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden relative">
+    <section
+      id="projects"
+      ref={container}
+      className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden relative"
+    >
       {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/20 to-transparent" />
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
@@ -90,7 +94,7 @@ export const ProjectsSection = () => {
               index={index}
             />
           ))}
-          
+
           {/* See More Projects Card */}
           <div className={seeMoreProjectsData.className}>
             <a

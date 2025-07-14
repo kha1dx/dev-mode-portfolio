@@ -1,36 +1,49 @@
-
-import { useState } from 'react';
-import { Mail, Phone, MapPin, Github, Linkedin, Twitter, Send, Copy, Check, MessageSquare, Calendar } from 'lucide-react';
+import { useState } from "react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Github,
+  Linkedin,
+  Twitter,
+  Send,
+  Copy,
+  Check,
+  MessageSquare,
+  Calendar,
+} from "lucide-react";
 
 export const ContactContent = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [copiedField, setCopiedField] = useState('');
+  const [copiedField, setCopiedField] = useState("");
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
     setIsSubmitting(false);
     setSubmitSuccess(true);
-    setFormData({ name: '', email: '', subject: '', message: '' });
-    
+    setFormData({ name: "", email: "", subject: "", message: "" });
+
     setTimeout(() => setSubmitSuccess(false), 3000);
   };
 
@@ -38,55 +51,55 @@ export const ContactContent = () => {
     try {
       await navigator.clipboard.writeText(text);
       setCopiedField(field);
-      setTimeout(() => setCopiedField(''), 2000);
+      setTimeout(() => setCopiedField(""), 2000);
     } catch (err) {
-      console.error('Failed to copy:', err);
+      console.error("Failed to copy:", err);
     }
   };
 
   const contactInfo = [
     {
       icon: Mail,
-      label: 'Email',
-      value: 'khaledmohamedsalleh@gmail.com',
-      href: 'mailto:khaledmohamedsalleh@gmail.com',
-      color: 'text-[#4ec9b0]'
+      label: "Email",
+      value: "khaledmohamedsalleh@gmail.com",
+      href: "mailto:khaledmohamedsalleh@gmail.com",
+      color: "text-[#4ec9b0]",
     },
     {
       icon: Phone,
-      label: 'Phone',
-      value: '+20 1014334387',
-      href: 'tel:+201014334387',
-      color: 'text-[#569cd6]'
+      label: "Phone",
+      value: "+20 1014334387",
+      href: "tel:+201014334387",
+      color: "text-[#569cd6]",
     },
     {
       icon: MapPin,
-      label: 'Location',
-      value: 'Cairo, Egypt',
-      href: 'https://maps.google.com/?q=Cairo,+Egypt',
-      color: 'text-[#ce9178]'
-    }
+      label: "Location",
+      value: "Cairo, Egypt",
+      href: "https://maps.google.com/?q=Cairo,+Egypt",
+      color: "text-[#ce9178]",
+    },
   ];
 
   const socialLinks = [
     {
       icon: Github,
-      label: 'GitHub',
-      href: 'https://github.com/kha1dx',
-      color: 'hover:text-[#ffffff]'
+      label: "GitHub",
+      href: "https://github.com/kha1dx",
+      color: "hover:text-[#ffffff]",
     },
     {
       icon: Linkedin,
-      label: 'LinkedIn',
-      href: 'https://linkedin.com/in/khal1dx',
-      color: 'hover:text-[#0077b5]'
+      label: "LinkedIn",
+      href: "https://linkedin.com/in/khal1dx",
+      color: "hover:text-[#0077b5]",
     },
     {
       icon: Twitter,
-      label: 'Twitter',
-      href: 'https://twitter.com/khal1dx',
-      color: 'hover:text-[#1da1f2]'
-    }
+      label: "Twitter",
+      href: "https://twitter.com/khal1dx",
+      color: "hover:text-[#1da1f2]",
+    },
   ];
 
   return (
@@ -98,7 +111,8 @@ export const ContactContent = () => {
             Get In <span className="text-[#4ec9b0]">Touch</span>
           </h1>
           <p className="text-[#cccccc] text-lg max-w-2xl mx-auto">
-            Let's discuss your next project or just say hello. I'm always excited to connect with fellow developers and potential clients.
+            Let's discuss your next project or just say hello. I'm always
+            excited to connect with fellow developers and potential clients.
           </p>
         </div>
 
@@ -108,13 +122,18 @@ export const ContactContent = () => {
           <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-8 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
             <div className="flex items-center mb-6">
               <MessageSquare className="w-6 h-6 text-[#4ec9b0] mr-3" />
-              <h2 className="text-2xl font-semibold text-white">Send Message</h2>
+              <h2 className="text-2xl font-semibold text-white">
+                Send Message
+              </h2>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="name" className="block text-[#cccccc] text-sm font-medium mb-2">
+                  <label
+                    htmlFor="name"
+                    className="block text-[#cccccc] text-sm font-medium mb-2"
+                  >
                     Name *
                   </label>
                   <input
@@ -129,7 +148,10 @@ export const ContactContent = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-[#cccccc] text-sm font-medium mb-2">
+                  <label
+                    htmlFor="email"
+                    className="block text-[#cccccc] text-sm font-medium mb-2"
+                  >
                     Email *
                   </label>
                   <input
@@ -144,9 +166,12 @@ export const ContactContent = () => {
                   />
                 </div>
               </div>
-              
+
               <div>
-                <label htmlFor="subject" className="block text-[#cccccc] text-sm font-medium mb-2">
+                <label
+                  htmlFor="subject"
+                  className="block text-[#cccccc] text-sm font-medium mb-2"
+                >
                   Subject *
                 </label>
                 <input
@@ -160,9 +185,12 @@ export const ContactContent = () => {
                   placeholder="Project Discussion / Collaboration / General Inquiry"
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="message" className="block text-[#cccccc] text-sm font-medium mb-2">
+                <label
+                  htmlFor="message"
+                  className="block text-[#cccccc] text-sm font-medium mb-2"
+                >
                   Message *
                 </label>
                 <textarea
@@ -176,7 +204,7 @@ export const ContactContent = () => {
                   placeholder="Tell me about your project, requirements, or just say hello..."
                 />
               </div>
-              
+
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -206,15 +234,22 @@ export const ContactContent = () => {
           <div className="space-y-8">
             {/* Contact Details */}
             <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-8 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
-              <h2 className="text-2xl font-semibold text-white mb-6">Contact Information</h2>
-              
+              <h2 className="text-2xl font-semibold text-white mb-6">
+                Contact Information
+              </h2>
+
               <div className="space-y-4">
                 {contactInfo.map((item) => {
                   const IconComponent = item.icon;
                   return (
-                    <div key={item.label} className="flex items-center justify-between group">
+                    <div
+                      key={item.label}
+                      className="flex items-center justify-between group"
+                    >
                       <div className="flex items-center">
-                        <IconComponent className={`w-5 h-5 ${item.color} mr-4`} />
+                        <IconComponent
+                          className={`w-5 h-5 ${item.color} mr-4`}
+                        />
                         <div>
                           <p className="text-[#cccccc] text-sm">{item.label}</p>
                           <a
@@ -246,8 +281,10 @@ export const ContactContent = () => {
 
             {/* Social Links */}
             <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-8 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
-              <h2 className="text-2xl font-semibold text-white mb-6">Follow Me</h2>
-              
+              <h2 className="text-2xl font-semibold text-white mb-6">
+                Follow Me
+              </h2>
+
               <div className="flex space-x-4">
                 {socialLinks.map((social) => {
                   const IconComponent = social.icon;
@@ -271,21 +308,29 @@ export const ContactContent = () => {
             <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-8 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
               <div className="flex items-center mb-4">
                 <Calendar className="w-6 h-6 text-[#4ec9b0] mr-3" />
-                <h2 className="text-2xl font-semibold text-white">Availability</h2>
+                <h2 className="text-2xl font-semibold text-white">
+                  Availability
+                </h2>
               </div>
-              
+
               <div className="space-y-3">
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-[#4ec9b0] rounded-full mr-3"></div>
-                  <span className="text-[#cccccc]">Available for new projects</span>
+                  <span className="text-[#cccccc]">
+                    Available for new projects
+                  </span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-[#569cd6] rounded-full mr-3"></div>
-                  <span className="text-[#cccccc]">Typical response time: 24 hours</span>
+                  <span className="text-[#cccccc]">
+                    Typical response time: 24 hours
+                  </span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-[#ce9178] rounded-full mr-3"></div>
-                  <span className="text-[#cccccc]">Open to remote collaboration</span>
+                  <span className="text-[#cccccc]">
+                    Open to remote collaboration
+                  </span>
                 </div>
               </div>
             </div>

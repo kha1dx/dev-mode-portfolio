@@ -2,8 +2,14 @@ import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import gsap from "gsap";
+import { redirect } from "react-router-dom";
+import { Contact } from "lucide-react";
 
-export const HeroSection = () => {
+interface HeroSectionProps {
+  onNavigate?: (action: string) => void;
+}
+
+export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
   const heroRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
   const cloudsRef = useRef<HTMLDivElement>(null);
@@ -21,13 +27,25 @@ export const HeroSection = () => {
 
   const handleDownloadCV = () => {
     // Google Drive file direct download link
-    const cvUrl = "https://drive.google.com/uc?export=download&id=1o6bglo83JzITmzZQkOsxPg4POQeLaVox";
-    const link = document.createElement('a');
+    const cvUrl =
+      "https://drive.google.com/uc?export=download&id=1o6bglo83JzITmzZQkOsxPg4POQeLaVox";
+    const link = document.createElement("a");
     link.href = cvUrl;
-    link.download = 'Khaled_Salleh_CV.pdf';
+    link.download = "Khaled_Salleh_CV.pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleContactClick = () => {
+    if (onNavigate) {
+      onNavigate("contact");
+    } else {
+      // Fallback for when onNavigate is not available
+      document
+        .getElementById("contact")
+        ?.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   useEffect(() => {
@@ -235,26 +253,30 @@ export const HeroSection = () => {
                 ref={descriptionRef}
                 className="text-base sm:text-lg lg:text-xl text-[#9F9F9F] mb-6 lg:mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed"
               >
-                Full Stack Developer & UI/UX Designer: Crafting seamless digital experiences 
-                from concept to deployment with modern technologies.
+                Full Stack Developer & UI/UX Designer: Crafting seamless digital
+                experiences from concept to deployment with modern technologies.
               </p>
               <div
                 ref={buttonsRef}
                 className="flex flex-col sm:flex-row gap-3 lg:gap-4 items-center justify-center lg:justify-start"
               >
-                <Button 
-                  onClick={handleDownloadCV}
+                <Button
+                  onClick={() =>
+                    document
+                      .getElementById("projects")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  }
                   className="w-full sm:w-48 lg:w-60 h-12 sm:h-14 lg:h-[77px] rounded-lg lg:rounded-[17.26px] border-none bg-[linear-gradient(179deg,rgba(255,255,255,0.5)_0%,rgba(58,58,58,0.5)_100%)] relative text-white px-4 lg:px-8 py-3 transition-all duration-300 hover:scale-105"
                 >
                   <span className="text-lg sm:text-xl lg:text-[33.2px] font-normal text-center text-white">
-                    Download CV
+                    Projects
                   </span>
                   <span className="absolute top-[-5px] lg:top-[-10px] right-[-10px] lg:right-[-20px] rotate-[-13.76deg] text-xl sm:text-2xl lg:text-[40.3px]">
                     📄
                   </span>
                 </Button>
-                <Button 
-                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                <Button
+                  onClick={handleContactClick}
                   className="w-full sm:w-48 lg:w-60 h-12 sm:h-14 lg:h-[77px] rounded-lg lg:rounded-[17.26px] border-none bg-[linear-gradient(179deg,rgba(255,255,255,0.5)_0%,rgba(58,58,58,0.5)_100%)] relative text-white px-4 lg:px-8 py-3 transition-all duration-300 hover:scale-105"
                 >
                   <span className="text-lg sm:text-xl lg:text-[33.2px] font-normal text-center text-white">

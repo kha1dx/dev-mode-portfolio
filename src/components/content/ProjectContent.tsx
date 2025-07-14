@@ -19,7 +19,7 @@ export const ProjectContent = ({ projectId }: ProjectContentProps) => {
             "Admin dashboard for inventory management",
             "Responsive design for mobile and desktop",
           ],
-          github: "https://github.com/KhaledSalleh/ecommerce-app",
+          github: "https://github.com/kha1dx/ecommerce-app",
           demo: "https://ecommerce-demo.example.com",
           language: "tsx",
         };

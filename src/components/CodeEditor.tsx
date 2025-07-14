@@ -1,10 +1,10 @@
-import { FileItem } from '@/pages/Index';
-import { AboutContent } from './content/AboutContent';
-import { ProjectsOverview } from './content/ProjectsOverview';
-import { SkillsContent } from './content/SkillsContent';
-import { ProjectContent } from './content/ProjectContent';
-import { ExperienceContent } from './content/ExperienceContent';
-import { ContactContent } from './content/ContactContent';
+import { FileItem } from "@/pages/Index";
+import { AboutContent } from "./content/AboutContent";
+import { ProjectsOverview } from "./content/ProjectsOverview";
+import { SkillsContent } from "./content/SkillsContent";
+import { ProjectContent } from "./content/ProjectContent";
+import { ExperienceContent } from "./content/ExperienceContent";
+import { ContactContent } from "./content/ContactContent";
 
 interface CodeEditorProps {
   activeFile: string;
@@ -12,24 +12,28 @@ interface CodeEditorProps {
   onNavigate?: (action: string) => void;
 }
 
-export const CodeEditor = ({ activeFile, portfolioFiles, onNavigate }: CodeEditorProps) => {
+export const CodeEditor = ({
+  activeFile,
+  portfolioFiles,
+  onNavigate,
+}: CodeEditorProps) => {
   const renderContent = () => {
     switch (activeFile) {
-      case 'about-main':
+      case "about-main":
         return <AboutContent onNavigate={onNavigate} />;
-      case 'projects-main':
+      case "projects-main":
         return <ProjectsOverview />;
-      case 'about':
+      case "about":
         return <AboutContent onNavigate={onNavigate} />;
-      case 'skills':
+      case "skills":
         return <SkillsContent />;
-      case 'project1':
-      case 'project2':
-      case 'project3':
+      case "project1":
+      case "project2":
+      case "project3":
         return <ProjectContent projectId={activeFile} />;
-      case 'experience':
+      case "experience":
         return <ExperienceContent />;
-      case 'contact':
+      case "contact":
         return <ContactContent />;
       default:
         return <AboutContent onNavigate={onNavigate} />;
@@ -38,9 +42,7 @@ export const CodeEditor = ({ activeFile, portfolioFiles, onNavigate }: CodeEdito
 
   return (
     <div className="flex-1 bg-[#1e1e1e] overflow-y-auto">
-      <div className="h-full animate-fade-in">
-        {renderContent()}
-      </div>
+      <div className="h-full animate-fade-in">{renderContent()}</div>
     </div>
   );
 };

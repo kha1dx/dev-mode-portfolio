@@ -1,40 +1,21 @@
 import { ExternalLink, Github } from "lucide-react";
+import { projectsData } from "@/data/projectsData";
 
-const projects = [
-  {
-    id: "project1",
-    title: "E-Commerce Platform",
-    description:
-      "A full-stack e-commerce solution with React, Node.js, and PostgreSQL",
-    image: "/placeholder.svg",
-    tech: ["React", "TypeScript", "Node.js", "PostgreSQL"],
-    github: "https://github.com/KhaledSalleh/ecommerce-app",
-    demo: "https://ecommerce-demo.example.com",
-    featured: true,
-  },
-  {
-    id: "project2",
-    title: "Task Management System",
-    description: "Collaborative task management with real-time updates",
-    image: "/placeholder.svg",
-    tech: ["Python", "FastAPI", "React", "MongoDB"],
-    github: "https://github.com/KhaledSalleh/task-manager",
-    demo: "https://taskmanager-demo.example.com",
-    featured: true,
-  },
-  {
-    id: "project3",
-    title: "Weather Forecast API",
-    description: "RESTful API providing detailed weather forecasts",
-    image: "/placeholder.svg",
-    tech: ["Node.js", "Express", "Redis", "Docker"],
-    github: "https://github.com/KhaledSalleh/weather-api",
-    demo: "https://api.weather-example.com/docs",
-    featured: false,
-  },
-];
+interface ProjectsOverviewProps {
+  onProjectClick?: (projectId: string) => void;
+}
 
-export const ProjectsOverview = () => {
+export const ProjectsOverview = ({ onProjectClick }: ProjectsOverviewProps) => {
+  const featuredProjects = projectsData.filter(
+    (project) => project.size === "wide" || project.size === "large"
+  );
+
+  const handleProjectClick = (projectId: string) => {
+    if (onProjectClick) {
+      onProjectClick(projectId);
+    }
+  };
+
   return (
     <div className="min-h-full bg-gradient-to-br from-[#1e1e1e] via-[#252526] to-[#1e1e1e] p-8">
       <div className="max-w-6xl mx-auto">
@@ -56,25 +37,36 @@ export const ProjectsOverview = () => {
             <span className="text-[#4ec9b0]">⭐</span> Featured Projects
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
-            {projects
-              .filter((p) => p.featured)
-              .map((project, index) => (
-                <div
-                  key={project.id}
-                  className="bg-[#252526] border border-[#3e3e42] rounded-lg overflow-hidden hover:border-[#569cd6] transition-all duration-300 hover:scale-105 animate-fade-in"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="aspect-video bg-[#1e1e1e] flex items-center justify-center">
-                    <div className="text-[#569cd6] text-4xl">🚀</div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold text-white mb-2">
+            {featuredProjects.map((project, index) => (
+              <div
+                key={project.id}
+                onClick={() => handleProjectClick(project.id)}
+                className="bg-[#252526] border border-[#3e3e42] rounded-lg overflow-hidden hover:border-[#569cd6] transition-all duration-300 hover:scale-105 animate-fade-in cursor-pointer"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="aspect-video bg-[#1e1e1e] overflow-hidden">
+                  <img
+                    src={`/${project.image}`}
+                    alt={project.title}
+                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/placeholder-project.jpg";
+                    }}
+                  />
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-2xl">{project.icon}</span>
+                    <h3 className="text-xl font-semibold text-white">
                       {project.title}
                     </h3>
-                    <p className="text-[#cccccc] mb-4">{project.description}</p>
+                  </div>
+                  <p className="text-[#cccccc] mb-4">{project.description}</p>
 
+                  {project.technologies && (
                     <div className="flex flex-wrap gap-2 mb-4">
-                      {project.tech.map((tech) => (
+                      {project.technologies.map((tech) => (
                         <span
                           key={tech}
                           className="bg-[#1e1e1e] text-[#569cd6] px-2 py-1 rounded text-sm border border-[#3e3e42]"
@@ -83,30 +75,37 @@ export const ProjectsOverview = () => {
                         </span>
                       ))}
                     </div>
+                  )}
 
-                    <div className="flex gap-3">
+                  <div className="flex gap-3">
+                    {project.liveUrl && (
                       <a
-                        href={project.demo}
+                        href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
                         className="bg-[#007acc] hover:bg-[#005a9e] text-white px-4 py-2 rounded flex items-center gap-2 transition-all duration-300 hover:scale-105"
                       >
                         <ExternalLink className="w-4 h-4" />
                         Demo
                       </a>
+                    )}
+                    {project.githubUrl && (
                       <a
-                        href={project.github}
+                        href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
                         className="border border-[#569cd6] text-[#569cd6] hover:bg-[#569cd6] hover:text-white px-4 py-2 rounded flex items-center gap-2 transition-all duration-300 hover:scale-105"
                       >
                         <Github className="w-4 h-4" />
                         Code
                       </a>
-                    </div>
+                    )}
                   </div>
                 </div>
-              ))}
+              </div>
+            ))}
           </div>
         </div>
 
@@ -116,59 +115,79 @@ export const ProjectsOverview = () => {
             All Projects
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
-            {projects.map((project, index) => (
+            {projectsData.map((project, index) => (
               <div
                 key={project.id}
-                className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 hover:border-[#569cd6] transition-all duration-300 hover:scale-105 animate-fade-in cursor-pointer"
+                onClick={() => handleProjectClick(project.id)}
+                className="bg-[#252526] border border-[#3e3e42] rounded-lg overflow-hidden hover:border-[#569cd6] transition-all duration-300 hover:scale-105 animate-fade-in cursor-pointer"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="text-2xl mb-3">
-                  {project.id === "project1" && "⚛️"}
-                  {project.id === "project2" && "🐍"}
-                  {project.id === "project3" && "🌤️"}
+                <div className="aspect-video bg-[#1e1e1e] overflow-hidden">
+                  <img
+                    src={`/${project.image}`}
+                    alt={project.title}
+                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/placeholder-project.jpg";
+                    }}
+                  />
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  {project.title}
-                </h3>
-                <p className="text-[#cccccc] text-sm mb-4">
-                  {project.description}
-                </p>
+                <div className="p-6">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-xl">{project.icon}</span>
+                    <h3 className="text-lg font-semibold text-white">
+                      {project.title}
+                    </h3>
+                  </div>
+                  <p className="text-[#cccccc] text-sm mb-4">
+                    {project.description}
+                  </p>
 
-                <div className="flex flex-wrap gap-1 mb-4">
-                  {project.tech.slice(0, 3).map((tech) => (
-                    <span
-                      key={tech}
-                      className="bg-[#1e1e1e] text-[#569cd6] px-2 py-1 rounded text-xs border border-[#3e3e42]"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                  {project.tech.length > 3 && (
-                    <span className="text-[#cccccc] text-xs px-2 py-1">
-                      +{project.tech.length - 3} more
-                    </span>
+                  {project.technologies && (
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {project.technologies.slice(0, 3).map((tech) => (
+                        <span
+                          key={tech}
+                          className="bg-[#1e1e1e] text-[#569cd6] px-2 py-1 rounded text-xs border border-[#3e3e42]"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {project.technologies.length > 3 && (
+                        <span className="text-[#cccccc] text-xs px-2 py-1">
+                          +{project.technologies.length - 3} more
+                        </span>
+                      )}
+                    </div>
                   )}
-                </div>
 
-                <div className="flex gap-2">
-                  <a
-                    href={project.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#569cd6] hover:text-[#4ec9b0] transition-colors duration-300 text-sm flex items-center gap-1"
-                  >
-                    <ExternalLink className="w-3 h-3" />
-                    Demo
-                  </a>
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#569cd6] hover:text-[#4ec9b0] transition-colors duration-300 text-sm flex items-center gap-1"
-                  >
-                    <Github className="w-3 h-3" />
-                    Code
-                  </a>
+                  <div className="flex gap-2">
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-[#569cd6] hover:text-[#4ec9b0] transition-colors duration-300 text-sm flex items-center gap-1"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        Demo
+                      </a>
+                    )}
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-[#569cd6] hover:text-[#4ec9b0] transition-colors duration-300 text-sm flex items-center gap-1"
+                      >
+                        <Github className="w-3 h-3" />
+                        Code
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -185,7 +204,7 @@ export const ProjectsOverview = () => {
             projects.
           </p>
           <a
-            href="mailto:Khaled.Salleh@example.com"
+            href="mailto:khaledmohamedsalleh@gmail.com"
             className="bg-[#007acc] hover:bg-[#005a9e] text-white px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 inline-flex items-center gap-2"
           >
             Let's Talk

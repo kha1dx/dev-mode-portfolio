@@ -1,214 +1,184 @@
+import { projectsData } from "@/data/projectsData";
+import { Github, ExternalLink, Code, Monitor } from "lucide-react";
+
 interface ProjectContentProps {
   projectId: string;
 }
 
 export const ProjectContent = ({ projectId }: ProjectContentProps) => {
-  const getProjectContent = () => {
-    switch (projectId) {
-      case "project1":
-        return {
-          title: "E-Commerce Application",
-          description:
-            "A full-stack e-commerce platform built with React and Node.js",
-          tech: ["React", "TypeScript", "Node.js", "PostgreSQL", "Stripe API"],
-          features: [
-            "User authentication and authorization",
-            "Product catalog with search and filtering",
-            "Shopping cart and checkout process",
-            "Payment integration with Stripe",
-            "Admin dashboard for inventory management",
-            "Responsive design for mobile and desktop",
-          ],
-          github: "https://github.com/kha1dx/ecommerce-app",
-          demo: "https://ecommerce-demo.example.com",
-          language: "tsx",
-        };
-      case "project2":
-        return {
-          title: "Task Management System",
-          description:
-            "A collaborative task management application with real-time updates",
-          tech: ["Python", "FastAPI", "React", "WebSockets", "MongoDB"],
-          features: [
-            "Real-time collaboration between team members",
-            "Drag-and-drop task organization",
-            "File attachments and comments",
-            "Deadline notifications and reminders",
-            "Team performance analytics",
-            "Integration with calendar applications",
-          ],
-          github: "https://github.com/KhaledSalleh/task-manager",
-          demo: "https://taskmanager-demo.example.com",
-          language: "python",
-        };
-      case "project3":
-        return {
-          title: "Weather Forecast API",
-          description:
-            "RESTful API providing detailed weather forecasts and historical data",
-          tech: ["Node.js", "Express", "Redis", "Docker", "AWS"],
-          features: [
-            "Current weather conditions for any location",
-            "7-day weather forecast with hourly details",
-            "Historical weather data analysis",
-            "Weather alerts and notifications",
-            "Caching for improved performance",
-            "Rate limiting and API key authentication",
-          ],
-          github: "https://github.com/KhaledSalleh/weather-api",
-          demo: "https://api.weather-example.com/docs",
-          language: "javascript",
-        };
-      default:
-        return null;
-    }
-  };
+  const project = projectsData.find((p) => p.id === projectId);
 
-  const project = getProjectContent();
   if (!project) return null;
 
-  const renderAsCode = () => {
-    if (project.language === "tsx") {
-      return (
-        <div className="p-6 font-mono text-sm leading-relaxed">
-          <div className="text-[#6a9955]">// {project.title}</div>
-          <div className="text-[#6a9955]">// {project.description}</div>
-          <div className="mt-4 text-[#cccccc]">
-            <div className="mb-4">
-              <span className="text-[#c586c0]">import</span>{" "}
-              <span className="text-[#9cdcfe]">React</span>{" "}
-              <span className="text-[#c586c0]">from</span>{" "}
-              <span className="text-[#ce9178]">'react'</span>;
+  return (
+    <div className="min-h-full bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1e1e1e] p-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12 animate-fade-in">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <span className="text-4xl">{project.icon}</span>
+            <h1 className="text-4xl font-bold text-white">{project.title}</h1>
+          </div>
+          <p className="text-[#cccccc] text-lg max-w-2xl mx-auto">
+            {project.description}
+          </p>
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid lg:grid-cols-2 gap-12">
+          {/* Project Image */}
+          <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
+            <div className="flex items-center mb-4">
+              <Monitor className="w-6 h-6 text-[#4ec9b0] mr-3" />
+              <h2 className="text-2xl font-semibold text-white">Preview</h2>
             </div>
 
-            <div className="mb-4">
-              <span className="text-[#569cd6]">const</span>{" "}
-              <span className="text-[#dcdcaa]">ProjectInfo</span> ={" "}
-              <span className="text-[#cccccc]">() =&gt; {"{"}</span>
+            <div className="relative group">
+              <img
+                src={`/${project.image}`}
+                alt={project.title}
+                className="w-full h-auto rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = "/placeholder-project.jpg";
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
             </div>
 
-            <div className="ml-4 space-y-2">
-              <div>
-                <span className="text-[#569cd6]">const</span>{" "}
-                <span className="text-[#9cdcfe]">technologies</span> = [
-              </div>
-              <div className="ml-4">
-                {project.tech.map((tech, index) => (
-                  <div key={tech}>
-                    <span className="text-[#ce9178]">"{tech}"</span>
-                    {index < project.tech.length - 1 ? "," : ""}
-                  </div>
-                ))}
-              </div>
-              <div>];</div>
+            {/* Action Buttons */}
+            <div className="flex gap-4 mt-6">
+              {project.liveUrl && project.liveUrl !== "#" && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-[#4ec9b0] hover:bg-[#3a9b87] text-[#1e1e1e] font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Live Demo
+                </a>
+              )}
+              {project.githubUrl && project.githubUrl !== "#" && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-[#1e1e1e] border border-[#3e3e42] hover:border-[#569cd6] text-[#cccccc] font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105"
+                >
+                  <Github className="w-4 h-4" />
+                  View Code
+                </a>
+              )}
+            </div>
+          </div>
 
-              <div className="mt-4">
-                <span className="text-[#569cd6]">const</span>{" "}
-                <span className="text-[#9cdcfe]">features</span> = [
-              </div>
-              <div className="ml-4">
-                {project.features.map((feature, index) => (
-                  <div key={feature}>
-                    <span className="text-[#ce9178]">"{feature}"</span>
-                    {index < project.features.length - 1 ? "," : ""}
-                  </div>
-                ))}
-              </div>
-              <div>];</div>
-
-              <div className="mt-4">
-                <span className="text-[#c586c0]">return</span> (
-              </div>
-              <div className="ml-4">
-                <div>
-                  &lt;<span className="text-[#569cd6]">div</span>{" "}
-                  <span className="text-[#92c5f7]">className</span>=
-                  <span className="text-[#ce9178]">"project-container"</span>
-                  &gt;
-                </div>
-                <div className="ml-4">
-                  <div>
-                    &lt;<span className="text-[#569cd6]">h2</span>&gt;
-                    {project.title}&lt;/
-                    <span className="text-[#569cd6]">h2</span>&gt;
-                  </div>
-                  <div>
-                    &lt;<span className="text-[#569cd6]">p</span>&gt;
-                    {project.description}&lt;/
-                    <span className="text-[#569cd6]">p</span>&gt;
-                  </div>
-                  <div>
-                    &lt;<span className="text-[#569cd6]">a</span>{" "}
-                    <span className="text-[#92c5f7]">href</span>=
-                    <span className="text-[#ce9178]">"{project.github}"</span>
-                    &gt;GitHub&lt;/<span className="text-[#569cd6]">a</span>&gt;
-                  </div>
-                  <div>
-                    &lt;<span className="text-[#569cd6]">a</span>{" "}
-                    <span className="text-[#92c5f7]">href</span>=
-                    <span className="text-[#ce9178]">"{project.demo}"</span>
-                    &gt;Live Demo&lt;/<span className="text-[#569cd6]">a</span>
-                    &gt;
-                  </div>
-                </div>
-                <div>
-                  &lt;/<span className="text-[#569cd6]">div</span>&gt;
-                </div>
-              </div>
-              <div>);</div>
+          {/* Code Display */}
+          <div className="bg-[#252526] border border-[#3e3e42] rounded-lg hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
+            <div className="flex items-center p-4 border-b border-[#3e3e42]">
+              <Code className="w-6 h-6 text-[#4ec9b0] mr-3" />
+              <h2 className="text-2xl font-semibold text-white">
+                Project Info
+              </h2>
             </div>
 
-            <div className="mt-2">{"}"}</div>
+            <div className="p-6 font-mono text-sm leading-relaxed">
+              <div className="text-[#6a9955]">// {project.title}</div>
+              <div className="text-[#6a9955]">// {project.description}</div>
+              <div className="mt-4 text-[#cccccc]">
+                <div className="mb-4">
+                  <span className="text-[#c586c0]">const</span>{" "}
+                  <span className="text-[#dcdcaa]">projectData</span> = {"{"}
+                </div>
+
+                <div className="ml-4 space-y-2">
+                  <div>
+                    <span className="text-[#92c5f7]">id</span>:{" "}
+                    <span className="text-[#ce9178]">"{project.id}"</span>,
+                  </div>
+                  <div>
+                    <span className="text-[#92c5f7]">title</span>:{" "}
+                    <span className="text-[#ce9178]">"{project.title}"</span>,
+                  </div>
+                  <div>
+                    <span className="text-[#92c5f7]">description</span>:{" "}
+                    <span className="text-[#ce9178]">
+                      "{project.description}"
+                    </span>
+                    ,
+                  </div>
+
+                  {project.technologies && project.technologies.length > 0 && (
+                    <>
+                      <div>
+                        <span className="text-[#92c5f7]">technologies</span>: [
+                      </div>
+                      <div className="ml-4">
+                        {project.technologies.map((tech, index) => (
+                          <div key={tech}>
+                            <span className="text-[#ce9178]">"{tech}"</span>
+                            {index < project.technologies!.length - 1
+                              ? ","
+                              : ""}
+                          </div>
+                        ))}
+                      </div>
+                      <div>],</div>
+                    </>
+                  )}
+
+                  {project.githubUrl && project.githubUrl !== "#" && (
+                    <div>
+                      <span className="text-[#92c5f7]">repository</span>:{" "}
+                      <span className="text-[#ce9178]">
+                        "{project.githubUrl}"
+                      </span>
+                      ,
+                    </div>
+                  )}
+
+                  {project.liveUrl && project.liveUrl !== "#" && (
+                    <div>
+                      <span className="text-[#92c5f7]">liveDemo</span>:{" "}
+                      <span className="text-[#ce9178]">
+                        "{project.liveUrl}"
+                      </span>
+                      ,
+                    </div>
+                  )}
+
+                  <div>
+                    <span className="text-[#92c5f7]">status</span>:{" "}
+                    <span className="text-[#ce9178]">"active"</span>
+                  </div>
+                </div>
+
+                <div className="mt-2">{"}"}</div>
+              </div>
+            </div>
           </div>
         </div>
-      );
-    }
 
-    // Similar patterns for Python and JavaScript
-    return (
-      <div className="p-6 font-mono text-sm leading-relaxed">
-        <div className="text-[#6a9955]"># {project.title}</div>
-        <div className="text-[#6a9955]"># {project.description}</div>
-        <div className="mt-4 text-[#cccccc]">
-          <div className="mb-4">
-            <span className="text-[#9cdcfe]">project_info</span> = {"{"}
-          </div>
-          <div className="ml-4 space-y-2">
-            <div>
-              <span className="text-[#92c5f7]">"title"</span>:{" "}
-              <span className="text-[#ce9178]">"{project.title}"</span>,
-            </div>
-            <div>
-              <span className="text-[#92c5f7]">"description"</span>:{" "}
-              <span className="text-[#ce9178]">"{project.description}"</span>,
-            </div>
-            <div>
-              <span className="text-[#92c5f7]">"technologies"</span>: [
-              <div className="ml-4">
-                {project.tech.map((tech, index) => (
-                  <div key={tech}>
-                    <span className="text-[#ce9178]">"{tech}"</span>
-                    {index < project.tech.length - 1 ? "," : ""}
-                  </div>
-                ))}
-              </div>
-              ],
-            </div>
-            <div>
-              <span className="text-[#92c5f7]">"github"</span>:{" "}
-              <span className="text-[#ce9178]">"{project.github}"</span>,
-            </div>
-            <div>
-              <span className="text-[#92c5f7]">"demo"</span>:{" "}
-              <span className="text-[#ce9178]">"{project.demo}"</span>
+        {/* Technologies Used */}
+        {project.technologies && project.technologies.length > 0 && (
+          <div className="mt-12 bg-[#252526] border border-[#3e3e42] rounded-lg p-8 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
+            <h3 className="text-2xl font-semibold text-white mb-6 flex items-center">
+              <span className="mr-3">🛠️</span>
+              Technologies Used
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              {project.technologies.map((tech) => (
+                <span
+                  key={tech}
+                  className="bg-[#1e1e1e] text-[#cccccc] px-4 py-2 rounded-lg border border-[#3e3e42] hover:border-[#4ec9b0] transition-colors duration-300"
+                >
+                  {tech}
+                </span>
+              ))}
             </div>
           </div>
-          <div className="mt-2">{"}"}</div>
-        </div>
+        )}
       </div>
-    );
-  };
-
-  return renderAsCode();
+    </div>
+  );
 };
-export default ProjectContent;

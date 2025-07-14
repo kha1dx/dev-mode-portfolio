@@ -17,7 +17,7 @@ export const AboutContent = ({ onNavigate }: AboutContentProps) => {
       <HeroSection onNavigate={onNavigate} />
       <AboutMeSection />
       <StatsSection />
-      <ProjectsSection />
+      <ProjectsSection onNavigate={onNavigate} />
       <CompaniesSection />
       <FooterSection />
     </div>

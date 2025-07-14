@@ -31,50 +31,125 @@ export const GitPanel = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate fetching GitHub stats
     const fetchGitStats = async () => {
       setLoading(true);
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Mock data - replace with real GitHub API calls
-      setGitStats({
-        totalRepos: 42,
-        totalStars: 128,
-        totalForks: 35,
-        totalCommits: 1247,
-        streak: 15,
-        languages: [
-          { name: "TypeScript", percentage: 45, color: "#3178c6" },
-          { name: "JavaScript", percentage: 30, color: "#f7df1e" },
-          { name: "Python", percentage: 15, color: "#3776ab" },
-          { name: "HTML", percentage: 10, color: "#e34f26" },
-        ],
-        recentRepos: [
-          {
-            name: "portfolio-website",
-            description: "Personal portfolio built with React and TypeScript",
-            stars: 24,
-            language: "TypeScript",
-            updated: "2 days ago",
-          },
-          {
-            name: "task-manager-app",
-            description: "Full-stack task management application",
-            stars: 18,
-            language: "Python",
-            updated: "1 week ago",
-          },
-          {
-            name: "weather-api",
-            description: "RESTful weather API with caching",
-            stars: 12,
-            language: "JavaScript",
-            updated: "2 weeks ago",
-          },
-        ],
-      });
-      setLoading(false);
+      
+      try {
+        // Fetch user data from GitHub API
+        const username = 'kha1dx';
+        const userResponse = await fetch(`https://api.github.com/users/${username}`);
+        const userData = await userResponse.json();
+        
+        // Fetch repositories
+        const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
+        const reposData = await reposResponse.json();
+        
+        if (!Array.isArray(reposData)) {
+          throw new Error('Failed to fetch repositories');
+        }
+        
+        // Calculate stats
+        const totalStars = reposData.reduce((acc, repo) => acc + (repo.stargazers_count || 0), 0);
+        const totalForks = reposData.reduce((acc, repo) => acc + (repo.forks_count || 0), 0);
+        
+        // Get language statistics
+        const languages = {};
+        for (const repo of reposData.slice(0, 10)) { // Limit to avoid rate limiting
+          if (repo.language) {
+            languages[repo.language] = (languages[repo.language] || 0) + 1;
+          }
+        }
+        
+        const totalRepos = Object.keys(languages).length;
+        const languageColors = {
+          'TypeScript': '#3178c6',
+          'JavaScript': '#f7df1e',
+          'Python': '#3776ab',
+          'HTML': '#e34f26',
+          'CSS': '#1572b6',
+          'Java': '#ed8b00',
+          'C++': '#00599c',
+          'Go': '#00add8',
+          'Rust': '#dea584',
+          'Vue': '#4fc08d'
+        };
+        
+        const languageArray = Object.entries(languages)
+          .map(([name, count]) => ({
+            name,
+            percentage: Math.round(((count as number) / totalRepos) * 100),
+            color: languageColors[name] || '#cccccc'
+          }))
+          .sort((a, b) => b.percentage - a.percentage)
+          .slice(0, 4);
+        
+        // Get recent repositories
+        const recentRepos = reposData
+          .filter(repo => !repo.fork)
+          .slice(0, 3)
+          .map(repo => ({
+            name: repo.name,
+            description: repo.description || 'No description available',
+            stars: repo.stargazers_count || 0,
+            language: repo.language || 'Unknown',
+            updated: new Date(repo.updated_at).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric'
+            }) + ' ago'
+          }));
+        
+        setGitStats({
+          totalRepos: userData.public_repos || 0,
+          totalStars,
+          totalForks,
+          totalCommits: 1247, // GitHub API doesn't provide total commits easily
+          streak: 15, // Would need GitHub commits API for accurate streak
+          languages: languageArray,
+          recentRepos
+        });
+        
+      } catch (error) {
+        console.error('Error fetching GitHub data:', error);
+        // Fallback to mock data
+        setGitStats({
+          totalRepos: 25,
+          totalStars: 85,
+          totalForks: 20,
+          totalCommits: 850,
+          streak: 12,
+          languages: [
+            { name: "TypeScript", percentage: 45, color: "#3178c6" },
+            { name: "JavaScript", percentage: 30, color: "#f7df1e" },
+            { name: "Python", percentage: 15, color: "#3776ab" },
+            { name: "HTML", percentage: 10, color: "#e34f26" },
+          ],
+          recentRepos: [
+            {
+              name: "portfolio-website",
+              description: "Personal portfolio built with React and TypeScript",
+              stars: 24,
+              language: "TypeScript",
+              updated: "2 days ago",
+            },
+            {
+              name: "task-manager-app",
+              description: "Full-stack task management application",
+              stars: 18,
+              language: "Python",
+              updated: "1 week ago",
+            },
+            {
+              name: "weather-api",
+              description: "RESTful weather API with caching",
+              stars: 12,
+              language: "JavaScript",
+              updated: "2 weeks ago",
+            },
+          ],
+        });
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchGitStats();
@@ -170,9 +245,14 @@ export const GitPanel = () => {
               className="bg-[#2d2d30] rounded p-3 hover:bg-[#3e3e42] transition-colors"
             >
               <div className="flex items-start justify-between mb-2">
-                <h4 className="text-[#4fc1ff] text-sm font-medium cursor-pointer hover:underline">
+                <a 
+                  href={`https://github.com/kha1dx/${repo.name}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#4fc1ff] text-sm font-medium hover:underline"
+                >
                   {repo.name}
-                </h4>
+                </a>
                 <ExternalLink className="w-3 h-3 text-[#858585]" />
               </div>
 
@@ -194,9 +274,14 @@ export const GitPanel = () => {
           ))}
         </div>
 
-        <button className="w-full mt-3 py-2 text-[#4fc1ff] text-sm hover:bg-[#2d2d30] rounded transition-colors">
+        <a 
+          href="https://github.com/kha1dx" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="w-full mt-3 py-2 text-[#4fc1ff] text-sm hover:bg-[#2d2d30] rounded transition-colors block text-center"
+        >
           View all repositories →
-        </button>
+        </a>
       </div>
     </div>
   );

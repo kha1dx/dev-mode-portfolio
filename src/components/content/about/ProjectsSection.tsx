@@ -3,9 +3,19 @@ import { ProjectCard } from "./ProjectCard";
 import { ViewAllProjectsCard } from "./ViewAllProjectsCard";
 import { projectsData, seeMoreProjectsData } from "../../../data/projectsData";
 
-export const ProjectsSection = () => {
+interface ProjectsSectionProps {
+  onNavigate?: (action: string) => void;
+}
+
+export const ProjectsSection = ({ onNavigate }: ProjectsSectionProps = {}) => {
   const container = useRef<HTMLElement>(null);
   const memoizedProjectsData = useMemo(() => projectsData, []);
+
+  const handleContactClick = () => {
+    if (onNavigate) {
+      onNavigate("contact");
+    }
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -127,12 +137,12 @@ export const ProjectsSection = () => {
               what you need — I'll handle the rest.
             </p>
             <div className="mt-4 sm:mt-6">
-              <a
-                href="#contact"
-                className="inline-block px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-medium rounded-full shadow hover:from-cyan-300 hover:to-blue-400 hover:scale-105 transition-transform duration-300 text-sm sm:text-base"
+              <button
+                onClick={handleContactClick}
+                className="inline-block px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-medium rounded-full shadow hover:from-cyan-300 hover:to-blue-400 hover:scale-105 transition-transform duration-300 text-sm sm:text-base cursor-pointer"
               >
                 Start Your Project
-              </a>
+              </button>
             </div>
           </div>
         </div>

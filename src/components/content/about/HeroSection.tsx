@@ -285,88 +285,87 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
             </div>
           </div>
 
-              {/* Right Content - Avatar with Clouds */}
-              <div className="flex justify-center lg:justify-end mt-8 lg:mt-0 overflow-hidden">
-                <div className="relative max-w-full">
-                  {/* Background Ellipses */}
-                  <div className="absolute inset-0 -z-10">
-                    {/* Yellow ellipse - positioned behind and to the left */}
-                    <div
-                      className="absolute w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 rounded-full blur-2xl lg:blur-3xl opacity-40"
-                      style={{
-                        backgroundColor: "#F4EB97",
-                        top: "-20%",
-                        left: "-30%",
-                        transform: "scale(1.2)",
-                      }}
-                    />
+          {/* Right Content - Avatar with Clouds */}
+          <div className="flex justify-center lg:justify-end mt-8 lg:mt-0">
+            <div className="relative">
+              {/* Background Ellipses */}
+              <div className="absolute inset-0 -z-10">
+                {/* Yellow ellipse - positioned behind and to the left */}
+                <div
+                  className="absolute w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 rounded-full blur-2xl lg:blur-3xl opacity-40"
+                  style={{
+                    backgroundColor: "#F4EB97",
+                    top: "-20%",
+                    left: "-30%",
+                    transform: "scale(1.2)",
+                  }}
+                />
 
-                    {/* Orange ellipse - positioned behind and to the right */}
-                    <div
-                      className="absolute w-44 h-44 sm:w-56 sm:h-56 lg:w-72 lg:h-72 rounded-full blur-2xl lg:blur-3xl opacity-50"
-                      style={{
-                        backgroundColor: "#FF5D20",
-                        top: "10%",
-                        right: "-25%",
-                        transform: "scale(1.1)",
-                      }}
-                    />
+                {/* Orange ellipse - positioned behind and to the right */}
+                <div
+                  className="absolute w-28 h-28 sm:w-40 sm:h-40 md:w-56 md:h-56 lg:w-72 lg:h-72 rounded-full blur-xl sm:blur-2xl lg:blur-3xl opacity-40 sm:opacity-50"
+                  style={{
+                    backgroundColor: "#FF5D20",
+                    top: "15%",
+                    right: "40%",
+                    transform: "scale(0.9)",
+                  }}
+                />
 
-                    {/* Additional subtle purple glow for depth */}
-                    <div
-                      className="absolute w-52 h-52 sm:w-72 sm:h-72 lg:w-96 lg:h-96 rounded-full blur-2xl lg:blur-3xl opacity-20"
-                      style={{
-                        backgroundColor: "#2D2A8C",
-                        top: "-10%",
-                        left: "50%",
-                        transform: "translateX(-50%) scale(1.3)",
-                      }}
-                    />
+                {/* Additional subtle purple glow for depth */}
+                <div
+                  className="absolute w-52 h-52 sm:w-72 sm:h-72 lg:w-96 lg:h-96 rounded-full blur-2xl lg:blur-3xl opacity-20"
+                  style={{
+                    backgroundColor: "#2D2A8C",
+                    top: "-10%",
+                    left: "50%",
+                    transform: "translateX(-50%) scale(1.3)",
+                  }}
+                />
+              </div>
+
+              <div
+                ref={avatarRef}
+                className="w-90 h-90 sm:w-80 sm:h-80 lg:w-[480px] lg:h-[480px] relative z-10"
+              >
+                {/* Hero Avatar Image */}
+                <img
+                  src="/hero1.png"
+                  alt="Khaled Salleh - UI/UX Designer"
+                  className="w-full h-full object-contain px-2 sm:px-3 lg:px-4"
+                  onError={(e) => {
+                    // Fallback to the attached image style if hero-avatar Sallehsn't load
+                    console.log("Hero avatar not found, using fallback");
+                  }}
+                />
+
+                <div
+                  ref={cloudsRef}
+                  className="absolute inset-0 pointer-events-none lg:scale-1"
+                >
+                  {/* Top Left Cloud - Even larger and closer */}
+                  <div className="absolute -top-12 -left-12 text-[6rem] sm:text-[8rem] md:text-[10rem] opacity-90 z-[-1]">
+                    ☁️
                   </div>
 
-                  <div
-                    ref={avatarRef}
-                    className="w-72 h-72 sm:w-80 sm:h-80 lg:w-[480px] lg:h-[480px] relative z-10 mx-auto lg:mx-0"
-                  >
-                    {/* Hero Avatar Image */}
-                    <img
-                      src="/hero1.png"
-                      alt="Khaled Salleh - UI/UX Designer"
-                      className="w-full h-full object-contain px-2 sm:px-3 lg:px-4"
-                      onError={(e) => {
-                        // Fallback to the attached image style if hero-avatar doesn't load
-                        console.log("Hero avatar not found, using fallback");
-                      }}
-                    />
+                  {/* Top Right Cloud - Even smaller and closer */}
+                  <div className="absolute -top-16 -right-8 text-[7rem] sm:text-[9rem] md:text-[11rem] opacity-85">
+                    ☁️
+                  </div>
 
-                    {/* White Clouds positioned around the avatar - constrained for mobile */}
-                    <div
-                      ref={cloudsRef}
-                      className="absolute inset-0 pointer-events-none overflow-hidden"
-                    >
-                      {/* Top Left Cloud - Responsive sizing */}
-                      <div className="absolute -top-6 sm:-top-8 lg:-top-12 -left-6 sm:-left-8 lg:-left-12 text-6xl sm:text-8xl lg:text-[10rem] opacity-90 z-[-1]">
-                        ☁️
-                      </div>
+                  {/* Bottom Left Cloud (behind avatar) - Larger and closer */}
+                  <div className="absolute -bottom-40 right-140 top-82 w-100 h-100 text-[8rem] sm:text-[10rem] md:text-[12rem] opacity-95">
+                    ☁️
+                  </div>
 
-                      {/* Top Right Cloud - Responsive sizing */}
-                      <div className="absolute -top-8 sm:-top-12 lg:-top-16 -right-4 sm:-right-6 lg:-right-8 text-7xl sm:text-9xl lg:text-[11rem] opacity-85">
-                        ☁️
-                      </div>
-
-                      {/* Bottom Left Cloud - Responsive positioning */}
-                      <div className="absolute -bottom-20 sm:-bottom-30 lg:-bottom-40 right-16 sm:right-24 lg:right-32 top-16 sm:top-20 lg:top-24 text-8xl sm:text-10xl lg:text-[12rem] opacity-95">
-                        ☁️
-                      </div>
-
-                      {/* Bottom Right Cloud - Responsive positioning */}
-                      <div className="absolute -bottom-20 sm:-bottom-30 lg:-bottom-40 top-14 sm:top-16 lg:top-20 -right-8 sm:-right-12 lg:-right-20 text-6xl sm:text-8xl lg:text-[10rem] opacity-80 z-[-1]">
-                        ☁️
-                      </div>
-                    </div>
+                  {/* Bottom Right Cloud (behind avatar) - Larger and closer */}
+                  <div className="absolute -bottom-40 top-70 -right-20 text-[6rem] sm:text-[8rem] md:text-[10rem] opacity-80 z-[-1]">
+                    ☁️
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -118,12 +118,12 @@ export const CompaniesSection = () => {
   }, []);
 
   return (
-    <section ref={container} className="relative py-32 px-8">
-      {/* Background Decorative Elements */}
+    <section ref={container} className="relative py-32 px-8 overflow-hidden">
+      {/* Background Decorative Elements - Made responsive and contained */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-900/10 to-transparent opacity-50" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-cyan-500/10 rounded-full blur-2xl sm:blur-3xl animate-pulse opacity-30 sm:opacity-50" />
       <div
-        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"
+        className="absolute bottom-1/4 right-1/4 w-44 h-44 sm:w-60 sm:h-60 md:w-76 md:h-76 lg:w-96 lg:h-96 bg-purple-500/10 rounded-full blur-2xl sm:blur-3xl animate-pulse opacity-30 sm:opacity-50"
         style={{ animationDelay: "2s" }}
       />
 

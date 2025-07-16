@@ -1,5 +1,4 @@
-
-import { FileItem } from '@/pages/Index';
+import { FileItem } from "@/pages/Index";
 
 interface StatusBarProps {
   activeFile: string;
@@ -19,18 +18,20 @@ export const StatusBar = ({ activeFile, portfolioFiles }: StatusBarProps) => {
   };
 
   const currentFile = findFile(activeFile, portfolioFiles);
-  const language = currentFile?.language || 'markdown';
+  const language = currentFile?.language || "markdown";
 
   return (
-    <div className="h-6 bg-[#007acc] flex items-center justify-between px-3 text-xs text-white">
-      <div className="flex items-center space-x-4">
-        <span>🌐 Live Server: localhost:3000</span>
-        <span>🔗 Git: main</span>
+    <div className="h-6 bg-[#007acc] flex items-center justify-between px-1 sm:px-3 text-xs text-white">
+      <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-4 truncate">
+        <span className="hidden sm:inline">🌐 Live Server: localhost:3000</span>
+        <span className="sm:hidden">🌐 Live</span>
+        <span className="hidden md:inline">🔗 Git: main</span>
+        <span className="md:hidden sm:inline">🔗 main</span>
       </div>
-      <div className="flex items-center space-x-4">
-        <span>Ln 1, Col 1</span>
-        <span>Spaces: 2</span>
-        <span>UTF-8</span>
+      <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-4 ml-2">
+        <span className="hidden sm:inline">Ln 1, Col 1</span>
+        <span className="hidden md:inline">Spaces: 2</span>
+        <span className="hidden lg:inline">UTF-8</span>
         <span className="capitalize">{language}</span>
       </div>
     </div>

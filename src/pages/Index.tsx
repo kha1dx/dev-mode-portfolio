@@ -73,7 +73,7 @@ const portfolioFiles: FileItem[] = [
         icon: "⚛️",
         language: "typescript",
         content: "project1",
-      }
+      },
     ],
   },
   {
@@ -207,8 +207,11 @@ const Index = () => {
           <div className="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
           <div className="w-3 h-3 rounded-full bg-[#28ca42]"></div>
         </div>
-        <div className="ml-4 text-[#cccccc]">
-          Khaled Salleh - Portfolio - Visual Studio Code
+        <div className="ml-2 sm:ml-4 text-[#cccccc] truncate">
+          <span className="hidden sm:inline">Khaled Salleh - Portfolio - </span>
+          <span className="hidden md:inline">Visual Studio Code</span>
+          <span className="sm:hidden">Portfolio</span>
+          <span className="md:hidden sm:inline">VS Code</span>
         </div>
       </div>
 

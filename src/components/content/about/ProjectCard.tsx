@@ -9,6 +9,10 @@ interface ProjectCardProps {
   liveUrl?: string;
   githubUrl?: string;
   index?: number;
+  onClick?: () => void;
+  className?: string;
+  style?: React.CSSProperties;
+
 }
 
 export const ProjectCard = React.memo(

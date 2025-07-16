@@ -1,183 +1,121 @@
+import React, { useEffect } from "react";
+import { ProjectCard } from "./about/ProjectCard";
 import { projectsData } from "@/data/projectsData";
-import { Github, ExternalLink, Code, Monitor } from "lucide-react";
 
 interface ProjectContentProps {
-  projectId: string;
+  projectId?: string;
 }
 
 export const ProjectContent = ({ projectId }: ProjectContentProps) => {
-  const project = projectsData.find((p) => p.id === projectId);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const target = entry.target as HTMLElement;
+            target.style.opacity = "1";
+            target.style.transform = "translateY(0)";
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
 
-  if (!project) return null;
+    // Delay observation to ensure elements are mounted
+    const timer = setTimeout(() => {
+      const elementsToObserve = [
+        ".section-heading",
+        ".section-subtitle",
+        ".project-item",
+      ];
+
+      elementsToObserve.forEach((selector) => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach((el) => observer.observe(el));
+      });
+    }, 100);
+
+    // Cleanup function to disconnect the observer and clear the timer
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, []);
 
   return (
-    <div className="min-h-full bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1e1e1e] p-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12 animate-fade-in">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <span className="text-4xl">{project.icon}</span>
-            <h1 className="text-4xl font-bold text-white">{project.title}</h1>
+    <div className="min-h-full bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] py-16 lg:py-24 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-8">
+        {/* Section Header */}
+        <div className="mb-12 lg:mb-16 text-center">
+          <h1 className="section-heading opacity-0 translate-y-8 transition-all duration-700 ease-out font-clash-display font-semibold text-white text-4xl md:text-5xl lg:text-6xl tracking-tight leading-tight mb-4">
+            All Projects
+          </h1>
+          <div className="relative flex justify-center mb-6">
+            <img
+              className="w-[280px] h-0.5"
+              alt="Separator"
+              src="/group-8.png"
+            />
           </div>
-          <p className="text-[#cccccc] text-lg max-w-2xl mx-auto">
-            {project.description}
+          <p className="section-subtitle opacity-0 translate-y-8 transition-all duration-700 ease-out font-clash-display font-light text-white/70 text-lg max-w-3xl mx-auto">
+            A comprehensive showcase of my development journey, featuring full-stack applications, mobile apps, and innovative solutions built with modern technologies.
           </p>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Project Image */}
-          <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
-            <div className="flex items-center mb-4">
-              <Monitor className="w-6 h-6 text-[#4ec9b0] mr-3" />
-              <h2 className="text-2xl font-semibold text-white">Preview</h2>
-            </div>
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
+          {projectsData.map((project, index) => (
+            <ProjectCard
+              key={project.id}
+              title={project.title}
+              icon={project.icon}
+              image={project.image}
+              description={project.description}
+              technologies={project.technologies}
+              liveUrl={project.liveUrl}
+              githubUrl={project.githubUrl}
+              index={index}
+            />
+          ))}
+        </div>
 
-            <div className="relative group">
-              <img
-                src={`/${project.image}`}
-                alt={project.title}
-                className="w-full h-auto rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/placeholder-project.jpg";
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex gap-4 mt-6">
-              {project.liveUrl && project.liveUrl !== "#" && (
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-[#4ec9b0] hover:bg-[#3a9b87] text-[#1e1e1e] font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  Live Demo
-                </a>
-              )}
-              {project.githubUrl && project.githubUrl !== "#" && (
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-[#1e1e1e] border border-[#3e3e42] hover:border-[#569cd6] text-[#cccccc] font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105"
-                >
-                  <Github className="w-4 h-4" />
-                  View Code
-                </a>
-              )}
-            </div>
-          </div>
-
-          {/* Code Display */}
-          <div className="bg-[#252526] border border-[#3e3e42] rounded-lg hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
-            <div className="flex items-center p-4 border-b border-[#3e3e42]">
-              <Code className="w-6 h-6 text-[#4ec9b0] mr-3" />
-              <h2 className="text-2xl font-semibold text-white">
-                Project Info
-              </h2>
-            </div>
-
-            <div className="p-6 font-mono text-sm leading-relaxed">
-              <div className="text-[#6a9955]">// {project.title}</div>
-              <div className="text-[#6a9955]">// {project.description}</div>
-              <div className="mt-4 text-[#cccccc]">
-                <div className="mb-4">
-                  <span className="text-[#c586c0]">const</span>{" "}
-                  <span className="text-[#dcdcaa]">projectData</span> = {"{"}
+        {/* Stats Section */}
+        <div className="text-center">
+          <div className="project-item opacity-0 translate-y-8 transition-all duration-700 ease-out w-full max-w-4xl mx-auto px-6 py-8 rounded-2xl border border-white/20 backdrop-blur-sm bg-white/10">
+            <h3 className="font-clash-display font-semibold text-white text-2xl md:text-3xl mb-4">
+              Project Portfolio Stats
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-400 mb-2">
+                  {projectsData.length}+
                 </div>
-
-                <div className="ml-4 space-y-2">
-                  <div>
-                    <span className="text-[#92c5f7]">id</span>:{" "}
-                    <span className="text-[#ce9178]">"{project.id}"</span>,
-                  </div>
-                  <div>
-                    <span className="text-[#92c5f7]">title</span>:{" "}
-                    <span className="text-[#ce9178]">"{project.title}"</span>,
-                  </div>
-                  <div>
-                    <span className="text-[#92c5f7]">description</span>:{" "}
-                    <span className="text-[#ce9178]">
-                      "{project.description}"
-                    </span>
-                    ,
-                  </div>
-
-                  {project.technologies && project.technologies.length > 0 && (
-                    <>
-                      <div>
-                        <span className="text-[#92c5f7]">technologies</span>: [
-                      </div>
-                      <div className="ml-4">
-                        {project.technologies.map((tech, index) => (
-                          <div key={tech}>
-                            <span className="text-[#ce9178]">"{tech}"</span>
-                            {index < project.technologies!.length - 1
-                              ? ","
-                              : ""}
-                          </div>
-                        ))}
-                      </div>
-                      <div>],</div>
-                    </>
-                  )}
-
-                  {project.githubUrl && project.githubUrl !== "#" && (
-                    <div>
-                      <span className="text-[#92c5f7]">repository</span>:{" "}
-                      <span className="text-[#ce9178]">
-                        "{project.githubUrl}"
-                      </span>
-                      ,
-                    </div>
-                  )}
-
-                  {project.liveUrl && project.liveUrl !== "#" && (
-                    <div>
-                      <span className="text-[#92c5f7]">liveDemo</span>:{" "}
-                      <span className="text-[#ce9178]">
-                        "{project.liveUrl}"
-                      </span>
-                      ,
-                    </div>
-                  )}
-
-                  <div>
-                    <span className="text-[#92c5f7]">status</span>:{" "}
-                    <span className="text-[#ce9178]">"active"</span>
-                  </div>
+                <p className="text-white/70 text-sm">Total Projects</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-pink-400 mb-2">
+                  {projectsData
+                    .filter((p) => p.technologies)
+                    .reduce((acc, p) => acc + (p.technologies?.length || 0), 0)}
+                  +
                 </div>
-
-                <div className="mt-2">{"}"}</div>
+                <p className="text-white/70 text-sm">Technologies Used</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-400 mb-2">
+                  {
+                    projectsData.filter((p) => p.liveUrl && p.liveUrl !== "#")
+                      .length
+                  }
+                </div>
+                <p className="text-white/70 text-sm">Live Deployments</p>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Technologies Used */}
-        {project.technologies && project.technologies.length > 0 && (
-          <div className="mt-12 bg-[#252526] border border-[#3e3e42] rounded-lg p-8 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
-            <h3 className="text-2xl font-semibold text-white mb-6 flex items-center">
-              <span className="mr-3">🛠️</span>
-              Technologies Used
-            </h3>
-            <div className="flex flex-wrap gap-3">
-              {project.technologies.map((tech) => (
-                <span
-                  key={tech}
-                  className="bg-[#1e1e1e] text-[#cccccc] px-4 py-2 rounded-lg border border-[#3e3e42] hover:border-[#4ec9b0] transition-colors duration-300"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

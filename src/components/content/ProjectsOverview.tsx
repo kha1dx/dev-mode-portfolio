@@ -1,5 +1,7 @@
+import React, { useEffect } from "react";
 import { ExternalLink, Github } from "lucide-react";
 import { projectsData } from "@/data/projectsData";
+import { ProjectCard } from "./about/ProjectCard";
 
 interface ProjectsOverviewProps {
   onProjectClick?: (projectId: string) => void;
@@ -10,6 +12,42 @@ export const ProjectsOverview = ({ onProjectClick }: ProjectsOverviewProps) => {
     (project) => project.size === "wide" || project.size === "large"
   );
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const target = entry.target as HTMLElement;
+            target.style.opacity = "1";
+            target.style.transform = "translateY(0)";
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
+
+    const timer = setTimeout(() => {
+      const elementsToObserve = [
+        ".section-heading",
+        ".section-subtitle",
+        ".project-item",
+      ];
+
+      elementsToObserve.forEach((selector) => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach((el) => observer.observe(el));
+      });
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, []);
+
   const handleProjectClick = (projectId: string) => {
     if (onProjectClick) {
       onProjectClick(projectId);
@@ -17,199 +55,112 @@ export const ProjectsOverview = ({ onProjectClick }: ProjectsOverviewProps) => {
   };
 
   return (
-    <div className="min-h-full bg-gradient-to-br from-[#1e1e1e] via-[#252526] to-[#1e1e1e] p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-full bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] py-16 lg:py-24 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-8">
         {/* Header */}
-        <div className="text-center mb-12 animate-fade-in">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            My <span className="text-[#569cd6]">Projects</span>
+        <div className="text-center mb-12 lg:mb-16">
+          <h1 className="section-heading opacity-0 translate-y-8 transition-all duration-700 ease-out font-clash-display font-semibold text-white text-4xl md:text-5xl lg:text-6xl tracking-tight leading-tight mb-4">
+            My <span className="text-purple-400">Projects</span>
           </h1>
-          <p className="text-[#cccccc] text-lg max-w-2xl mx-auto">
-            A collection of projects that showcase my skills in full-stack
-            development, from web applications to APIs and everything in
-            between.
+          <div className="relative flex justify-center mb-6">
+            <img
+              className="w-[280px] h-0.5"
+              alt="Separator"
+              src="/group-8.png"
+            />
+          </div>
+          <p className="section-subtitle opacity-0 translate-y-8 transition-all duration-700 ease-out font-clash-display font-light text-white/70 text-lg max-w-3xl mx-auto">
+            A comprehensive showcase of my development journey, featuring
+            full-stack applications, mobile apps, and innovative solutions built
+            with modern technologies.
           </p>
         </div>
 
         {/* Featured Projects */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-semibold text-white mb-6 flex items-center gap-2">
-            <span className="text-[#4ec9b0]">⭐</span> Featured Projects
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {featuredProjects.map((project, index) => (
-              <div
-                key={project.id}
-                onClick={() => handleProjectClick(project.id)}
-                className="bg-[#252526] border border-[#3e3e42] rounded-lg overflow-hidden hover:border-[#569cd6] transition-all duration-300 hover:scale-105 animate-fade-in cursor-pointer"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="aspect-video bg-[#1e1e1e] overflow-hidden">
-                  <img
-                    src={`/${project.image}`}
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "/placeholder-project.jpg";
-                    }}
-                  />
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-2xl">{project.icon}</span>
-                    <h3 className="text-xl font-semibold text-white">
-                      {project.title}
-                    </h3>
-                  </div>
-                  <p className="text-[#cccccc] mb-4">{project.description}</p>
-
-                  {project.technologies && (
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.technologies.map((tech) => (
-                        <span
-                          key={tech}
-                          className="bg-[#1e1e1e] text-[#569cd6] px-2 py-1 rounded text-sm border border-[#3e3e42]"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="flex gap-3">
-                    {project.liveUrl && (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="bg-[#007acc] hover:bg-[#005a9e] text-white px-4 py-2 rounded flex items-center gap-2 transition-all duration-300 hover:scale-105"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        Demo
-                      </a>
-                    )}
-                    {project.githubUrl && (
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="border border-[#569cd6] text-[#569cd6] hover:bg-[#569cd6] hover:text-white px-4 py-2 rounded flex items-center gap-2 transition-all duration-300 hover:scale-105"
-                      >
-                        <Github className="w-4 h-4" />
-                        Code
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
+        {featuredProjects.length > 0 && (
+          <div className="mb-16">
+            <h2 className="project-item opacity-0 translate-y-8 transition-all duration-700 ease-out font-clash-display font-semibold text-white text-2xl md:text-3xl mb-8 flex items-center gap-3">
+              <span className="text-purple-400">⭐</span> Featured Projects
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+              {featuredProjects.map((project, index) => (
+                <ProjectCard
+                  key={project.id}
+                  title={project.title}
+                  icon={project.icon}
+                  image={project.image}
+                  description={project.description}
+                  technologies={project.technologies}
+                  liveUrl={project.liveUrl}
+                  githubUrl={project.githubUrl}
+                  index={index}
+                  onClick={() => handleProjectClick(project.id)}
+                  className="bg-[#252526] border border-[#3e3e42] rounded-lg overflow-hidden hover:border-[#569cd6] transition-all duration-300 hover:scale-105 animate-fade-in cursor-pointer"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* All Projects */}
-        <div>
-          <h2 className="text-2xl font-semibold text-white mb-6">
+        <div className="mb-16">
+          <h2 className="project-item opacity-0 translate-y-8 transition-all duration-700 ease-out font-clash-display font-semibold text-white text-2xl md:text-3xl mb-8">
             All Projects
           </h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {projectsData.map((project, index) => (
-              <div
+              <ProjectCard
                 key={project.id}
+                title={project.title}
+                icon={project.icon}
+                image={project.image}
+                description={project.description}
+                technologies={project.technologies}
+                liveUrl={project.liveUrl}
+                githubUrl={project.githubUrl}
+                index={index}
                 onClick={() => handleProjectClick(project.id)}
                 className="bg-[#252526] border border-[#3e3e42] rounded-lg overflow-hidden hover:border-[#569cd6] transition-all duration-300 hover:scale-105 animate-fade-in cursor-pointer"
                 style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="aspect-video bg-[#1e1e1e] overflow-hidden">
-                  <img
-                    src={`/${project.image}`}
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "/placeholder-project.jpg";
-                    }}
-                  />
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xl">{project.icon}</span>
-                    <h3 className="text-lg font-semibold text-white">
-                      {project.title}
-                    </h3>
-                  </div>
-                  <p className="text-[#cccccc] text-sm mb-4">
-                    {project.description}
-                  </p>
-
-                  {project.technologies && (
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      {project.technologies.slice(0, 3).map((tech) => (
-                        <span
-                          key={tech}
-                          className="bg-[#1e1e1e] text-[#569cd6] px-2 py-1 rounded text-xs border border-[#3e3e42]"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                      {project.technologies.length > 3 && (
-                        <span className="text-[#cccccc] text-xs px-2 py-1">
-                          +{project.technologies.length - 3} more
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                  <div className="flex gap-2">
-                    {project.liveUrl && (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-[#569cd6] hover:text-[#4ec9b0] transition-colors duration-300 text-sm flex items-center gap-1"
-                      >
-                        <ExternalLink className="w-3 h-3" />
-                        Demo
-                      </a>
-                    )}
-                    {project.githubUrl && (
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-[#569cd6] hover:text-[#4ec9b0] transition-colors duration-300 text-sm flex items-center gap-1"
-                      >
-                        <Github className="w-3 h-3" />
-                        Code
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
+              />
             ))}
           </div>
         </div>
 
-        {/* Call to Action */}
-        <div className="text-center mt-12 p-8 bg-[#252526] border border-[#3e3e42] rounded-lg">
-          <h3 className="text-xl font-semibold text-white mb-4">
-            Interested in working together?
-          </h3>
-          <p className="text-[#cccccc] mb-6">
-            I'm always open to discussing new opportunities and interesting
-            projects.
-          </p>
-          <a
-            href="mailto:khaledmohamedsalleh@gmail.com"
-            className="bg-[#007acc] hover:bg-[#005a9e] text-white px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 inline-flex items-center gap-2"
-          >
-            Let's Talk
-            <ExternalLink className="w-4 h-4" />
-          </a>
+        {/* Stats Section */}
+        <div className="text-center">
+          <div className="project-item opacity-0 translate-y-8 transition-all duration-700 ease-out w-full max-w-4xl mx-auto px-6 py-8 rounded-2xl border border-white/20 backdrop-blur-sm bg-white/10">
+            <h3 className="font-clash-display font-semibold text-white text-2xl md:text-3xl mb-4">
+              Project Portfolio Stats
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-400 mb-2">
+                  {projectsData.length}+
+                </div>
+                <p className="text-white/70 text-sm">Total Projects</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-pink-400 mb-2">
+                  {projectsData
+                    .filter((p) => p.technologies)
+                    .reduce((acc, p) => acc + (p.technologies?.length || 0), 0)}
+                  +
+                </div>
+                <p className="text-white/70 text-sm">Technologies Used</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-400 mb-2">
+                  {
+                    projectsData.filter((p) => p.liveUrl && p.liveUrl !== "#")
+                      .length
+                  }
+                </div>
+                <p className="text-white/70 text-sm">Live Deployments</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

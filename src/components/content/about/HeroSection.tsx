@@ -359,7 +359,7 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
                   </div>
 
                   {/* Bottom Right Cloud (behind avatar) - Larger and closer */}
-                  <div className="absolute -bottom-40 top-70 -right-20 text-[6rem] sm:text-[8rem] md:text-[10rem] opacity-80 z-[-1]">
+                  <div className="absolute -bottom-40 top-70 -right-20 text-[6rem] hidden sm:hidden md:text-[10rem] opacity-80 z-[-1]">
                     ☁️
                   </div>
                 </div>

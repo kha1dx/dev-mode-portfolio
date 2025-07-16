@@ -21,6 +21,7 @@ export const ContactContent = () => {
     email: "",
     subject: "",
     message: "",
+    budget: "", // Added budget field
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -28,7 +29,7 @@ export const ContactContent = () => {
   const { toast } = useToast();
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     setFormData({
       ...formData,
@@ -65,6 +66,7 @@ export const ContactContent = () => {
             email: formData.email.trim(),
             subject: formData.subject.trim(),
             message: formData.message.trim(),
+            budget: formData.budget || "Not specified", // Include budget in email
             userAgent: navigator.userAgent,
             referrer: document.referrer,
           },
@@ -78,7 +80,7 @@ export const ContactContent = () => {
       }
 
       setSubmitSuccess(true);
-      setFormData({ name: "", email: "", subject: "", message: "" });
+      setFormData({ name: "", email: "", subject: "", message: "", budget: "" });
 
       toast({
         title: "Message sent successfully!",
@@ -155,26 +157,26 @@ export const ContactContent = () => {
   ];
 
   return (
-    <div className="min-h-full bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1e1e1e] p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1e1e1e] p-4 sm:p-6 md:p-8">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12 animate-fade-in">
-          <h1 className="text-4xl font-bold text-white mb-4">
+        <div className="text-center mb-8 sm:mb-12 animate-fade-in">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
             Get In <span className="text-[#4ec9b0]">Touch</span>
           </h1>
-          <p className="text-[#cccccc] text-lg max-w-2xl mx-auto">
+          <p className="text-[#cccccc] text-base sm:text-lg max-w-2xl mx-auto">
             Let's discuss your next project or just say hello. I'm always
             excited to connect with fellow developers and potential clients.
           </p>
         </div>
 
         {/* Contact Grid */}
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12">
           {/* Contact Form */}
-          <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-8 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
+          <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 sm:p-8 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
             <div className="flex items-center mb-6">
-              <MessageSquare className="w-6 h-6 text-[#4ec9b0] mr-3" />
-              <h2 className="text-2xl font-semibold text-white">
+              <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 text-[#4ec9b0] mr-3" />
+              <h2 className="text-xl sm:text-2xl font-semibold text-white">
                 Send Message
               </h2>
             </div>
@@ -195,7 +197,7 @@ export const ContactContent = () => {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded-lg px-4 py-3 text-[#cccccc] placeholder-[#6a9955] focus:border-[#4ec9b0] focus:outline-none transition-colors"
+                    className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-[#cccccc] placeholder-[#6a9955] focus:border-[#4ec9b0] focus:outline-none transition-colors text-sm sm:text-base"
                     placeholder="Your Name"
                   />
                 </div>
@@ -213,7 +215,7 @@ export const ContactContent = () => {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded-lg px-4 py-3 text-[#cccccc] placeholder-[#6a9955] focus:border-[#4ec9b0] focus:outline-none transition-colors"
+                    className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-[#cccccc] placeholder-[#6a9955] focus:border-[#4ec9b0] focus:outline-none transition-colors text-sm sm:text-base"
                     placeholder="your.email@example.com"
                   />
                 </div>
@@ -233,9 +235,31 @@ export const ContactContent = () => {
                   value={formData.subject}
                   onChange={handleInputChange}
                   required
-                  className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded-lg px-4 py-3 text-[#cccccc] placeholder-[#6a9955] focus:border-[#4ec9b0] focus:outline-none transition-colors"
+                  className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-[#cccccc] placeholder-[#6a9955] focus:border-[#4ec9b0] focus:outline-none transition-colors text-sm sm:text-base"
                   placeholder="Project Discussion / Collaboration / General Inquiry"
                 />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="budget"
+                  className="block text-[#cccccc] text-sm font-medium mb-2"
+                >
+                  Budget Range
+                </label>
+                <select
+                  id="budget"
+                  name="budget"
+                  value={formData.budget}
+                  onChange={handleInputChange}
+                  className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-[#cccccc] focus:border-[#4ec9b0] focus:outline-none transition-colors text-sm sm:text-base"
+                >
+                  <option value="">Select Budget Range</option>
+                  <option value="Under $1,000">Under $1,000</option>
+                  <option value="$1,000 - $5,000">$1,000 - $5,000</option>
+                  <option value="$5,000 - $10,000">$5,000 - $10,000</option>
+                  <option value="$10,000+">$10,000+</option>
+                </select>
               </div>
 
               <div>
@@ -251,8 +275,8 @@ export const ContactContent = () => {
                   value={formData.message}
                   onChange={handleInputChange}
                   required
-                  rows={6}
-                  className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded-lg px-4 py-3 text-[#cccccc] placeholder-[#6a9955] focus:border-[#4ec9b0] focus:outline-none transition-colors resize-none"
+                  rows={5}
+                  className="w-full bg-[#1e1e1e] border border-[#3e3e42] rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-[#cccccc] placeholder-[#6a9955] focus:border-[#4ec9b0] focus:outline-none transition-colors resize-none text-sm sm:text-base"
                   placeholder="Tell me about your project, requirements, or just say hello..."
                 />
               </div>
@@ -260,7 +284,7 @@ export const ContactContent = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-[#4ec9b0] hover:bg-[#3a9b87] disabled:bg-[#3e3e42] text-[#1e1e1e] font-medium py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full bg-[#4ec9b0] hover:bg-[#3a9b87] disabled:bg-[#3e3e42] text-[#1e1e1e] font-medium py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition-all duration-300 hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm sm:text-base"
               >
                 {isSubmitting ? (
                   <>
@@ -283,10 +307,10 @@ export const ContactContent = () => {
           </div>
 
           {/* Contact Information */}
-          <div className="space-y-8">
+          <div className="space-y-6 md:space-y-8">
             {/* Contact Details */}
-            <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-8 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
-              <h2 className="text-2xl font-semibold text-white mb-6">
+            <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 sm:p-8 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
+              <h2 className="text-xl sm:text-2xl font-semibold text-white mb-6">
                 Contact Information
               </h2>
 
@@ -296,11 +320,11 @@ export const ContactContent = () => {
                   return (
                     <div
                       key={item.label}
-                      className="flex items-center justify-between group"
+                      className="flex flex-col sm:flex-row items-start sm:items-center justify-between group"
                     >
-                      <div className="flex items-center">
+                      <div className="flex items-center mb-2 sm:mb-0">
                         <IconComponent
-                          className={`w-5 h-5 ${item.color} mr-4`}
+                          className={`w-5 h-5 ${item.color} mr-3 sm:mr-4`}
                         />
                         <div>
                           <p className="text-[#cccccc] text-sm">{item.label}</p>
@@ -308,7 +332,7 @@ export const ContactContent = () => {
                             href={item.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-white hover:text-[#4ec9b0] transition-colors"
+                            className="text-white hover:text-[#4ec9b0] transition-colors text-sm sm:text-base"
                           >
                             {item.value}
                           </a>
@@ -332,12 +356,12 @@ export const ContactContent = () => {
             </div>
 
             {/* Social Links */}
-            <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-8 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
-              <h2 className="text-2xl font-semibold text-white mb-6">
+            <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 sm:p-8 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
+              <h2 className="text-xl sm:text-2xl font-semibold text-white mb-6">
                 Follow Me
               </h2>
 
-              <div className="flex space-x-4">
+              <div className="flex flex-wrap gap-3 sm:gap-4">
                 {socialLinks.map((social) => {
                   const IconComponent = social.icon;
                   return (
@@ -349,7 +373,7 @@ export const ContactContent = () => {
                       className={`p-3 bg-[#1e1e1e] border border-[#3e3e42] rounded-lg text-[#cccccc] ${social.color} transition-all duration-300 hover:scale-110 hover:border-[#569cd6]`}
                       title={social.label}
                     >
-                      <IconComponent className="w-6 h-6" />
+                      <IconComponent className="w-5 h-5 sm:w-6 sm:h-6" />
                     </a>
                   );
                 })}
@@ -357,10 +381,10 @@ export const ContactContent = () => {
             </div>
 
             {/* Availability */}
-            <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-8 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
+            <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 sm:p-8 hover:border-[#569cd6] transition-all duration-300 animate-fade-in">
               <div className="flex items-center mb-4">
-                <Calendar className="w-6 h-6 text-[#4ec9b0] mr-3" />
-                <h2 className="text-2xl font-semibold text-white">
+                <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-[#4ec9b0] mr-3" />
+                <h2 className="text-xl sm:text-2xl font-semibold text-white">
                   Availability
                 </h2>
               </div>
@@ -368,19 +392,19 @@ export const ContactContent = () => {
               <div className="space-y-3">
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-[#4ec9b0] rounded-full mr-3"></div>
-                  <span className="text-[#cccccc]">
+                  <span className="text-[#cccccc] text-sm sm:text-base">
                     Available for new projects
                   </span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-[#569cd6] rounded-full mr-3"></div>
-                  <span className="text-[#cccccc]">
+                  <span className="text-[#cccccc] text-sm sm:text-base">
                     Typical response time: 24 hours
                   </span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-[#ce9178] rounded-full mr-3"></div>
-                  <span className="text-[#cccccc]">
+                  <span className="text-[#cccccc] text-sm sm:text-base">
                     Open to remote collaboration
                   </span>
                 </div>

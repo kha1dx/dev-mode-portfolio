@@ -1,6 +1,8 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { Resend } from 'https://esm.sh/resend@2.0.0'
 
+declare const Deno: any
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -19,7 +21,7 @@ serve(async (req) => {
 
     // Send email to yourself
     const { data, error } = await resend.emails.send({
-      from: 'Portfolio Contact <noreply@yourdomain.com>', // Replace with your verified domain
+      from: 'Portfolio Contact <onboarding@resend.dev>', // Using Resend's test domain
       to: ['khaledmohamedsalleh@gmail.com'],
       subject: `Portfolio Contact: ${subject}`,
       html: `
@@ -49,7 +51,7 @@ serve(async (req) => {
 
     // Optional: Send confirmation email to the user
     await resend.emails.send({
-      from: 'Khaled Mohamed <noreply@yourdomain.com>', // Replace with your verified domain
+      from: 'Khaled Mohamed <onboarding@resend.dev>', // Using Resend's test domain
       to: [email],
       subject: 'Thank you for contacting me!',
       html: `

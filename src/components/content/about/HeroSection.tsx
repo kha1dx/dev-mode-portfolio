@@ -349,7 +349,7 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
                   </div>
 
                   {/* Top Right Cloud - Even smaller and closer */}
-                  <div className="absolute -top-16 -right-8 text-[7rem] sm:text-[9rem] md:text-[11rem] opacity-85">
+                  <div className="absolute -top-16 -right-8 text-[7rem] sm:text-[5rem] hidden sm:hidden lg:block  md:text-[10rem] opacity-85">
                     ☁️
                   </div>
 
@@ -359,7 +359,7 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
                   </div>
 
                   {/* Bottom Right Cloud (behind avatar) - Larger and closer */}
-                  <div className="absolute -bottom-40 top-70 -right-20 text-[6rem] hidden sm:hidden md:text-[10rem] opacity-80 z-[-1]">
+                  <div className="absolute -bottom-40 top-70 -right-20 text-[6rem] hidden sm:hidden md:text-[10rem] lg:block opacity-80 z-[-1]">
                     ☁️
                   </div>
                 </div>

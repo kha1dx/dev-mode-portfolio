@@ -61,18 +61,62 @@ export const ActivityBar = ({
   );
 
   return (
-    <div className="w-12 bg-[#2c2c2c] flex flex-col border-r border-[#3e3e42]">
+    <div className="w-8 sm:w-10 md:w-12 bg-[#2c2c2c] flex flex-col border-r border-[#3e3e42] min-h-screen">
       {/* Top Activities */}
-      <div className="flex-1">
+      <div className="flex-1 pt-2">
         {activities.map((activity) => (
-          <ActivityButton key={activity.id} activity={activity} />
+          <div key={activity.id} className="w-full h-8 sm:h-10 md:h-12 flex items-center justify-center relative group">
+            <button
+              onClick={() => onPanelChange(activity.id)}
+              className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex items-center justify-center rounded transition-colors ${
+                activePanel === activity.id
+                  ? "text-white bg-[#007acc]"
+                  : "text-[#858585] hover:text-white hover:bg-[#3e3e42]"
+              }`}
+              title={activity.label}
+            >
+              <activity.icon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+            </button>
+
+            {/* Active indicator */}
+            {activePanel === activity.id && (
+              <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-4 sm:h-5 md:h-6 bg-white rounded-r" />
+            )}
+
+            {/* Tooltip - hidden on mobile */}
+            <div className="hidden md:block absolute left-10 lg:left-12 bg-[#2c2c2c] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity z-50 whitespace-nowrap pointer-events-none">
+              {activity.label}
+            </div>
+          </div>
         ))}
       </div>
 
       {/* Bottom Activities */}
-      <div className="border-t border-[#3e3e42]">
+      <div className="border-t border-[#3e3e42] pb-2">
         {bottomActivities.map((activity) => (
-          <ActivityButton key={activity.id} activity={activity} />
+          <div key={activity.id} className="w-full h-8 sm:h-10 md:h-12 flex items-center justify-center relative group">
+            <button
+              onClick={() => onPanelChange(activity.id)}
+              className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex items-center justify-center rounded transition-colors ${
+                activePanel === activity.id
+                  ? "text-white bg-[#007acc]"
+                  : "text-[#858585] hover:text-white hover:bg-[#3e3e42]"
+              }`}
+              title={activity.label}
+            >
+              <activity.icon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+            </button>
+
+            {/* Active indicator */}
+            {activePanel === activity.id && (
+              <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-4 sm:h-5 md:h-6 bg-white rounded-r" />
+            )}
+
+            {/* Tooltip - hidden on mobile */}
+            <div className="hidden md:block absolute left-10 lg:left-12 bg-[#2c2c2c] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity z-50 whitespace-nowrap pointer-events-none">
+              {activity.label}
+            </div>
+          </div>
         ))}
       </div>
     </div>

@@ -4,12 +4,7 @@ interface DockProps {
 
 export const Dock = ({ onNavigate }: DockProps) => {
   const dockItems = [
-    {
-      id: 'contact',
-      image: '/mail.png',
-      label: 'Contact',
-      action: 'contact'
-    },
+    
     {
       id: 'home',
       image: '/home.png',
@@ -22,6 +17,13 @@ export const Dock = ({ onNavigate }: DockProps) => {
       label: 'Projects',
       action: 'projects'
     },
+    {
+      id: 'contact',
+      image: '/mail.png',
+      label: 'Contact',
+      action: 'contact'
+    },
+    
     {
       id: 'chat',
       image: '/chatbot.png',

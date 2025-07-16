@@ -326,7 +326,7 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
 
               <div
                 ref={avatarRef}
-                className="w-90 h-90 sm:w-80 sm:h-80 lg:w-[480px] lg:h-[480px] relative z-10"
+                className="w-90 h-90 sm:w-40 sm:h-40 lg:w-[480px] lg:h-[480px] z-10"
               >
                 {/* Hero Avatar Image */}
                 <img
@@ -344,22 +344,22 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
                   className="absolute inset-0 pointer-events-none lg:scale-1"
                 >
                   {/* Top Left Cloud - Even larger and closer */}
-                  <div className="absolute -top-12 -left-12 text-[6rem] sm:text-[8rem] md:text-[10rem] opacity-90 z-[-1]">
+                  <div className="absolute -top-12 -left-12 text-[6rem] sm:text-[4rem] md:text-[10rem] opacity-90 z-[-1]">
                     ☁️
                   </div>
 
                   {/* Top Right Cloud - Even smaller and closer */}
-                  <div className="absolute -top-16 -right-8 text-[7rem] sm:text-[9rem] md:text-[11rem] opacity-85">
+                  <div className="absolute -top-16 -right-8 text-[7rem] sm:text-[5rem] md:text-[11rem] opacity-85">
                     ☁️
                   </div>
 
                   {/* Bottom Left Cloud (behind avatar) - Larger and closer */}
-                  <div className="absolute -bottom-40 right-140 top-82 w-100 h-100 text-[8rem] sm:text-[10rem] md:text-[12rem] opacity-95">
+                  <div className="absolute -bottom-40 right-140 top-82 w-100 h-100 text-[8rem] sm:text-[6rem] md:text-[12rem] opacity-95">
                     ☁️
                   </div>
 
                   {/* Bottom Right Cloud (behind avatar) - Larger and closer */}
-                  <div className="absolute -bottom-40 top-70 -right-20 text-[6rem] sm:text-[8rem] md:text-[10rem] opacity-80 z-[-1]">
+                  <div className="absolute -bottom-40 top-70 -right-20 sm:-right-[110] text-[6rem] sm:text-[4rem] md:text-[10rem] opacity-80 z-[-1]">
                     ☁️
                   </div>
                 </div>

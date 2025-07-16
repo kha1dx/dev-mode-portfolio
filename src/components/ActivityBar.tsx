@@ -3,7 +3,7 @@ import {
   Search,
   GitBranch,
   Terminal,
-  MessageSquare,
+  Bot,
   Settings,
   User,
 } from "lucide-react";
@@ -22,7 +22,7 @@ export const ActivityBar = ({
     { id: "search", icon: Search, label: "Search" },
     { id: "git", icon: GitBranch, label: "Source Control" },
     { id: "terminal", icon: Terminal, label: "Terminal" },
-    { id: "chat", icon: MessageSquare, label: "Portfolio Assistant" },
+    { id: "chat", icon: Bot, label: "Portfolio Assistant" },
   ];
 
   const bottomActivities = [

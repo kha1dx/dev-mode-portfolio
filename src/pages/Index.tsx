@@ -68,28 +68,12 @@ const portfolioFiles: FileItem[] = [
     children: [
       {
         id: "project1",
-        name: "e-commerce-app.tsx",
+        name: "All-Projects.tsx",
         type: "file",
         icon: "⚛️",
         language: "typescript",
         content: "project1",
-      },
-      {
-        id: "project2",
-        name: "task-manager.py",
-        type: "file",
-        icon: "🐍",
-        language: "python",
-        content: "project2",
-      },
-      {
-        id: "project3",
-        name: "weather-api.js",
-        type: "file",
-        icon: "🌤️",
-        language: "javascript",
-        content: "project3",
-      },
+      }
     ],
   },
   {

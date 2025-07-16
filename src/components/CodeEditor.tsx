@@ -23,11 +23,13 @@ export const CodeEditor = ({
         return <AboutContent onNavigate={onNavigate} />;
       case "projects-main":
         return <ProjectsOverview />;
+      case "projects":
+      case "project1":
+        return <ProjectsOverview />;
       case "about":
         return <AboutContent onNavigate={onNavigate} />;
       case "skills":
         return <SkillsContent />;
-      case "project1":
       case "project2":
       case "project3":
         return <ProjectContent projectId={activeFile} />;

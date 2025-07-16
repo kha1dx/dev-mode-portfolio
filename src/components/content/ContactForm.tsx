@@ -27,18 +27,66 @@ export const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.functions.invoke('send-contact-email', {
-        body: {
-          name: formData.name,
-          email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-          userAgent: navigator.userAgent,
-          referrer: document.referrer
-        }
+      // Validate form data
+      if (
+        !formData.name.trim() ||
+        !formData.email.trim() ||
+        !formData.subject.trim() ||
+        !formData.message.trim()
+      ) {
+        toast({
+          title: "Validation Error",
+          description: "Please fill in all required fields.",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email.trim())) {
+        toast({
+          title: "Invalid Email",
+          description: "Please enter a valid email address.",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      console.log("Sending email with data:", {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        subject: formData.subject.trim(),
+        message: formData.message.trim(),
       });
 
-      if (error) throw error;
+      const { data, error } = await supabase.functions.invoke(
+        "send-contact-email",
+        {
+          body: {
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            subject: formData.subject.trim(),
+            message: formData.message.trim(),
+            userAgent: navigator.userAgent,
+            referrer: document.referrer,
+          },
+        }
+      );
+
+      console.log("Supabase response:", { data, error });
+
+      if (error) {
+        console.error("Supabase function error:", error);
+        throw new Error(error.message || "Failed to send message");
+      }
+
+      if (!data?.success) {
+        console.error("Email sending failed:", data?.error);
+        throw new Error(data?.error || "Failed to send message");
+      }
 
       toast({
         title: "Message sent successfully!",
@@ -46,11 +94,15 @@ export const ContactForm = () => {
       });
 
       setFormData({ name: "", email: "", subject: "", message: "" });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Email Error:", error);
       toast({
         title: "Error sending message",
-        description: "Please try again or contact me directly at khaledmohamedsalleh@gmail.com",
+        description:
+          error.message === "Failed to fetch"
+            ? "Network error. Please check your connection and try again."
+            : error.message ||
+              "Please try again or contact me directly at khaledmohamedsalleh@gmail.com",
         variant: "destructive",
       });
     } finally {
@@ -59,7 +111,10 @@ export const ContactForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 w-full max-w-lg mx-auto px-4">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 sm:space-y-6 w-full max-w-lg mx-auto px-4"
+    >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <Input
           name="name"

@@ -12,6 +12,8 @@ import {
   MessageSquare,
   Calendar,
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export const ContactContent = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +25,7 @@ export const ContactContent = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [copiedField, setCopiedField] = useState("");
+  const { toast } = useToast();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -37,14 +40,63 @@ export const ContactContent = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      // Validate form data
+      if (
+        !formData.name.trim() ||
+        !formData.email.trim() ||
+        !formData.subject.trim() ||
+        !formData.message.trim()
+      ) {
+        toast({
+          title: "Validation Error",
+          description: "Please fill in all required fields.",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
 
-    setIsSubmitting(false);
-    setSubmitSuccess(true);
-    setFormData({ name: "", email: "", subject: "", message: "" });
+      const { data, error } = await supabase.functions.invoke(
+        "send-contact-email",
+        {
+          body: {
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            subject: formData.subject.trim(),
+            message: formData.message.trim(),
+            userAgent: navigator.userAgent,
+            referrer: document.referrer,
+          },
+        }
+      );
 
-    setTimeout(() => setSubmitSuccess(false), 3000);
+      if (error || !data?.success) {
+        throw new Error(
+          data?.error || error?.message || "Failed to send message"
+        );
+      }
+
+      setSubmitSuccess(true);
+      setFormData({ name: "", email: "", subject: "", message: "" });
+
+      toast({
+        title: "Message sent successfully!",
+        description: "Thank you for your message. I'll get back to you soon.",
+      });
+
+      setTimeout(() => setSubmitSuccess(false), 3000);
+    } catch (error: any) {
+      console.error("Email Error:", error);
+      toast({
+        title: "Error sending message",
+        description:
+          error.message || "Please try again or contact me directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const copyToClipboard = async (text: string, field: string) => {

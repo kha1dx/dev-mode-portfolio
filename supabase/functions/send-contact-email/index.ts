@@ -1,61 +1,27 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.51.0";
-import { Resend } from "npm:resend@2.0.0";
-
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { Resend } from 'https://esm.sh/resend@2.0.0'
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
-interface ContactEmailRequest {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-  userAgent?: string;
-  referrer?: string;
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const handler = async (req: Request): Promise<Response> => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
   }
 
   try {
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
-    );
+    const { name, email, subject, message, userAgent, referrer } = await req.json()
 
-    const { name, email, subject, message, userAgent, referrer }: ContactEmailRequest = await req.json();
+    // Initialize Resend with your API key
+    const resend = new Resend(Deno.env.get('RESEND_API_KEY'))
 
-    // Get client IP
-    const clientIP = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
-
-    // Store contact submission in database
-    const { error: dbError } = await supabase
-      .from('contact_submissions')
-      .insert({
-        name,
-        email,
-        subject,
-        message,
-        ip_address: clientIP,
-        user_agent: userAgent,
-        referrer: referrer
-      });
-
-    if (dbError) {
-      console.error("Database error:", dbError);
-    }
-
-    // Send email notification to you
-    const emailResponse = await resend.emails.send({
-      from: "Portfolio Contact <onboarding@resend.dev>",
-      to: ["khaledmohamedsalleh@gmail.com"],
-      subject: `New Contact Form: ${subject}`,
+    // Send email to yourself
+    const { data, error } = await resend.emails.send({
+      from: 'Portfolio Contact <noreply@yourdomain.com>', // Replace with your verified domain
+      to: ['khaledmohamedsalleh@gmail.com'],
+      subject: `Portfolio Contact: ${subject}`,
       html: `
         <h2>New Contact Form Submission</h2>
         <p><strong>Name:</strong> ${name}</p>
@@ -64,40 +30,54 @@ const handler = async (req: Request): Promise<Response> => {
         <p><strong>Message:</strong></p>
         <p>${message.replace(/\n/g, '<br>')}</p>
         <hr>
-        <p><small>IP: ${clientIP}</small></p>
-        <p><small>User Agent: ${userAgent || 'Unknown'}</small></p>
-        <p><small>Referrer: ${referrer || 'Direct'}</small></p>
+        <p><small>User Agent: ${userAgent}</small></p>
+        <p><small>Referrer: ${referrer}</small></p>
       `,
-    });
+      reply_to: email,
+    })
 
-    // Send confirmation email to user
+    if (error) {
+      console.error('Resend error:', error)
+      return new Response(
+        JSON.stringify({ success: false, error: error.message }),
+        { 
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
+    }
+
+    // Optional: Send confirmation email to the user
     await resend.emails.send({
-      from: "Khaled <onboarding@resend.dev>",
+      from: 'Khaled Mohamed <noreply@yourdomain.com>', // Replace with your verified domain
       to: [email],
-      subject: "Thank you for contacting me!",
+      subject: 'Thank you for contacting me!',
       html: `
-        <h2>Thank you for your message, ${name}!</h2>
-        <p>I have received your message and will get back to you as soon as possible.</p>
+        <h2>Thank you for reaching out!</h2>
+        <p>Hi ${name},</p>
+        <p>I've received your message and will get back to you as soon as possible.</p>
         <p><strong>Your message:</strong></p>
-        <p style="background: #f5f5f5; padding: 15px; border-radius: 5px;">${message.replace(/\n/g, '<br>')}</p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
         <p>Best regards,<br>Khaled Mohamed</p>
       `,
-    });
+    })
 
-    return new Response(JSON.stringify({ success: true, emailResponse }), {
-      status: 200,
-      headers: { "Content-Type": "application/json", ...corsHeaders },
-    });
-  } catch (error: any) {
-    console.error("Error in send-contact-email function:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
+      JSON.stringify({ success: true, data }),
+      { 
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
-    );
-  }
-};
+    )
 
-serve(handler);
+  } catch (error) {
+    console.error('Function error:', error)
+    return new Response(
+      JSON.stringify({ success: false, error: error.message }),
+      { 
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      }
+    )
+  }
+})

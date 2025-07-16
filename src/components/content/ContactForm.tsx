@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import emailjs from "@emailjs/browser";
+import { supabase } from "@/integrations/supabase/client";
 
 export const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -27,21 +27,18 @@ export const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      // EmailJS configuration - Replace these with your actual EmailJS credentials
-      const serviceId = "service_your_id"; // Replace with your EmailJS service ID
-      const templateId = "template_your_id"; // Replace with your EmailJS template ID
-      const publicKey = "your_public_key"; // Replace with your EmailJS public key
+      const { error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          userAgent: navigator.userAgent,
+          referrer: document.referrer
+        }
+      });
 
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        to_email: "khaledmohamedsalleh@gmail.com",
-        subject: formData.subject,
-        message: formData.message,
-        reply_to: formData.email,
-      };
-
-      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      if (error) throw error;
 
       toast({
         title: "Message sent successfully!",
@@ -50,11 +47,10 @@ export const ContactForm = () => {
 
       setFormData({ name: "", email: "", subject: "", message: "" });
     } catch (error) {
-      console.error("EmailJS Error:", error);
+      console.error("Email Error:", error);
       toast({
         title: "Error sending message",
-        description:
-          "Please try again or contact me directly at khaledmohamedsalleh@gmail.com",
+        description: "Please try again or contact me directly at khaledmohamedsalleh@gmail.com",
         variant: "destructive",
       });
     } finally {
@@ -63,15 +59,15 @@ export const ContactForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-lg mx-auto">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 w-full max-w-lg mx-auto px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <Input
           name="name"
           placeholder="Your Name"
           value={formData.name}
           onChange={handleInputChange}
           required
-          className="bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-400"
+          className="bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-400 h-10 sm:h-11"
         />
         <Input
           name="email"
@@ -80,7 +76,7 @@ export const ContactForm = () => {
           value={formData.email}
           onChange={handleInputChange}
           required
-          className="bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-400"
+          className="bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-400 h-10 sm:h-11"
         />
       </div>
       <Input
@@ -89,7 +85,7 @@ export const ContactForm = () => {
         value={formData.subject}
         onChange={handleInputChange}
         required
-        className="bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-400"
+        className="bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-400 h-10 sm:h-11"
       />
       <Textarea
         name="message"
@@ -98,12 +94,12 @@ export const ContactForm = () => {
         onChange={handleInputChange}
         required
         rows={4}
-        className="bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-400"
+        className="bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-400 min-h-[100px] resize-y"
       />
       <Button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-semibold hover:from-cyan-300 hover:to-blue-400 disabled:opacity-50"
+        className="w-full bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-semibold hover:from-cyan-300 hover:to-blue-400 disabled:opacity-50 h-11 sm:h-12 text-sm sm:text-base"
       >
         {isSubmitting ? "Sending..." : "Send Message"}
       </Button>

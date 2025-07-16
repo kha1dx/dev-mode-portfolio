@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAnalytics } from "@/hooks/useAnalytics";
 import { FileExplorer } from "@/components/FileExplorer";
 import { CodeEditor } from "@/components/CodeEditor";
 import { StatusBar } from "@/components/StatusBar";
@@ -95,6 +96,7 @@ const portfolioFiles: FileItem[] = [
 ];
 
 const Index = () => {
+  const analytics = useAnalytics();
   const [activeFile, setActiveFile] = useState<string>("about-main");
   const [openTabs, setOpenTabs] = useState<string[]>(["about-main"]);
   const [expandedFolders, setExpandedFolders] = useState<string[]>([
@@ -197,6 +199,10 @@ const Index = () => {
   const handleSidePanelResize = (newWidth: number) => {
     setSidePanelWidth(newWidth);
   };
+
+  useEffect(() => {
+    analytics.trackPageView('/', 'Portfolio Home');
+  }, [analytics]);
 
   return (
     <div className="h-screen bg-[#1e1e1e] text-[#cccccc] flex flex-col overflow-hidden">

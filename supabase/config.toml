@@ -1,1 +1,10 @@
 project_id = "nnwbbemvpydtawgyyrfs"
+
+[functions.send-contact-email]
+verify_jwt = false
+
+[functions.track-analytics]
+verify_jwt = false
+
+[functions.chatbot]
+verify_jwt = false

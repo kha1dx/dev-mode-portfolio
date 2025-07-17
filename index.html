@@ -35,8 +35,9 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const handleKeyboard = () => {
           if (window.visualViewport) {
             const viewport = window.visualViewport;
             
@@ -54,6 +55,10 @@
           }
         };
 
+        const disableIosTextFieldZoom = () => {
+          // iOS zoom disable logic can be added here
+        };
+
         if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
           disableIosTextFieldZoom();
         }
@@ -61,10 +66,5 @@
         handleKeyboard();
       });
     </script>
-  </head>
-
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

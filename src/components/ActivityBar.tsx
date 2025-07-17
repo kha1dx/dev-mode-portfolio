@@ -61,11 +61,14 @@ export const ActivityBar = ({
   );
 
   return (
-    <div className="w-8 sm:w-10 md:w-12 bg-[#2c2c2c] flex flex-col border-r border-[#3e3e42] min-h-screen">
+    <div className="w-8  md:w-12 bg-[#2c2c2c] flex flex-col border-r border-[#3e3e42] min-h-screen">
       {/* Top Activities */}
       <div className="flex-1 pt-2">
         {activities.map((activity) => (
-          <div key={activity.id} className="w-full h-8 sm:h-10 md:h-12 flex items-center justify-center relative group">
+          <div
+            key={activity.id}
+            className="w-full h-8 sm:h-10 md:h-12 flex items-center justify-center relative group"
+          >
             <button
               onClick={() => onPanelChange(activity.id)}
               className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex items-center justify-center rounded transition-colors ${
@@ -94,7 +97,10 @@ export const ActivityBar = ({
       {/* Bottom Activities */}
       <div className="border-t border-[#3e3e42] pb-2">
         {bottomActivities.map((activity) => (
-          <div key={activity.id} className="w-full h-8 sm:h-10 md:h-12 flex items-center justify-center relative group">
+          <div
+            key={activity.id}
+            className="w-full h-full sm:h-10 md:h-12 flex items-center justify-center relative group"
+          >
             <button
               onClick={() => onPanelChange(activity.id)}
               className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex items-center justify-center rounded transition-colors ${

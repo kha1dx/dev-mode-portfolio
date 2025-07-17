@@ -99,7 +99,7 @@ export const ActivityBar = ({
         {bottomActivities.map((activity) => (
           <div
             key={activity.id}
-            className="w-full h-full sm:h-10 md:h-12 flex items-center justify-center relative group"
+            className="w-full h-14 sm:h-10 md:h-12 flex items-center justify-center relative group"
           >
             <button
               onClick={() => onPanelChange(activity.id)}

@@ -18,6 +18,7 @@ body {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: none;
+  background: #1e1e1e;
 }
 
 /* Keyboard active state fixes */

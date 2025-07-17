@@ -559,3 +559,61 @@ html, body {
 .side-panel-resize {
   transition: width 0.1s ease-out;
 }
+
+/* Chatbot specific mobile keyboard fixes */
+@media screen and (max-width: 768px) {
+  .chatbot-container {
+    height: 100vh !important;
+    height: 100dvh !important;
+    height: var(--app-height) !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    max-height: var(--app-height) !important;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Prevent chatbot from creating white space on keyboard popup */
+  .chatbot-container * {
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Fix for chatbot input area */
+  .chatbot-container .flex-shrink-0:last-child {
+    position: sticky;
+    bottom: 0;
+    background: #1e1e1e;
+    z-index: 10;
+  }
+  
+  /* Ensure messages area stays within bounds */
+  .chatbot-container .flex-1.overflow-y-auto {
+    height: 0;
+    min-height: 0;
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
+  }
+}
+
+/* iOS Safari specific chatbot fixes */
+@supports (-webkit-touch-callout: none) {
+  @media screen and (max-width: 768px) {
+    .chatbot-container {
+      height: 100vh !important;
+      height: -webkit-fill-available !important;
+      height: 100dvh !important;
+      height: var(--app-height) !important;
+      max-height: 100vh !important;
+      max-height: -webkit-fill-available !important;
+      max-height: 100dvh !important;
+      max-height: var(--app-height) !important;
+      position: relative;
+      overflow: hidden;
+    }
+  }
+}

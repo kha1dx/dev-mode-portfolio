@@ -14,7 +14,8 @@ interface ChatbotProps {
 }
 
 export const Chatbot = ({ onClose }: ChatbotProps) => {
-  // Removed useAppHeight hook to fix mobile keyboard issues
+  // Re-enable useAppHeight hook for proper mobile viewport handling
+  useAppHeight();
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -316,7 +317,7 @@ TONE: Professional but friendly, helpful, and focused on conversion while being 
   ];
 
   return (
-    <div className="flex-1 bg-[#1e1e1e] flex flex-col h-full max-h-[100vh] max-h-[100dvh]">
+    <div className="chatbot-container flex-1 bg-[#1e1e1e] flex flex-col h-full max-h-[100vh] max-h-[100dvh] max-h-[var(--app-height)]">
       {/* Header */}
       <div className="h-12 bg-[#2d2d30] border-b border-[#3e3e42] flex items-center justify-between px-4 flex-shrink-0">
         <div className="flex items-center space-x-2">

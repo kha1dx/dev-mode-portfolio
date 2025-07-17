@@ -2,6 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile viewport fixes and keyboard handling */
+html {
+  height: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  min-height: var(--app-height);
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+}
+
+/* Keyboard active state fixes */
+body.keyboard-active {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body.keyboard-dismissed {
+  position: static;
+  overflow: visible;
+}
+
+.viewport-reset {
+  height: 100vh !important;
+  height: 100dvh !important;
+  height: var(--app-height) !important;
+  overflow-y: auto;
+}
+
+/* Form input fixes for mobile */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+textarea,
+select {
+  font-size: 16px !important;
+  transform: translateZ(0);
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
+/* Prevent zoom on input focus */
+@media screen and (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  textarea,
+  select {
+    font-size: 16px !important;
+    zoom: 1;
+  }
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
 
 @layer base {

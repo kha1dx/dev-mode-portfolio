@@ -26,7 +26,7 @@ export const ActivityBar = ({
   ];
 
   const bottomActivities = [
-    { id: "profile", icon: User, label: "Account" },
+    { id: "account", icon: User, label: "Account" },
     { id: "settings", icon: Settings, label: "Settings" },
   ];
 
@@ -61,29 +61,29 @@ export const ActivityBar = ({
   );
 
   return (
-    <div className="w-8  md:w-12 bg-[#2c2c2c] flex flex-col border-r border-[#3e3e42] min-h-screen">
+    <div className="w-8 md:w-12 bg-[#2c2c2c] flex flex-col border-r border-[#3e3e42] h-full max-h-screen overflow-y-auto">
       {/* Top Activities */}
-      <div className="flex-1 pt-2">
+      <div className="flex-1 pt-2 space-y-1">
         {activities.map((activity) => (
           <div
             key={activity.id}
-            className="w-full h-8 sm:h-10 md:h-12 flex items-center justify-center relative group"
+            className="w-full h-8 md:h-12 flex items-center justify-center relative group"
           >
             <button
               onClick={() => onPanelChange(activity.id)}
-              className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex items-center justify-center rounded transition-colors ${
+              className={`w-6 h-6 md:w-8 md:h-8 flex items-center justify-center rounded transition-colors ${
                 activePanel === activity.id
                   ? "text-white bg-[#007acc]"
                   : "text-[#858585] hover:text-white hover:bg-[#3e3e42]"
               }`}
               title={activity.label}
             >
-              <activity.icon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+              <activity.icon className="w-4 h-4 md:w-6 md:h-6" />
             </button>
 
             {/* Active indicator */}
             {activePanel === activity.id && (
-              <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-4 sm:h-5 md:h-6 bg-white rounded-r" />
+              <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-4 md:h-6 bg-white rounded-r" />
             )}
 
             {/* Tooltip - hidden on mobile */}
@@ -95,27 +95,27 @@ export const ActivityBar = ({
       </div>
 
       {/* Bottom Activities */}
-      <div className="border-t border-[#3e3e42] pb-2">
+      <div className="border-t border-[#3e3e42] pb-2 space-y-1">
         {bottomActivities.map((activity) => (
           <div
             key={activity.id}
-            className="w-full h-14 sm:h-10 md:h-12 flex items-center justify-center relative group"
+            className="w-full h-8 md:h-12 flex items-center justify-center relative group"
           >
             <button
               onClick={() => onPanelChange(activity.id)}
-              className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex items-center justify-center rounded transition-colors ${
+              className={`w-6 h-6 md:w-8 md:h-8 flex items-center justify-center rounded transition-colors ${
                 activePanel === activity.id
                   ? "text-white bg-[#007acc]"
                   : "text-[#858585] hover:text-white hover:bg-[#3e3e42]"
               }`}
               title={activity.label}
             >
-              <activity.icon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+              <activity.icon className="w-4 h-4 md:w-6 md:h-6" />
             </button>
 
             {/* Active indicator */}
             {activePanel === activity.id && (
-              <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-4 sm:h-5 md:h-6 bg-white rounded-r" />
+              <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-4 md:h-6 bg-white rounded-r" />
             )}
 
             {/* Tooltip - hidden on mobile */}

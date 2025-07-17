@@ -1,6 +1,8 @@
 import { FileExplorer } from "./FileExplorer";
 import { SearchPanel } from "./panels/SearchPanel";
 import { GitPanel } from "./panels/GitPanel";
+import { AccountPanel } from "./panels/AccountPanel";
+import { SettingsPanel } from "./panels/SettingsPanel";
 import { SidePanelResizeHandle } from "./SidePanelResizeHandle";
 import { FileItem } from "../pages/Index";
 
@@ -41,6 +43,10 @@ export const SidePanel = ({
         return "TERMINAL";
       case "chat":
         return "PORTFOLIO ASSISTANT";
+      case "account":
+        return "ACCOUNT";
+      case "settings":
+        return "SETTINGS";
       default:
         return "EXPLORER";
     }
@@ -81,6 +87,10 @@ export const SidePanel = ({
             Chat will be opened in the main area
           </div>
         );
+      case "account":
+        return <AccountPanel />;
+      case "settings":
+        return <SettingsPanel />;
       default:
         return null;
     }

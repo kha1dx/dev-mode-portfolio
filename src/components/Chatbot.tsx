@@ -13,8 +13,6 @@ interface ChatbotProps {
 }
 
 export const Chatbot = ({ onClose }: ChatbotProps) => {
-  // Re-enable useAppHeight hook for proper mobile viewport handling
-
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "1",

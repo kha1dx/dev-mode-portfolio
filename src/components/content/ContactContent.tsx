@@ -14,11 +14,9 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import useAppHeight from "@/hooks/useAppHeight";
 
 export const ContactContent = () => {
   // Apply the app height hook
-  useAppHeight();
 
   const [formData, setFormData] = useState({
     name: "",

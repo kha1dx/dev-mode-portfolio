@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Send, X, Bot, User, Terminal } from "lucide-react";
+import useAppHeight from "@/hooks/useAppHeight";
 
 interface ChatMessage {
   id: string;
@@ -13,6 +14,9 @@ interface ChatbotProps {
 }
 
 export const Chatbot = ({ onClose }: ChatbotProps) => {
+  // Apply the app height hook
+  useAppHeight();
+
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "1",
@@ -313,7 +317,7 @@ TONE: Professional but friendly, helpful, and focused on conversion while being 
   ];
 
   return (
-    <div className="flex-1 bg-[#1e1e1e] flex flex-col h-full">
+    <div className="flex-1 bg-[#1e1e1e] flex flex-col h-[var(--app-height)]">
       {/* Header */}
       <div className="h-12 bg-[#2d2d30] border-b border-[#3e3e42] flex items-center justify-between px-4 flex-shrink-0">
         <div className="flex items-center space-x-2">

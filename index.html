@@ -16,27 +16,27 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <script>
-      // Prevent zoom on input focus for iOS
-      document.addEventListener('DOMContentLoaded', function() {
-        const addMaximumScaleToMetaViewport = () => {
-          const el = document.querySelector('meta[name=viewport]');
-          if (el !== null) {
-            let content = el.getAttribute('content');
-            let re = /maximum\-scale=[0-9\.]+/g;
-            if (re.test(content)) {
-              content = content.replace(re, 'maximum-scale=1.0');
-            } else {
-              content = [content, 'maximum-scale=1.0'].join(', ');
-            }
-            el.setAttribute('content', content);
-          }
-        };
+    <style>
+      /* Initialize the app height variable */
+      :root {
+        --app-height: 100vh;
+      }
+      
+      /* Prevent zoom on input focus for iOS */
+      input[type="text"],
+      input[type="email"],
+      textarea,
+      select {
+        font-size: 16px !important;
+      }
+    </style>
+  </head>
 
-        const disableIosTextFieldZoom = addMaximumScaleToMetaViewport;
-
-        // Handle keyboard open/close
-        const handleKeyboard = () => {
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
           if (window.visualViewport) {
             const viewport = window.visualViewport;
             

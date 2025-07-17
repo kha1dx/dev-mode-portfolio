@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { Send, X, Bot, User, Terminal } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 
 interface ChatMessage {
   id: string;
@@ -49,33 +48,213 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
     loadPortfolioData();
   }, []);
 
-  const [sessionId] = useState(() => 
-    sessionStorage.getItem('chatbot_session') || 
-    Math.random().toString(36).substring(2) + Date.now().toString(36)
-  );
-
-  useEffect(() => {
-    if (!sessionStorage.getItem('chatbot_session')) {
-      sessionStorage.setItem('chatbot_session', sessionId);
-    }
-  }, [sessionId]);
-
   const generateResponse = async (userMessage: string): Promise<string> => {
-    try {
-      const { data, error } = await supabase.functions.invoke('chatbot', {
-        body: {
-          message: userMessage,
-          sessionId: sessionId,
-          userAgent: navigator.userAgent
-        }
-      });
+    const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    const scalewayApiKey = import.meta.env.VITE_SCALEWAY_API_KEY;
+    const scalewayBaseUrl = import.meta.env.VITE_SCALEWAY_BASE_URL;
+    const ollamaUrl =
+      import.meta.env.VITE_OLLAMA_URL || "http://localhost:11434";
 
-      if (error) throw error;
+    console.log("Gemini API Key loaded:", geminiApiKey ? "Yes" : "No");
+    console.log("Scaleway API Key loaded:", scalewayApiKey ? "Yes" : "No");
+    console.log("Portfolio data loaded:", portfolioData ? "Yes" : "No");
+
+    const prompt = `You are Khaled's professional portfolio assistant. Your goal is to help visitors learn about Khaled and convert them into clients by being helpful, knowledgeable, and building trust.
+
+PORTFOLIO DATA:
+${portfolioData || "Portfolio data not available"}
+
+USER MESSAGE: "${userMessage}"
+
+INSTRUCTIONS:
+1. First, check if the user's question can be answered using information from the portfolio data above
+2. If yes, provide a helpful, concise answer based on that data while highlighting Khaled's expertise
+3. If the question isn't directly answerable from the portfolio but is a reasonable knowledge question (like "what is React?"), provide a helpful educational answer, then smoothly connect it back to Khaled's expertise
+4. If the question is completely unrelated to work/technology, politely redirect to discussing Khaled's services
+5. Always be conversational, friendly, and focus on building trust
+6. Keep responses concise (2-3 sentences max unless more detail is specifically requested)
+7. End with a relevant follow-up question when appropriate to keep the conversation flowing
+
+TONE: Professional but friendly, helpful, and focused on conversion while being genuinely useful to the user.`;
+
+    // Try Gemini first (with retry mechanism)
+    if (geminiApiKey) {
+      const maxRetries = 2;
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          console.log(`Trying Gemini... (Attempt ${attempt}/${maxRetries})`);
+
+          const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                  temperature: 0.7,
+                  maxOutputTokens: 400,
+                },
+              }),
+            }
+          );
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Gemini API Error Response:", errorText);
+
+            // If it's a 503 (overloaded) and we have retries left, wait and try again
+            if (response.status === 503 && attempt < maxRetries) {
+              console.log(
+                `Gemini overloaded, waiting 2 seconds before retry...`
+              );
+              await new Promise((resolve) => setTimeout(resolve, 2000));
+              continue;
+            }
+
+            throw new Error(
+              `Gemini API Error: ${response.status} - ${errorText}`
+            );
+          }
+
+          const data = await response.json();
+          const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+          if (!aiResponse) {
+            throw new Error("Empty response from Gemini");
+          }
+
+          console.log("Gemini response successful");
+          return aiResponse;
+        } catch (error) {
+          console.error(`Gemini error (Attempt ${attempt}):`, error);
+
+          // If this is the last attempt or it's not a 503 error, break and try next service
+          if (
+            attempt === maxRetries ||
+            !(error instanceof Error && error.message.includes("503"))
+          ) {
+            break;
+          }
+
+          // Wait before retry for 503 errors
+          if (error instanceof Error && error.message.includes("503")) {
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+          }
+        }
+      }
+    }
+
+    // Try DeepSeek Scaleway as fallback
+    if (scalewayApiKey && scalewayBaseUrl) {
+      try {
+        console.log("Trying DeepSeek Scaleway as fallback...");
+
+        const response = await fetch(scalewayBaseUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${scalewayApiKey}`,
+          },
+          body: JSON.stringify({
+            model: "deepseek-r1-distill-llama-70b",
+            messages: [
+              {
+                role: "system",
+                content:
+                  "You are Khaled's professional portfolio assistant. Be helpful, conversational, and focus on converting visitors into clients.",
+              },
+              { role: "user", content: prompt },
+            ],
+            max_tokens: 400,
+            temperature: 0.7,
+            top_p: 0.95,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("DeepSeek API Error Response:", errorText);
+          throw new Error(
+            `DeepSeek API Error: ${response.status} - ${errorText}`
+          );
+        }
+
+        const data = await response.json();
+        const aiResponse = data.choices?.[0]?.message?.content;
+
+        if (!aiResponse) {
+          throw new Error("Empty response from DeepSeek");
+        }
+
+        console.log("DeepSeek response successful");
+        return aiResponse;
+      } catch (error) {
+        console.error("DeepSeek error:", error);
+      }
+    }
+
+    // Try local Ollama Mistral as final fallback
+    try {
+      console.log("Trying local Ollama Mistral as final fallback...");
+
+      // First check if Ollama is available
+      const healthController = new AbortController();
+      const healthTimeout = setTimeout(() => healthController.abort(), 5000);
+      
+      const healthResponse = await fetch(`${ollamaUrl}/api/tags`, {
+        method: "GET",
+        signal: healthController.signal,
+      });
+      
+      clearTimeout(healthTimeout);
+
+      if (!healthResponse.ok) {
+        throw new Error("Ollama service is not available");
+      }
+
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+      
+      const response = await fetch(`${ollamaUrl}/api/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "mistral:latest",
+          prompt: prompt,
+          options: {
+            temperature: 0.7,
+            top_p: 0.95,
+            max_tokens: 400,
+          },
+          stream: false,
+        }),
+        signal: controller.signal,
+      });
+      
+      clearTimeout(timeout);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Ollama API Error Response:", errorText);
+        throw new Error(`Ollama API Error: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.response) {
+        throw new Error("Empty response from Ollama");
+      }
+
+      console.log("Ollama response successful");
       return data.response;
     } catch (error) {
-      console.error("Chatbot error:", error);
-      return "I'm having trouble connecting to my AI services right now, but I'd love to help you learn about Khaled's work! He's a skilled developer with expertise in modern web technologies like React, TypeScript, and Node.js. Feel free to contact him directly at khaledmohamedsalleh@gmail.com, or try asking me again in a moment!";
+      console.error("Ollama error:", error);
     }
+
+    // If all AI services fail, return a helpful fallback message
+    console.log("All AI services failed, using fallback message");
+    return "I'm having trouble connecting to my AI services right now, but I'd love to help you learn about Khaled's work! He's a skilled developer with expertise in modern web technologies like React, TypeScript, and Node.js. Feel free to contact him directly at khaledmohamedsalleh@gmail.com, or try asking me again in a moment when my services are back online!";
   };
 
   const handleSendMessage = async () => {

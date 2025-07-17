@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { Send, X, Bot, User, Terminal } from "lucide-react";
-import useAppHeight from "@/hooks/useAppHeight";
 
 interface ChatMessage {
   id: string;
@@ -15,7 +14,6 @@ interface ChatbotProps {
 
 export const Chatbot = ({ onClose }: ChatbotProps) => {
   // Re-enable useAppHeight hook for proper mobile viewport handling
-  useAppHeight();
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -205,12 +203,12 @@ TONE: Professional but friendly, helpful, and focused on conversion while being 
       // First check if Ollama is available
       const healthController = new AbortController();
       const healthTimeout = setTimeout(() => healthController.abort(), 5000);
-      
+
       const healthResponse = await fetch(`${ollamaUrl}/api/tags`, {
         method: "GET",
         signal: healthController.signal,
       });
-      
+
       clearTimeout(healthTimeout);
 
       if (!healthResponse.ok) {
@@ -219,7 +217,7 @@ TONE: Professional but friendly, helpful, and focused on conversion while being 
 
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 30000);
-      
+
       const response = await fetch(`${ollamaUrl}/api/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -235,7 +233,7 @@ TONE: Professional but friendly, helpful, and focused on conversion while being 
         }),
         signal: controller.signal,
       });
-      
+
       clearTimeout(timeout);
 
       if (!response.ok) {

@@ -2,12 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Mobile viewport fixes and keyboard handling */
+/* Enhanced mobile viewport and keyboard handling */
+:root {
+  --app-height: 100vh;
+  --vh: 1vh;
+}
+
 html {
   height: 100%;
   height: 100vh;
   height: 100dvh;
+  height: var(--app-height);
   overflow-x: hidden;
+  /* Disable elastic/bounce scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
 }
 
 body {
@@ -15,54 +25,127 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   min-height: var(--app-height);
+  height: 100%;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: none;
+  overscroll-behavior-y: none;
+  margin: 0;
+  padding: 0;
+  /* Ensure background extends beyond viewport */
+  background-attachment: fixed;
+  position: relative;
 }
 
-/* Keyboard active state fixes */
-body.keyboard-active {
-  position: fixed;
-  width: 100%;
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  min-height: var(--app-height);
   height: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
+  overscroll-behavior: none;
 }
 
-body.keyboard-dismissed {
-  position: static;
-  overflow: visible;
+/* Enhanced iOS Safari fixes */
+@supports (-webkit-touch-callout: none) {
+  html {
+    height: 100%;
+    height: 100vh;
+    height: -webkit-fill-available;
+    height: 100dvh;
+    height: var(--app-height);
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
+  }
+  
+  body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    min-height: 100dvh;
+    min-height: var(--app-height);
+    height: 100%;
+    overflow-x: hidden;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    background-attachment: fixed;
+    position: relative;
+  }
+
+  #root {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    min-height: 100dvh;
+    min-height: var(--app-height);
+    height: 100%;
+  }
 }
 
-.viewport-reset {
-  height: 100vh !important;
-  height: 100dvh !important;
-  height: var(--app-height) !important;
-  overflow-y: auto;
-}
-
-/* Form input fixes for mobile */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="search"],
-textarea,
-select {
-  font-size: 16px !important;
-  transform: translateZ(0);
-  -webkit-appearance: none;
-  border-radius: 0;
-}
-
-/* Prevent zoom on input focus */
+/* Mobile-specific adjustments */
 @media screen and (max-width: 768px) {
+  html {
+    height: 100vh;
+    height: 100dvh;
+    height: var(--app-height);
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  body {
+    height: 100vh;
+    height: 100dvh;
+    height: var(--app-height);
+    min-height: 100vh;
+    min-height: 100dvh;
+    min-height: var(--app-height);
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+  }
+
+  #root {
+    height: 100vh;
+    height: 100dvh;
+    height: var(--app-height);
+    min-height: 100vh;
+    min-height: 100dvh;
+    min-height: var(--app-height);
+    overflow-x: hidden;
+  }
+
+  /* Prevent zoom on input focus */
   input[type="text"],
   input[type="email"],
+  input[type="tel"],
   input[type="password"],
-  input[type="search"],
   textarea,
   select {
     font-size: 16px !important;
-    zoom: 1;
+    transform: none !important;
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+
+  /* Fix for mobile keyboard */
+  body.keyboard-active {
+    height: 100vh !important;
+    height: 100dvh !important;
+    height: var(--app-height) !important;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+  
+  body.keyboard-dismissed {
+    height: auto !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    min-height: var(--app-height) !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
   }
 }
 

@@ -159,7 +159,7 @@ export const ContactContent = () => {
   ];
 
   return (
-    <div className="min-h-screen min-h-[var(--app-height)] bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1e1e1e] p-4 sm:p-6 md:p-8">
+    <div className="min-h-[var(--app-height)] bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1e1e1e] p-4 sm:p-6 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12 animate-fade-in">

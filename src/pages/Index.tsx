@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { FileExplorer } from "@/components/FileExplorer";
 import { CodeEditor } from "@/components/CodeEditor";
@@ -9,7 +9,6 @@ import { Chatbot } from "@/components/Chatbot";
 import { Terminal } from "@/components/Terminal";
 import { ActivityBar } from "@/components/ActivityBar";
 import { SidePanel } from "@/components/SidePanel";
-import { useAppHeight } from "@/hooks/useAppHeight";
 
 export interface FileItem {
   id: string;
@@ -97,9 +96,6 @@ const portfolioFiles: FileItem[] = [
 ];
 
 const Index = () => {
-  // Use the app height hook
-  useAppHeight();
-
   const analytics = useAnalytics();
   const [activeFile, setActiveFile] = useState<string>("about-main");
   const [openTabs, setOpenTabs] = useState<string[]>(["about-main"]);
@@ -209,7 +205,7 @@ const Index = () => {
   }, [analytics]);
 
   return (
-    <div className="h-screen h-[var(--app-height)] bg-[#1e1e1e] text-[#cccccc] overflow-hidden flex flex-col">
+    <div className="h-screen bg-[#1e1e1e] text-[#cccccc] flex flex-col overflow-hidden">
       {/* Title Bar */}
       <div className="h-8 bg-[#323233] flex items-center px-2 text-xs border-b border-[#2d2d30] pt-safe-top">
         <div className="flex items-center space-x-1">

@@ -1,43 +1,24 @@
 import { useEffect } from 'react';
 
-export const useAppHeight = () => {
+const useAppHeight = () => {
   useEffect(() => {
     const setAppHeight = () => {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
+      const doc = document.documentElement;
+      doc.style.setProperty('--app-height', `${window.innerHeight}px`);
     };
 
-    // Set initial height
+    // Set the height on initial load
     setAppHeight();
 
-    // Handle resize and orientation changes
-    const handleResize = () => {
-      // Debounce to avoid excessive calls
-      setTimeout(setAppHeight, 100);
-    };
+    // Optional: Update on orientation change for mobile devices
+    window.addEventListener('orientationchange', () => {
+      setTimeout(setAppHeight, 100); // Small delay to ensure proper measurement
+    });
 
-    const handleOrientationChange = () => {
-      // Wait for orientation change to complete
-      setTimeout(setAppHeight, 300);
-    };
-
-    // Add event listeners
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleOrientationChange);
-    
-    // Handle viewport changes on mobile (keyboard, address bar, etc.)
-    if ('visualViewport' in window) {
-      window.visualViewport?.addEventListener('resize', setAppHeight);
-    }
-
-    // Cleanup
     return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', handleOrientationChange);
-      if ('visualViewport' in window) {
-        window.visualViewport?.removeEventListener('resize', setAppHeight);
-      }
+      window.removeEventListener('orientationchange', setAppHeight);
     };
   }, []);
 };
+
+export default useAppHeight;

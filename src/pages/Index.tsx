@@ -207,13 +207,13 @@ const Index = () => {
   return (
     <div className="h-screen bg-[#1e1e1e] text-[#cccccc] flex flex-col overflow-hidden">
       {/* Title Bar */}
-      <div className="h-8 bg-[#323233] flex items-center px-2 text-xs border-b border-[#2d2d30]">
+      <div className="h-8 bg-[#323233] flex items-center px-2 text-xs border-b border-[#2d2d30] pt-safe-top">
         <div className="flex items-center space-x-1">
           <div className="w-3 h-3 rounded-full bg-[#ff5f57]"></div>
           <div className="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
           <div className="w-3 h-3 rounded-full bg-[#28ca42]"></div>
         </div>
-        <div className="ml-2 sm:ml-4 text-[#cccccc] truncate">
+        <div className="ml-2 sm:ml-4 text-[#cccccc] truncate overflow-y-auto">
           <span className="hidden sm:inline">Khaled Salleh - Portfolio - </span>
           <span className="hidden md:inline">Visual Studio Code</span>
           <span className="sm:hidden">Portfolio</span>
@@ -222,7 +222,7 @@ const Index = () => {
       </div>
 
       {/* Main Content Container */}
-      <div className="flex flex-1 overflow-hidden relative">
+      <div className="flex flex-1 overflow-hidden relative pt-2 sm:pt-0">
         {/* Activity Bar */}
         <ActivityBar
           activePanel={activePanel}

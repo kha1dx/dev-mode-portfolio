@@ -61,7 +61,7 @@ export const ActivityBar = ({
   );
 
   return (
-    <div className="w-8 md:w-12 bg-[#2c2c2c] flex flex-col border-r border-[#3e3e42] h-full max-h-screen overflow-y-auto">
+    <div className="hidden md:flex w-8 md:w-12 bg-[#2c2c2c] flex-col border-r border-[#3e3e42] h-full max-h-screen overflow-y-auto">
       {/* Top Activities */}
       <div className="flex-1 pt-8 sm:pt-4 md:pt-2 space-y-1">
         {activities.map((activity) => (

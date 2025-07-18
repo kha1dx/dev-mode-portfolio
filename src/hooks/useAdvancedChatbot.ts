@@ -29,6 +29,7 @@ export const useAdvancedChatbot = () => {
   
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [portfolioData, setPortfolioData] = useState<string>("");
   const [sessionId] = useState(() => {
     // Get or create session ID
     let id = sessionStorage.getItem('chatbot_session_id');
@@ -41,6 +42,22 @@ export const useAdvancedChatbot = () => {
   
   const [sessionInfo, setSessionInfo] = useState<ChatSession | null>(null);
   const conversationLoaded = useRef(false);
+
+  // Load portfolio data once on mount
+  useEffect(() => {
+    const loadPortfolioData = async () => {
+      try {
+        const response = await fetch("/portfolio-details.md");
+        if (response.ok) {
+          const text = await response.text();
+          setPortfolioData(text);
+        }
+      } catch (error) {
+        console.warn("Could not load portfolio data:", error);
+      }
+    };
+    loadPortfolioData();
+  }, []);
 
   // Load conversation history on mount
   useEffect(() => {
@@ -105,6 +122,180 @@ export const useAdvancedChatbot = () => {
     }
   };
 
+  const generateResponse = async (userMessage: string): Promise<{ response: string; provider: string }> => {
+    const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    const scalewayApiKey = import.meta.env.VITE_SCALEWAY_API_KEY;
+    const scalewayBaseUrl = import.meta.env.VITE_SCALEWAY_BASE_URL;
+    const ollamaUrl = import.meta.env.VITE_OLLAMA_URL || "http://localhost:11434";
+
+    const prompt = `You are Khaled's professional portfolio assistant. Your goal is to help visitors learn about Khaled and convert them into clients by being helpful, knowledgeable, and building trust.
+
+PORTFOLIO DATA:
+${portfolioData || "Portfolio data not available"}
+
+USER MESSAGE: "${userMessage}"
+
+INSTRUCTIONS:
+1. First, check if the user's question can be answered using information from the portfolio data above
+2. If yes, provide a helpful, concise answer based on that data while highlighting Khaled's expertise
+3. If the question isn't directly answerable from the portfolio but is a reasonable knowledge question (like "what is React?"), provide a helpful educational answer, then smoothly connect it back to Khaled's expertise
+4. If the question is completely unrelated to work/technology, politely redirect to discussing Khaled's services
+5. Always be conversational, friendly, and focus on building trust
+6. Keep responses concise (2-3 sentences max unless more detail is specifically requested)
+7. End with a relevant follow-up question when appropriate to keep the conversation flowing
+
+TONE: Professional but friendly, helpful, and focused on conversion while being genuinely useful to the user.`;
+
+    // Try Gemini first (with retry mechanism)
+    if (geminiApiKey) {
+      const maxRetries = 2;
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                  temperature: 0.7,
+                  maxOutputTokens: 400,
+                },
+              }),
+            }
+          );
+
+          if (!response.ok) {
+            if (response.status === 503 && attempt < maxRetries) {
+              await new Promise((resolve) => setTimeout(resolve, 2000));
+              continue;
+            }
+            throw new Error(`Gemini API Error: ${response.status}`);
+          }
+
+          const data = await response.json();
+          const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (aiResponse) return { response: aiResponse, provider: 'gemini' };
+        } catch (error) {
+          console.warn(`Gemini attempt ${attempt} failed:`, error);
+          if (attempt === maxRetries) break;
+        }
+      }
+    }
+
+    // Try Scaleway as fallback
+    if (scalewayApiKey && scalewayBaseUrl) {
+      try {
+        const response = await fetch(`${scalewayBaseUrl}/v1/chat/completions`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${scalewayApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "llama-3.1-8b-instruct",
+            messages: [{ role: "user", content: prompt }],
+            max_tokens: 400,
+            temperature: 0.7,
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const aiResponse = data.choices?.[0]?.message?.content;
+          if (aiResponse) return { response: aiResponse, provider: 'scaleway' };
+        }
+      } catch (error) {
+        console.warn("Scaleway API failed:", error);
+      }
+    }
+
+    // Try Ollama as final fallback
+    if (ollamaUrl) {
+      try {
+        const response = await fetch(`${ollamaUrl}/api/generate`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: "llama3.2:latest",
+            prompt: prompt,
+            stream: false,
+            options: {
+              temperature: 0.7,
+              num_predict: 400,
+            },
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.response) return { response: data.response, provider: 'ollama' };
+        }
+      } catch (error) {
+        console.warn("Ollama API failed:", error);
+      }
+    }
+
+    // Final fallback
+    return {
+      response: "I'm having trouble connecting to my AI services right now, but I'd love to help you learn about Khaled's work! Feel free to contact him directly at khaledmohamedsalleh@gmail.com!",
+      provider: 'fallback'
+    };
+  };
+
+  const saveConversation = async (userMessage: string, botResponse: string, provider: string, responseTime: number) => {
+    try {
+      // Update or create session
+      const { data: existingSession } = await supabase
+        .from('chatbot_sessions')
+        .select('*')
+        .eq('session_id', sessionId)
+        .single();
+
+      if (existingSession) {
+        await supabase
+          .from('chatbot_sessions')
+          .update({
+            total_messages: existingSession.total_messages + 1,
+            last_activity: new Date().toISOString(),
+          })
+          .eq('session_id', sessionId);
+      } else {
+        await supabase
+          .from('chatbot_sessions')
+          .insert({
+            session_id: sessionId,
+            total_messages: 1,
+            last_activity: new Date().toISOString(),
+          });
+      }
+
+      // Save conversation
+      const messageOrder = Math.floor(Date.now() / 1000);
+      await supabase
+        .from('chatbot_conversations')
+        .insert({
+          session_id: sessionId,
+          user_message: userMessage,
+          bot_response: botResponse,
+          ai_provider_used: provider,
+          response_time_ms: responseTime,
+          message_order: messageOrder,
+        });
+
+      // Update session info
+      setSessionInfo(prev => ({
+        sessionId,
+        totalMessages: (prev?.totalMessages || 0) + 1,
+        lastActivity: new Date()
+      }));
+
+    } catch (error) {
+      console.error('Error saving conversation:', error);
+    }
+  };
+
   const sendMessage = async (message: string) => {
     if (!message.trim() || isTyping) return;
 
@@ -121,42 +312,47 @@ export const useAdvancedChatbot = () => {
 
     try {
       const startTime = Date.now();
+      let response: string;
+      let provider: string;
       
-      // Call the advanced chatbot function
-      const { data, error } = await supabase.functions.invoke('advanced-chatbot', {
-        body: {
-          message: message.trim(),
-          sessionId: sessionId,
-          userAgent: navigator.userAgent,
-          userId: null // Could be set if user is authenticated
+      // Try edge function first (if in production)
+      if (import.meta.env.PROD) {
+        try {
+          const { data, error } = await supabase.functions.invoke('advanced-chatbot', {
+            body: { message, sessionId, userAgent: navigator.userAgent }
+          });
+          
+          if (!error && data) {
+            response = data.response;
+            provider = data.provider;
+          }
+        } catch (e) {
+          console.error('Edge function error, falling back:', e);
         }
-      });
-
-      if (error) {
-        throw new Error(error.message || 'Failed to get response');
+      }
+      
+      // Fallback to direct API calls (development or if edge function fails)
+      if (!response!) {
+        const result = await generateResponse(message.trim());
+        response = result.response;
+        provider = result.provider;
       }
 
       const responseTime = Date.now() - startTime;
       
       const botMessage: ChatMessage = {
         id: `bot_${Date.now()}`,
-        content: data.response || "I'm having trouble responding right now. Please try again!",
+        content: response,
         sender: "bot",
         timestamp: new Date(),
-        provider: data.provider || 'unknown',
+        provider: provider,
         responseTime: responseTime
       };
 
       setMessages((prev) => [...prev, botMessage]);
       
-      // Update session info
-      if (sessionInfo) {
-        setSessionInfo({
-          ...sessionInfo,
-          totalMessages: sessionInfo.totalMessages + 1,
-          lastActivity: new Date()
-        });
-      }
+      // Save to database
+      await saveConversation(message.trim(), response, provider, responseTime);
 
     } catch (error: any) {
       console.error('Chatbot error:', error);
@@ -188,6 +384,10 @@ export const useAdvancedChatbot = () => {
         .delete()
         .eq('session_id', sessionId);
 
+      // Generate new session ID
+      const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2)}`;
+      sessionStorage.setItem('chatbot_session_id', newSessionId);
+
       // Clear local state
       setMessages([{
         id: "welcome",
@@ -199,9 +399,8 @@ export const useAdvancedChatbot = () => {
       
       setSessionInfo(null);
       
-      // Generate new session ID
-      const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2)}`;
-      sessionStorage.setItem('chatbot_session_id', newSessionId);
+      // Update the sessionId state by triggering a re-render
+      window.location.reload();
       
     } catch (error) {
       console.error('Error clearing conversation:', error);

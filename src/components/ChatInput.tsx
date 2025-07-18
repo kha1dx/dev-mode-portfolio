@@ -21,8 +21,8 @@ export const ChatInput = ({
   };
 
   return (
-    <div className="border-t border-[#3e3e42] bg-[#1e1e1e] p-4 flex-shrink-0">
-      <div className="bg-[#0c0c0c] border border-[#3e3e42] rounded-lg p-3">
+    <div className="border-t border-[#3e3e42] bg-[#1e1e1e] p-4 pb-20 flex-shrink-0">
+      <div className="bg-[#0c0c0c] border border-[#3e3e42] rounded-lg p-3 pb-10">
         <div className="flex items-center space-x-2 mb-2 font-mono text-sm">
           <span className="text-[#4ec9b0]">guest@portfolio</span>
           <span className="text-[#cccccc]">:</span>

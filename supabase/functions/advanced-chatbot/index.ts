@@ -291,7 +291,7 @@ async function tryScalewayAPI(prompt: string, message: string): Promise<string |
   const { data: secrets } = await supabase
     .from('vault.decrypted_secrets')
     .select('name, decrypted_secret')
-    .in('name', ['SCALEWAY_API_KEY', 'SCALEWAY_BASE_URL'])
+    .in('name', ['SCALEWAY_API_KEY', 'SCALEWAY_BASE_URL']);
 
   const apiKey = secrets?.find(s => s.name === 'SCALEWAY_API_KEY')?.decrypted_secret;
   const baseUrl = secrets?.find(s => s.name === 'SCALEWAY_BASE_URL')?.decrypted_secret;

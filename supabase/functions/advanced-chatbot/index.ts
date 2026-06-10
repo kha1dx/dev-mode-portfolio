@@ -179,6 +179,7 @@ async function getAIResponseWithFallbacks(
   
   // Try each AI provider in order
   const providers = [
+    { name: "openai", func: tryOpenAIAPI },
     { name: "gemini", func: tryGeminiAPI },
     { name: "scaleway", func: tryScalewayAPI },
     { name: "ollama", func: tryOllamaAPI },
@@ -241,6 +242,50 @@ INSTRUCTIONS:
 TONE: Professional but friendly, helpful, conversion-focused while being genuinely useful.`;
 
   return prompt;
+}
+
+async function tryOpenAIAPI(prompt: string, message: string): Promise<string | null> {
+  let apiKey = Deno.env.get("OPENAI_API_KEY");
+
+  if (!apiKey) {
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+    );
+
+    const { data: secrets } = await supabase
+      .from('vault.decrypted_secrets')
+      .select('name, decrypted_secret')
+      .eq('name', 'OPENAI_API_KEY')
+      .single();
+
+    apiKey = secrets?.decrypted_secret;
+  }
+
+  if (!apiKey) {
+    throw new Error("OpenAI API key not found");
+  }
+
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 400,
+      temperature: 0.7,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`OpenAI API Error: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content || null;
 }
 
 async function tryGeminiAPI(prompt: string, message: string): Promise<string | null> {

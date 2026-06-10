@@ -1,6 +1,7 @@
 import { HeroSection } from "./about/HeroSection";
 import { HeaderSection } from "./about/HeaderSection";
 import { AboutMeSection } from "./about/AboutMeSection";
+import { CareerSection } from "./about/CareerSection";
 import { EducationSection } from "./about/EducationSection";
 import { StatsSection } from "./about/StatsSection";
 import { ProjectsSection } from "./about/ProjectsSection";
@@ -17,6 +18,7 @@ export const AboutContent = ({ onNavigate }: AboutContentProps) => {
       <HeaderSection onNavigate={onNavigate} />
       <HeroSection onNavigate={onNavigate} />
       <AboutMeSection />
+      <CareerSection />
       <EducationSection />
       <StatsSection />
       <ProjectsSection onNavigate={onNavigate} />

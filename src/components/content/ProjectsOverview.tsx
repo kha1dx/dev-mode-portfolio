@@ -9,7 +9,8 @@ interface ProjectsOverviewProps {
 
 export const ProjectsOverview = ({ onProjectClick }: ProjectsOverviewProps) => {
   const featuredProjects = projectsData.filter(
-    (project) => project.size === "wide" || project.size === "large"
+    (project) =>
+      project.featured || project.size === "wide" || project.size === "large"
   );
 
   useEffect(() => {
@@ -93,6 +94,8 @@ export const ProjectsOverview = ({ onProjectClick }: ProjectsOverviewProps) => {
                   technologies={project.technologies}
                   liveUrl={project.liveUrl}
                   githubUrl={project.githubUrl}
+                  featured={project.featured}
+                  status={project.status}
                   index={index}
                   onClick={() => handleProjectClick(project.id)}
                   className="bg-[#252526] border border-[#3e3e42] rounded-lg overflow-hidden hover:border-[#569cd6] transition-all duration-300 hover:scale-105 animate-fade-in cursor-pointer"
@@ -119,6 +122,8 @@ export const ProjectsOverview = ({ onProjectClick }: ProjectsOverviewProps) => {
                 technologies={project.technologies}
                 liveUrl={project.liveUrl}
                 githubUrl={project.githubUrl}
+                featured={project.featured}
+                status={project.status}
                 index={index}
                 onClick={() => handleProjectClick(project.id)}
                 className="bg-[#252526] border border-[#3e3e42] rounded-lg overflow-hidden hover:border-[#569cd6] transition-all duration-300 hover:scale-105 animate-fade-in cursor-pointer"

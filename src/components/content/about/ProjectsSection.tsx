@@ -93,6 +93,8 @@ export const ProjectsSection = ({ onNavigate }: ProjectsSectionProps = {}) => {
               technologies={project.technologies}
               liveUrl={project.liveUrl}
               githubUrl={project.githubUrl}
+              featured={project.featured}
+              status={project.status}
               index={index}
             />
           ))}

@@ -112,12 +112,13 @@ export const useAdvancedChatbot = () => {
 
   // Development-only response generation using environment variables
   const generateResponse = async (userMessage: string): Promise<{ response: string; provider: string }> => {
+    const openaiApiKey = import.meta.env.VITE_OPENAI_API_KEY;
     const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY;
     const scalewayApiKey = import.meta.env.VITE_SCALEWAY_API_KEY;
     const scalewayBaseUrl = import.meta.env.VITE_SCALEWAY_BASE_URL;
     const ollamaUrl = import.meta.env.VITE_OLLAMA_URL || "http://localhost:11434";
 
-    if (!geminiApiKey && !scalewayApiKey && !ollamaUrl) {
+    if (!openaiApiKey && !geminiApiKey && !scalewayApiKey && !ollamaUrl) {
       return {
         response: "API keys are not configured. Please contact the administrator.",
         provider: "error",
@@ -141,6 +142,34 @@ INSTRUCTIONS:
 7. End with a relevant follow-up question when appropriate
 
 TONE: Professional but friendly, helpful, and focused on conversion while being genuinely useful.`;
+
+    if (openaiApiKey) {
+      try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${openaiApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: [
+              { role: "system", content: prompt },
+              { role: "user", content: userMessage },
+            ],
+            max_tokens: 400,
+            temperature: 0.7,
+          }),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          const aiResponse = data.choices?.[0]?.message?.content;
+          if (aiResponse) return { response: aiResponse, provider: "openai" };
+        }
+      } catch (error) {
+        console.warn("OpenAI failed:", error);
+      }
+    }
 
     if (geminiApiKey) {
       try {

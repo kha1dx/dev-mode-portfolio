@@ -12,7 +12,8 @@ interface ProjectCardProps {
   onClick?: () => void;
   className?: string;
   style?: React.CSSProperties;
-
+  featured?: boolean;
+  status?: "live" | "in-development";
 }
 
 export const ProjectCard = React.memo(
@@ -25,6 +26,8 @@ export const ProjectCard = React.memo(
     liveUrl,
     githubUrl,
     index = 0,
+    featured = false,
+    status,
   }: ProjectCardProps) => {
     const [imageLoaded, setImageLoaded] = useState(false);
     const [imageError, setImageError] = useState(false);
@@ -39,14 +42,38 @@ export const ProjectCard = React.memo(
     }, []);
 
     const hasBackgroundImage = image && !imageError;
+    const isComingSoon = status === "in-development";
+
+    const comingSoonBadge = (
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs bg-amber-500/20 text-amber-300 rounded-full border border-amber-400/30 backdrop-blur">
+        <span className="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse" />
+        Coming Soon
+      </span>
+    );
 
     return (
       <div
-        className={`project-item opacity-0 translate-y-8 transition-all duration-700 ease-out group relative overflow-hidden rounded-lg border border-white/20 bg-white/10 backdrop-blur-sm hover:bg-white/15 hover:border-white/30 hover:scale-105 min-h-[300px] flex flex-col`}
+        className={`project-item opacity-0 translate-y-8 transition-all duration-700 ease-out group relative overflow-hidden rounded-lg backdrop-blur-sm hover:scale-105 min-h-[300px] flex flex-col ${
+          featured
+            ? "border-2 border-purple-400/50 bg-white/10 shadow-[0_0_30px_rgba(192,132,252,0.25)] hover:bg-white/15 hover:border-purple-400/70 hover:shadow-[0_0_45px_rgba(192,132,252,0.4)]"
+            : "border border-white/20 bg-white/10 hover:bg-white/15 hover:border-white/30"
+        }`}
         style={{
           transitionDelay: `${index * 0.1}s`,
         }}
       >
+        {/* Featured Badge */}
+        {featured && (
+          <div className="absolute top-3 right-3 z-20 px-3 py-1 text-xs text-white rounded-full bg-gradient-to-r from-purple-500/80 to-pink-500/80 backdrop-blur">
+            ★ Main Project
+          </div>
+        )}
+
+        {/* Coming Soon Badge (over image) */}
+        {isComingSoon && hasBackgroundImage && (
+          <div className="absolute top-3 left-3 z-20">{comingSoonBadge}</div>
+        )}
+
         {/* Background Image */}
         {hasBackgroundImage && (
           <>
@@ -76,6 +103,9 @@ export const ProjectCard = React.memo(
             <h3 className="font-clash-display font-semibold text-white text-xl group-hover:text-purple-300 transition-colors duration-300">
               {title}
             </h3>
+            {isComingSoon && !hasBackgroundImage && (
+              <div className="ml-3">{comingSoonBadge}</div>
+            )}
           </div>
 
           {/* Description */}
@@ -111,7 +141,7 @@ export const ProjectCard = React.memo(
                 rel="noopener noreferrer"
                 className="flex-1 px-3 py-2 bg-gradient-to-r from-purple-400/20 to-pink-400/20 border border-purple-300/30 text-purple-200 text-sm rounded hover:from-purple-400/30 hover:to-pink-400/30 transition-all duration-300 text-center"
               >
-                Live Demo
+                {isComingSoon ? "Learn More" : "Live Demo"}
               </a>
             )}
             {githubUrl && (

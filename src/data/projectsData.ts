@@ -16,9 +16,24 @@ export interface ProjectData {
   technologies?: string[];
   liveUrl?: string;
   githubUrl?: string;
+  featured?: boolean;
+  status?: "live" | "in-development";
 }
 
 export const projectsData: readonly ProjectData[] = [
+  {
+    id: "SlideWorx",
+    title: "SlideWorx",
+    icon: "🌐",
+    image: "slideworx.png",
+    description: "AI-powered translation platform that converts PowerPoint decks between English and Arabic — preserving every layout while transforming designs between RTL and LTR. Built at TheAgileWorx.",
+    className: "col-span-1 md:col-span-3 lg:col-span-3",
+    size: "wide",
+    featured: true,
+    status: "in-development",
+    technologies: ["AI Translation", "Firebase Auth", "Cloud SQL", "RTL/LTR Engine", "PowerPoint Automation"],
+    liveUrl: "https://www.theagileworx.com/products/slideworx"
+  },
   {
     id: "Movies",
     title: "Movies App",
@@ -66,6 +81,29 @@ export const projectsData: readonly ProjectData[] = [
     technologies: ["Next.js", "Node.js", "MongoDB", "Tailwind CSS"],
     liveUrl: "https://scad-internships.com",
     githubUrl: "https://github.com/kha1dx/SCAD-Internships"
+  },
+  {
+    id: "unyt",
+    title: "unyt.org Platform",
+    icon: "🛰️",
+    image: "placeholder.svg",
+    description: "Contributed to unyt.org's open-source ecosystem for decentralized full-stack development during my time as a software engineer there.",
+    className: "col-span-1",
+    size: "medium",
+    status: "live",
+    technologies: ["TypeScript", "Deno", "Open Source"],
+    liveUrl: "https://unyt.org"
+  },
+  {
+    id: "innovisionary",
+    title: "Innovisionary Creative",
+    icon: "🎬",
+    image: "placeholder.svg",
+    description: "Founded a creative studio delivering video edits, motion graphics, and brand identities — where my freelance career began.",
+    className: "col-span-1",
+    size: "medium",
+    status: "live",
+    technologies: ["Video Editing", "Motion Graphics", "Brand Design"]
   }
 ] as const;
 

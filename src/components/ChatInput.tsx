@@ -4,6 +4,8 @@ interface ChatInputProps {
   value: string;
   onChange: (value: string) => void;
   onSend: () => void;
+  /** True while the bot is generating a response. The input stays editable —
+   *  this only gates sending so the user can keep typing as the model replies. */
   disabled: boolean;
 }
 
@@ -13,10 +15,15 @@ export const ChatInput = ({
   onSend,
   disabled,
 }: ChatInputProps) => {
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  // The text field is NEVER disabled, so focus is never lost and the user can
+  // type freely while the model is still responding. We only block the actual
+  // send (Enter / button) until the current response finishes.
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      onSend();
+      if (!disabled) {
+        onSend();
+      }
     }
   };
 
@@ -34,10 +41,13 @@ export const ChatInput = ({
             type="text"
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Ask about Khaled's work..."
+            onKeyDown={handleKeyDown}
+            placeholder={
+              disabled
+                ? "Assistant is replying… you can keep typing"
+                : "Ask about Khaled's work..."
+            }
             className="flex-1 bg-transparent border-none text-[#cccccc] placeholder-[#6a9955] focus:outline-none"
-            disabled={disabled}
           />
           <button
             onClick={onSend}

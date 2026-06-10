@@ -43,7 +43,15 @@ export const CodeEditor = ({
   };
 
   return (
-    <div className="flex-1 bg-[#1e1e1e] overflow-y-auto">
+    // Keying the scroll container on activeFile remounts a fresh element on
+    // every page switch. A newly-mounted element always starts at scrollTop 0,
+    // so switching pages can never inherit the previous page's scroll offset
+    // (and it re-triggers the fade-in animation for the new content).
+    <div
+      key={activeFile}
+      className="flex-1 bg-[#1e1e1e] overflow-y-auto"
+      style={{ overflowAnchor: "none" }}
+    >
       <div className="h-full animate-fade-in">{renderContent()}</div>
     </div>
   );

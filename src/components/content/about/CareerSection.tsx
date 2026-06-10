@@ -19,7 +19,7 @@ interface CareerEntry {
 
 const careerTimeline: CareerEntry[] = [
   {
-    period: "2020 — 2022",
+    period: "2021 — 2022",
     role: "Freelance Video Editor & Graphic Designer",
     org: "Innovisionary Creative",
     description:
@@ -28,7 +28,7 @@ const careerTimeline: CareerEntry[] = [
     tags: ["Video Editing", "Motion Graphics", "Brand Design"],
   },
   {
-    period: "2022 — 2024",
+    period: "2022 — 2025",
     role: "Freelance Full-Stack Software Engineer",
     org: "Fiverr & Direct Clients",
     description:
@@ -37,20 +37,20 @@ const careerTimeline: CareerEntry[] = [
     tags: ["React", "Node.js", "TypeScript", "Mobile"],
   },
   {
-    period: "2024 — 2025",
-    role: "Software Engineer",
-    org: "unyt.org",
+    period: "Sep 2025 — Mar 2026",
+    role: "Software Engineering Intern",
+    org: "unyt.org · Berlin / Remote",
     description:
-      "Worked on unyt.org's open-source ecosystem for decentralized full-stack development.",
+      "Built and shipped the \"Network Inspector\" module for the DATEX Workbench in Vue 3, giving developers real-time visibility into network traffic inside the IDE. Managed the full SDLC on an open-source codebase — issue tracking, implementation, and PR reviews.",
     icon: Network,
-    tags: ["TypeScript", "Deno", "Open Source"],
+    tags: ["Vue 3", "TypeScript", "Open Source"],
   },
   {
-    period: "2025 — Present",
-    role: "AI Developer",
-    org: "TheAgileWorx",
+    period: "Mar 2026 — Present",
+    role: "AI Developer Intern",
+    org: "Agile Worx · Cairo",
     description:
-      "Building AI-powered products for an agile consultancy — including SlideWorx, an AI platform that translates PowerPoint decks between English and Arabic with full RTL/LTR layout transformation.",
+      "Co-led an AI-powered PPTX localization platform (SlideWorx) that translates decks English → Arabic with full RTL/LTR layout transformation — cutting translation time by 99%+. Built full-stack with Firebase authentication and a Cloud SQL database.",
     icon: Sparkles,
     tags: ["AI Integration", "LLMs", "Firebase", "Cloud SQL"],
     current: true,

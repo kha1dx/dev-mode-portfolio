@@ -8,6 +8,28 @@ What sets Khaled apart is his holistic approach to development. He doesn't just 
 
 Khaled is the founder of "Innovisionary Creative," where he transforms startup ideas into impactful visual products. His philosophy centers on creating technology that feels human, purposeful, and authentic. He believes in building solutions that don't just work—they inspire.
 
+## Career & Experience
+
+Khaled's journey spans from creative media into AI engineering:
+
+- **AI Developer Intern — Agile Worx (Mar 2026 – Present):** Currently building AI-powered products for an agile consultancy. He co-led **SlideWorx**, his flagship project (see Featured Work below).
+- **Software Engineering Intern — unyt.org (Sep 2025 – Mar 2026):** Built and shipped the "Network Inspector" module for the DATEX Workbench in Vue 3, giving developers real-time visibility into network traffic inside the IDE. Managed the full SDLC on an open-source codebase.
+- **Freelance Full-Stack Software Engineer (2022 – 2025):** Delivered 15+ full-stack web and mobile projects for clients worldwide on Fiverr and directly, earning consistent 5-star ratings.
+- **Freelance Video Editor & Graphic Designer — Innovisionary Creative (2021 – 2022):** Where his career began — video editing, motion graphics, and brand identities.
+
+## Featured Work
+
+### SlideWorx — AI PowerPoint Translation (Main Project)
+
+SlideWorx is Khaled's flagship and most recent project, built at **TheAgileWorx**. It's an AI-powered translation platform that converts PowerPoint decks between **English and Arabic**, transforming layouts between **RTL and LTR** while preserving every design detail. It's built on **Firebase authentication** and a **Cloud SQL database**, and it automated a previously manual multi-person translation workflow. Learn more: https://www.theagileworx.com/products/slideworx
+
+### Other Projects
+
+- **Movies App** — A modern movie discovery app with ratings, reviews, and watchlists (React, TypeScript, TMDb API).
+- **HabitKit** — A personal habit tracker with progress analytics and goal setting (React Native, Firebase).
+- **KAI Assistant** — An AI-powered personal assistant with natural language processing (Python, OpenAI API).
+- **SCAD Internships** — A university internship portal with application tracking and company matching (Next.js, Node.js).
+
 ## Technical Expertise
 
 ### Frontend Development

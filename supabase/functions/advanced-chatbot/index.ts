@@ -145,11 +145,20 @@ async function loadPortfolioContext(): Promise<string> {
   try {
     // In a real implementation, this would load from your portfolio data
     return `
-    Khaled Salleh - Full Stack Developer Portfolio Context:
-    
-    About: Passionate Computer Science student at German University in Cairo with 3+ years professional development experience. 15+ projects delivered with 5-star ratings on Fiverr. Founder of "Innovisionary Creative". McKinsey Forward Program graduate and Best Digital System Design award winner.
-    
-    Skills: React, TypeScript, Node.js, Python, Swift/SwiftUI, UI/UX Design, AI Integration, Mobile Development
+    Khaled Salleh - Software Engineer & AI Developer Portfolio Context:
+
+    About: Computer Engineering student at the German University in Cairo with 3+ years of professional development experience. 15+ projects delivered with 5-star ratings on Fiverr. Founder of "Innovisionary Creative". McKinsey Forward Program graduate and Best Digital System Design award winner.
+
+    Career & Experience:
+    - AI Developer Intern at Agile Worx (Mar 2026 - Present): co-led SlideWorx, his flagship AI project.
+    - Software Engineering Intern at unyt.org (Sep 2025 - Mar 2026): built the "Network Inspector" module for the DATEX Workbench in Vue 3.
+    - Freelance Full-Stack Software Engineer (2022 - 2025): 15+ web and mobile projects, 5-star ratings.
+    - Freelance Video Editor & Graphic Designer / Innovisionary Creative (2021 - 2022): where his career began.
+
+    Featured Project — SlideWorx (main/flagship): An AI-powered translation platform built at TheAgileWorx that converts PowerPoint decks between English and Arabic, transforming layouts between RTL and LTR while preserving design. Built on Firebase authentication and a Cloud SQL database. Learn more: https://www.theagileworx.com/products/slideworx
+    Other projects: Movies App (React/TMDb), HabitKit (React Native), KAI Assistant (Python/OpenAI), SCAD Internships (Next.js).
+
+    Skills: React, TypeScript, Next.js, Vue 3, Node.js, Python, FastAPI, UI/UX Design, AI/LLM Integration, Mobile Development
     
     Services & Pricing:
     - Landing Pages: $800-$2,000

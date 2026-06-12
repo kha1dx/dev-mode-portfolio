@@ -12,7 +12,7 @@ export const HeaderSection = ({ onNavigate }: HeaderSectionProps) => {
   const handleDownloadCV = () => {
     // Google Drive file direct download link
     const cvUrl =
-      "https://drive.google.com/uc?export=download&id=1o6bglo83JzITmzZQkOsxPg4POQeLaVox";
+      "https://drive.google.com/file/d/1iWom-JuP9H-Q2WzWCf966qLZ8vWoVZOo/view?usp=sharing";
     const link = document.createElement("a");
     link.href = cvUrl;
     link.download = "Khaled_Salleh_CV.pdf";

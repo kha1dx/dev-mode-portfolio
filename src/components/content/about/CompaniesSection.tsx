@@ -1,29 +1,15 @@
 import React, { useRef, useEffect } from "react";
 
 // --- Data for Testimonials ---
-const testimonialsData = [
-  {
-    quote:
-      "Working with them was a game-changer. Their expertise in frontend development is unparalleled, delivering a product that exceeded all our expectations.",
-    name: "Sarah Khaledson",
-    role: "CEO at Tech Innovators",
-    avatar: "👩‍💻",
-  },
-  {
-    quote:
-      "The attention to detail and commitment to quality was incredible. They are not just developers; they are true partners in building a vision.",
-    name: "Michael Chen",
-    role: "Product Manager at NextGen Solutions",
-    avatar: "👨‍💼",
-  },
-  {
-    quote:
-      "An absolute pleasure to collaborate with. The final result was not only visually stunning but also incredibly performant and scalable. Highly recommended!",
-    name: "Emily Rodriguez",
-    role: "Lead Designer at Creative Minds",
-    avatar: "🎨",
-  },
-];
+// Real testimonials go here. Previously held three placeholder entries with
+// invented names; those were removed rather than shipped as if genuine.
+// Shape: { quote, name, role, avatar }
+const testimonialsData: {
+  quote: string;
+  name: string;
+  role: string;
+  avatar: string;
+}[] = [];
 
 // --- Optimized Testimonial Card Component ---
 const TestimonialCard = React.memo(

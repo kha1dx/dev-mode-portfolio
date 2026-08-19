@@ -3,9 +3,9 @@ import { Separator } from "../../ui/separator";
 
 // --- Data Definition ---
 const statsData = [
-  { value: 5, suffix: "+", description: "Years of Design Experience" },
-  { value: 50, suffix: "+", description: "Overall Global Customers" },
-  { value: 90, suffix: "+", description: "Projects I Have Worked on" },
+  { value: 3, suffix: "", description: "Years of Experience" },
+  { value: 14, suffix: "", description: "Overall Global Customers" },
+  { value: 28, suffix: "", description: "Projects I Have Worked on" },
 ];
 
 // --- Utility Functions ---

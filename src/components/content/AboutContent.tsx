@@ -5,7 +5,6 @@ import { CareerSection } from "./about/CareerSection";
 import { EducationSection } from "./about/EducationSection";
 import { StatsSection } from "./about/StatsSection";
 import { ProjectsSection } from "./about/ProjectsSection";
-import { CompaniesSection } from "./about/CompaniesSection";
 import { FooterSection } from "./about/FooterSection";
 
 interface AboutContentProps {
@@ -22,7 +21,8 @@ export const AboutContent = ({ onNavigate }: AboutContentProps) => {
       <EducationSection />
       <StatsSection />
       <ProjectsSection onNavigate={onNavigate} />
-      <CompaniesSection />
+      {/* Testimonials hidden until real, current quotes are available.
+          Re-enable by importing and rendering <CompaniesSection />. */}
       <FooterSection />
     </div>
   );

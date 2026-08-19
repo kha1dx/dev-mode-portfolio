@@ -24,7 +24,7 @@ export const EducationSection = () => {
 
   const educationTimeline = [
     {
-      period: "2019 - 2022",
+      period: "2019 – 2022",
       title: "IGCSE Graduate",
       institution: "Modern School",
       description:
@@ -32,13 +32,22 @@ export const EducationSection = () => {
       icon: GraduationCap,
     },
     {
-      period: "2022 - 2027",
-      title: "Computer Science",
+      period: "2022 – 2027",
+      title: "Computer Engineering",
       institution: "German University in Cairo",
       description:
         "Studying Computer Architecture, Databases, Computational Theory, System Design",
       icon: GraduationCap,
       current: true,
+      subItems: [
+        {
+          period: "Sep 2025 – Feb 2026",
+          title: "Semester Abroad",
+          institution: "German International University, Berlin",
+          description:
+            "Studied Data Structures and C++ in Berlin, alongside my software engineering internship at unyt.org.",
+        },
+      ],
     },
   ];
 
@@ -119,6 +128,27 @@ export const EducationSection = () => {
                       <p className="font-clash-display font-light text-white/70 text-base leading-relaxed">
                         {item.description}
                       </p>
+                      {item.subItems?.map((sub) => (
+                        <div
+                          key={sub.title}
+                          className="mt-4 pl-4 border-l-2 border-purple-300/40"
+                        >
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <h5 className="font-clash-display font-medium text-white text-base md:text-lg">
+                              {sub.title}
+                            </h5>
+                            <span className="text-xs font-medium px-2.5 py-0.5 bg-white/10 text-purple-200 rounded-full border border-purple-300/30">
+                              {sub.period}
+                            </span>
+                          </div>
+                          <h6 className="font-clash-display font-medium text-white/80 text-sm mt-0.5">
+                            {sub.institution}
+                          </h6>
+                          <p className="font-clash-display font-light text-white/60 text-sm leading-relaxed mt-1">
+                            {sub.description}
+                          </p>
+                        </div>
+                      ))}
                       {item.current && (
                         <div className="mt-3">
                           <span className="inline-flex items-center px-3 py-1 text-xs font-medium bg-green-500/20 text-green-300 rounded-full border border-green-400/30">

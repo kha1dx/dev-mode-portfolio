@@ -48,16 +48,16 @@ export const projectsData: readonly ProjectData[] = [
     liveUrl: "https://deema.khal1dx.com"
   },
   {
-    id: "SCAD",
-    title: "SCAD Internships",
-    icon: "🎓",
-    image: "scad.jpg",
-    description: "University internship portal with application tracking and company matching",
-    className: "col-span-1 md:col-span-3 lg:col-span-3",
-    size: "wide",
-    technologies: ["Next.js", "Node.js", "MongoDB", "Tailwind CSS"],
+    id: "innovisionary",
+    title: "Innovisionary Creative",
+    icon: "🎬",
+    image: "innovisionary-site.jpg",
+    description: "The creative studio I founded, covering brand identity, video, motion graphics, and campaign work for restaurants, fintech, and creators. I designed and built its site from the ground up.",
+    className: "col-span-1",
+    size: "medium",
     status: "live",
-    liveUrl: "https://scad.khal1dx.com"
+    technologies: ["Brand Design", "Video Editing", "Motion Graphics", "Art Direction"],
+    liveUrl: "https://innovisionary.khal1dx.com"
   },
   {
     id: "HabitKit",
@@ -103,15 +103,16 @@ export const projectsData: readonly ProjectData[] = [
     liveUrl: "https://unyt.org"
   },
   {
-    id: "innovisionary",
-    title: "Innovisionary Creative",
-    icon: "🎬",
-    image: "innovisionary.png",
-    description: "Founded a creative studio delivering video edits, motion graphics, and brand identities, where my freelance career began.",
-    className: "col-span-1",
-    size: "medium",
+    id: "SCAD",
+    title: "SCAD Internships",
+    icon: "🎓",
+    image: "scad.jpg",
+    description: "University internship portal with application tracking and company matching",
+    className: "col-span-1 md:col-span-3 lg:col-span-3",
+    size: "wide",
+    technologies: ["Next.js", "Node.js", "MongoDB", "Tailwind CSS"],
     status: "live",
-    technologies: ["Video Editing", "Motion Graphics", "Brand Design"]
+    liveUrl: "https://scad.khal1dx.com"
   }
 ] as const;
 

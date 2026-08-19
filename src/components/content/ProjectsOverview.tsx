@@ -8,10 +8,9 @@ interface ProjectsOverviewProps {
 }
 
 export const ProjectsOverview = ({ onProjectClick }: ProjectsOverviewProps) => {
-  const featuredProjects = projectsData.filter(
-    (project) =>
-      project.featured || project.size === "wide" || project.size === "large"
-  );
+  // Featured is an explicit flag. It used to also infer from size "wide"/"large",
+  // which quietly pulled in SCAD and disagreed with the About page's top three.
+  const featuredProjects = projectsData.filter((project) => project.featured);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -50,10 +49,22 @@ export const ProjectsOverview = ({ onProjectClick }: ProjectsOverviewProps) => {
   }, []);
 
   const handleProjectClick = (projectId: string) => {
+    // Prefer a caller-supplied handler; otherwise open the project itself.
+    // There is no per-project detail view, so the live site is the useful target.
     if (onProjectClick) {
       onProjectClick(projectId);
+      return;
     }
+    const project = projectsData.find((p) => p.id === projectId);
+    const url = project?.liveUrl ?? project?.githubUrl;
+    if (url) window.open(url, "_blank", "noopener,noreferrer");
   };
+
+  // Only cards that lead somewhere should look and behave clickable.
+  const clickHandlerFor = (project: { id: string; liveUrl?: string; githubUrl?: string }) =>
+    onProjectClick || project.liveUrl || project.githubUrl
+      ? () => handleProjectClick(project.id)
+      : undefined;
 
   return (
     <div className="min-h-full bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] py-16 lg:py-24 relative overflow-hidden">
@@ -97,7 +108,7 @@ export const ProjectsOverview = ({ onProjectClick }: ProjectsOverviewProps) => {
                   featured={project.featured}
                   status={project.status}
                   index={index}
-                  onClick={() => handleProjectClick(project.id)}
+                  onClick={clickHandlerFor(project)}
                   className="bg-[#252526] border border-[#3e3e42] rounded-lg overflow-hidden hover:border-[#569cd6] transition-all duration-300 hover:scale-105 animate-fade-in cursor-pointer"
                   style={{ animationDelay: `${index * 100}ms` }}
                 />
@@ -113,8 +124,9 @@ export const ProjectsOverview = ({ onProjectClick }: ProjectsOverviewProps) => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {projectsData.map((project, index) => (
+              // Anchor target for search results that deep-link to one project.
+              <div key={project.id} id={`project-${project.id}`} className="scroll-mt-6 h-full">
               <ProjectCard
-                key={project.id}
                 title={project.title}
                 icon={project.icon}
                 image={project.image}
@@ -125,10 +137,11 @@ export const ProjectsOverview = ({ onProjectClick }: ProjectsOverviewProps) => {
                 featured={project.featured}
                 status={project.status}
                 index={index}
-                onClick={() => handleProjectClick(project.id)}
+                onClick={clickHandlerFor(project)}
                 className="bg-[#252526] border border-[#3e3e42] rounded-lg overflow-hidden hover:border-[#569cd6] transition-all duration-300 hover:scale-105 animate-fade-in cursor-pointer"
                 style={{ animationDelay: `${index * 100}ms` }}
               />
+              </div>
             ))}
           </div>
         </div>

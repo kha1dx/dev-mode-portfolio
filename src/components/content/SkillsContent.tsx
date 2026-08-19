@@ -1,56 +1,4 @@
-
-import { Code2, Database, Cloud, Wrench, Smartphone, Globe } from 'lucide-react';
-
-const skillCategories = [
-  {
-    title: 'Frontend Development',
-    icon: Code2,
-    color: 'text-[#61dafb]',
-    skills: [
-      { name: 'React', level: 95, color: 'bg-[#61dafb]' },
-      { name: 'TypeScript', level: 90, color: 'bg-[#3178c6]' },
-      { name: 'Next.js', level: 85, color: 'bg-[#ffffff]' },
-      { name: 'Tailwind CSS', level: 90, color: 'bg-[#38bdf8]' },
-      { name: 'JavaScript', level: 95, color: 'bg-[#f7df1e]' }
-    ]
-  },
-  {
-    title: 'Backend Development',
-    icon: Database,
-    color: 'text-[#4ec9b0]',
-    skills: [
-      { name: 'Node.js', level: 88, color: 'bg-[#339933]' },
-      { name: 'Python', level: 85, color: 'bg-[#3776ab]' },
-      { name: 'PostgreSQL', level: 80, color: 'bg-[#336791]' },
-      { name: 'MongoDB', level: 75, color: 'bg-[#47a248]' },
-      { name: 'GraphQL', level: 70, color: 'bg-[#e10098]' }
-    ]
-  },
-  {
-    title: 'Cloud & DevOps',
-    icon: Cloud,
-    color: 'text-[#ff9900]',
-    skills: [
-      { name: 'AWS', level: 80, color: 'bg-[#ff9900]' },
-      { name: 'Docker', level: 85, color: 'bg-[#2496ed]' },
-      { name: 'Kubernetes', level: 65, color: 'bg-[#326ce5]' },
-      { name: 'CI/CD', level: 75, color: 'bg-[#4caf50]' },
-      { name: 'Terraform', level: 60, color: 'bg-[#7b42bc]' }
-    ]
-  },
-  {
-    title: 'Tools & Others',
-    icon: Wrench,
-    color: 'text-[#f39c12]',
-    skills: [
-      { name: 'Git', level: 95, color: 'bg-[#f05032]' },
-      { name: 'VS Code', level: 98, color: 'bg-[#007acc]' },
-      { name: 'Figma', level: 70, color: 'bg-[#f24e1e]' },
-      { name: 'Jest', level: 80, color: 'bg-[#c21325]' },
-      { name: 'Webpack', level: 75, color: 'bg-[#8dd6f9]' }
-    ]
-  }
-];
+import { skillCategories, currentlyWorkingWith } from '@/data/skillsData';
 
 export const SkillsContent = () => {
   return (
@@ -62,8 +10,8 @@ export const SkillsContent = () => {
             Technical <span className="text-[#4ec9b0]">Skills</span>
           </h1>
           <p className="text-[#cccccc] text-lg max-w-2xl mx-auto">
-            A comprehensive overview of my technical expertise and proficiency levels
-            across various technologies and tools.
+            The stack I build with as a software engineer and AI developer,
+            centred on Google Cloud, Firebase and LLM-backed products.
           </p>
         </div>
 
@@ -74,12 +22,21 @@ export const SkillsContent = () => {
             return (
               <div
                 key={category.title}
-                className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 hover:border-[#569cd6] transition-all duration-300 hover:scale-105 animate-fade-in"
+                className={`bg-[#252526] border rounded-lg p-6 transition-all duration-300 hover:scale-105 animate-fade-in ${
+                  category.featured
+                    ? 'border-[#4285f4]/50 hover:border-[#4285f4]'
+                    : 'border-[#3e3e42] hover:border-[#569cd6]'
+                }`}
                 style={{ animationDelay: `${categoryIndex * 150}ms` }}
               >
                 <div className="flex items-center mb-6">
                   <IconComponent className={`w-6 h-6 ${category.color} mr-3`} />
                   <h2 className="text-xl font-semibold text-white">{category.title}</h2>
+                  {category.featured && (
+                    <span className="ml-auto text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-[#4285f4]/15 text-[#4285f4] border border-[#4285f4]/40">
+                      Daily
+                    </span>
+                  )}
                 </div>
                 
                 <div className="space-y-4">
@@ -113,15 +70,15 @@ export const SkillsContent = () => {
         {/* Additional Info */}
         <div className="mt-12 text-center">
           <div className="bg-[#252526] border border-[#3e3e42] rounded-lg p-8">
-            <h3 className="text-xl font-semibold text-white mb-4">Continuous Learning</h3>
+            <h3 className="text-xl font-semibold text-white mb-4">What I use day to day</h3>
             <p className="text-[#cccccc] mb-6">
-              I'm always exploring new technologies and expanding my skill set. Currently diving deep into:
+              The stack behind Agile Translate, the AI localization platform I build with the team at Agile Worx:
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
-              {['Rust', 'WebAssembly', 'Machine Learning', 'Blockchain', 'Edge Computing'].map((tech) => (
+              {currentlyWorkingWith.map((tech) => (
                 <span
                   key={tech}
-                  className="bg-[#1e1e1e] border border-[#569cd6] text-[#569cd6] px-3 py-1 rounded-full text-sm hover:bg-[#569cd6] hover:text-white transition-all duration-300"
+                  className="bg-[#1e1e1e] border border-[#4285f4] text-[#4285f4] px-3 py-1 rounded-full text-sm hover:bg-[#4285f4] hover:text-white transition-all duration-300"
                 >
                   {tech}
                 </span>

@@ -5,6 +5,7 @@ import { AccountPanel } from "./panels/AccountPanel";
 import { SettingsPanel } from "./panels/SettingsPanel";
 import { SidePanelResizeHandle } from "./SidePanelResizeHandle";
 import { FileItem } from "../pages/Index";
+import type { OpenTarget } from "@/utils/navigation";
 
 interface SidePanelProps {
   activePanel: string;
@@ -14,7 +15,7 @@ interface SidePanelProps {
   expandedFolders: string[];
   onToggleFolder: (folderId: string) => void;
   collapsed: boolean;
-  onSearchResult: (content: string, fileId: string) => void;
+  onOpenTarget: (target: OpenTarget, query?: string) => void;
   width: number;
   onWidthChange: (width: number) => void;
 }
@@ -27,7 +28,7 @@ export const SidePanel = ({
   expandedFolders,
   onToggleFolder,
   collapsed,
-  onSearchResult,
+  onOpenTarget,
   width,
   onWidthChange,
 }: SidePanelProps) => {
@@ -66,13 +67,7 @@ export const SidePanel = ({
           />
         );
       case "search":
-        return (
-          <SearchPanel
-            portfolioFiles={portfolioFiles}
-            onFileSelect={onFileSelect}
-            onSearchResult={onSearchResult}
-          />
-        );
+        return <SearchPanel onOpenTarget={onOpenTarget} />;
       case "git":
         return <GitPanel />;
       case "terminal":
@@ -101,7 +96,7 @@ export const SidePanel = ({
   }
 
   return (
-    <div className="flex">
+    <div className="flex" data-search-ignore="">
       <div
         className="bg-[#252526] border-r border-[#2d2d30] flex flex-col"
         style={{ width: `${width}px` }}

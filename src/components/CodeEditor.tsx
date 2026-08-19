@@ -49,6 +49,7 @@ export const CodeEditor = ({
     // (and it re-triggers the fade-in animation for the new content).
     <div
       key={activeFile}
+      data-editor-surface=""
       className="flex-1 bg-[#1e1e1e] overflow-y-auto"
       style={{ overflowAnchor: "none" }}
     >

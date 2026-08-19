@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { FileExplorer } from "@/components/FileExplorer";
 import { CodeEditor } from "@/components/CodeEditor";
@@ -9,6 +10,12 @@ import { Chatbot } from "@/components/Chatbot";
 import { Terminal } from "@/components/Terminal";
 import { ActivityBar } from "@/components/ActivityBar";
 import { SidePanel } from "@/components/SidePanel";
+import {
+  openExternal,
+  scrollToAnchor,
+  type OpenTarget,
+} from "@/utils/navigation";
+import { clearPageHighlights, highlightInPage } from "@/utils/highlightInPage";
 
 export interface FileItem {
   id: string;
@@ -95,19 +102,71 @@ const portfolioFiles: FileItem[] = [
   },
 ];
 
+// Each editor tab gets its own URL so a refresh, the back button, and shared
+// links all land on the right file instead of resetting to about-main.
+export const FILE_ROUTES: Record<string, string> = {
+  "about-main": "/",
+  "projects-main": "/projects",
+  about: "/about",
+  skills: "/skills",
+  project1: "/all-projects",
+  experience: "/experience",
+  contact: "/contact",
+};
+
+export const CHAT_PATH = "/chat";
+
+const ROUTE_FILES: Record<string, string> = Object.fromEntries(
+  Object.entries(FILE_ROUTES).map(([fileId, path]) => [path, fileId])
+);
+
+const fileIdForPath = (pathname: string) =>
+  ROUTE_FILES[pathname] ?? ROUTE_FILES[pathname.replace(/\/+$/, "") || "/"] ?? "about-main";
+
 const Index = () => {
   const analytics = useAnalytics();
-  const [activeFile, setActiveFile] = useState<string>("about-main");
-  const [openTabs, setOpenTabs] = useState<string[]>(["about-main"]);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const initialFile = fileIdForPath(location.pathname);
+  const [activeFile, setActiveFile] = useState<string>(initialFile);
+  const [openTabs, setOpenTabs] = useState<string[]>(
+    initialFile === "about-main" ? ["about-main"] : ["about-main", initialFile]
+  );
   const [expandedFolders, setExpandedFolders] = useState<string[]>([
     "main",
     "projects",
   ]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(true);
-  const [showChatbot, setShowChatbot] = useState<boolean>(false);
+  const [showChatbot, setShowChatbot] = useState<boolean>(
+    location.pathname === CHAT_PATH
+  );
   const [showTerminal, setShowTerminal] = useState<boolean>(false);
   const [activePanel, setActivePanel] = useState<string>("explorer");
   const [sidePanelWidth, setSidePanelWidth] = useState<number>(300);
+
+  // URL -> state. Covers refresh, back/forward, and shared links.
+  useEffect(() => {
+    if (location.pathname === CHAT_PATH) {
+      setShowChatbot(true);
+      return;
+    }
+    setShowChatbot(false);
+    const fileId = fileIdForPath(location.pathname);
+    if (fileId !== activeFile) {
+      setActiveFile(fileId);
+      setOpenTabs((tabs) => (tabs.includes(fileId) ? tabs : [...tabs, fileId]));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
+
+  // state -> URL. Guarded on equality so it cannot ping-pong with the effect above.
+  useEffect(() => {
+    const want = showChatbot ? CHAT_PATH : FILE_ROUTES[activeFile] ?? "/";
+    if (location.pathname !== want) {
+      navigate(want);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showChatbot, activeFile]);
 
   const MAX_VISIBLE_TABS = 4;
 
@@ -164,7 +223,9 @@ const Index = () => {
         handleFileSelect("projects-main");
         break;
       case "chat":
-        setShowChatbot(!showChatbot);
+        // idempotent: re-clicking while already in chat keeps you there.
+        // Closing is the X in the chat header, or opening any other view.
+        setShowChatbot(true);
         break;
       case "terminal":
         setShowTerminal(!showTerminal);
@@ -174,7 +235,7 @@ const Index = () => {
 
   const handleActivityChange = (panel: string) => {
     if (panel === "chat") {
-      setShowChatbot(!showChatbot);
+      setShowChatbot(true);
     } else if (panel === "terminal") {
       setShowTerminal(!showTerminal);
     } else {
@@ -191,10 +252,66 @@ const Index = () => {
     }
   };
 
-  const handleSearchResult = (content: string, fileId: string) => {
-    handleFileSelect(fileId);
-    setShowChatbot(false);
+  // Single entry point for every "go there" request coming out of search or the
+  // terminal. A target is either an external link, an app action, or a file
+  // (optionally a section within it).
+  const handleOpenTarget = (target: OpenTarget, query?: string) => {
+    if (target.href) {
+      openExternal(target.href);
+      return;
+    }
+
+    if (target.action) {
+      // Search results say "open", so they open rather than toggle.
+      if (target.action === "terminal") setShowTerminal(true);
+      else if (target.action === "chat") setShowChatbot(true);
+      else handleDockNavigation(target.action);
+      return;
+    }
+
+    if (!target.fileId) return;
+
+    handleFileSelect(target.fileId);
+
+    // With a query, land on the matching word and highlight every occurrence,
+    // falling back to the section when the page doesn't literally contain it.
+    if (query?.trim()) {
+      highlightInPage(query, { fallbackAnchor: target.anchor });
+    } else {
+      clearPageHighlights();
+      if (target.anchor) scrollToAnchor(target.anchor);
+    }
   };
+
+  // VS Code's own shortcuts, so the muscle memory carries over.
+  useEffect(() => {
+    const handleShortcut = (event: KeyboardEvent) => {
+      const meta = event.metaKey || event.ctrlKey;
+
+      // Ctrl+` toggles the terminal panel.
+      if (event.ctrlKey && event.key === "`") {
+        event.preventDefault();
+        setShowTerminal((visible) => !visible);
+        return;
+      }
+
+      if (!meta) return;
+
+      // Cmd/Ctrl+Shift+F focuses search, Cmd/Ctrl+B toggles the sidebar.
+      if (event.shiftKey && event.key.toLowerCase() === "f") {
+        event.preventDefault();
+        setActivePanel("search");
+        setSidebarCollapsed(false);
+        setShowChatbot(false);
+      } else if (!event.shiftKey && event.key.toLowerCase() === "b") {
+        event.preventDefault();
+        setSidebarCollapsed((collapsed) => !collapsed);
+      }
+    };
+
+    window.addEventListener("keydown", handleShortcut);
+    return () => window.removeEventListener("keydown", handleShortcut);
+  }, []);
 
   const handleSidePanelResize = (newWidth: number) => {
     setSidePanelWidth(newWidth);
@@ -240,7 +357,7 @@ const Index = () => {
             expandedFolders={expandedFolders}
             onToggleFolder={toggleFolder}
             collapsed={sidebarCollapsed}
-            onSearchResult={handleSearchResult}
+            onOpenTarget={handleOpenTarget}
             width={sidePanelWidth}
             onWidthChange={handleSidePanelResize}
           />
@@ -273,13 +390,15 @@ const Index = () => {
 
         {/* Terminal Overlay - positioned over the entire main content */}
         {!showChatbot && showTerminal && (
-          <div className="absolute bottom-0 left-12 right-0 z-10">
+          <div
+            className="absolute bottom-0 left-0 md:left-12 right-0 z-10"
+            data-search-ignore=""
+          >
             <Terminal
               isVisible={showTerminal}
               onClose={() => setShowTerminal(false)}
               onMinimize={() => setShowTerminal(false)}
-              portfolioFiles={portfolioFiles}
-              onSearchResult={handleSearchResult}
+              onOpenTarget={handleOpenTarget}
             />
           </div>
         )}

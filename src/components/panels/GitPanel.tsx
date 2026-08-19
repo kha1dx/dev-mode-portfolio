@@ -26,6 +26,31 @@ interface GitStats {
   }[];
 }
 
+const formatRelativeTime = (isoDate: string) => {
+  const then = new Date(isoDate).getTime();
+  if (Number.isNaN(then)) return "unknown";
+
+  const seconds = Math.round((Date.now() - then) / 1000);
+  if (seconds < 60) return "just now";
+
+  const units: [Intl.RelativeTimeFormatUnit, number][] = [
+    ["year", 60 * 60 * 24 * 365],
+    ["month", 60 * 60 * 24 * 30],
+    ["week", 60 * 60 * 24 * 7],
+    ["day", 60 * 60 * 24],
+    ["hour", 60 * 60],
+    ["minute", 60],
+  ];
+
+  const rtf = new Intl.RelativeTimeFormat("en-US", { numeric: "auto" });
+  for (const [unit, secondsInUnit] of units) {
+    if (seconds >= secondsInUnit) {
+      return rtf.format(-Math.floor(seconds / secondsInUnit), unit);
+    }
+  }
+  return "just now";
+};
+
 export const GitPanel = () => {
   const [gitStats, setGitStats] = useState<GitStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -52,15 +77,18 @@ export const GitPanel = () => {
         const totalStars = reposData.reduce((acc, repo) => acc + (repo.stargazers_count || 0), 0);
         const totalForks = reposData.reduce((acc, repo) => acc + (repo.forks_count || 0), 0);
         
-        // Get language statistics
-        const languages = {};
-        for (const repo of reposData.slice(0, 10)) { // Limit to avoid rate limiting
+        // Get language statistics across owned (non-fork) repos.
+        // The denominator is the number of repos that report a primary language,
+        // so the percentages are a share of those repos and can never exceed 100%.
+        const ownedRepos = reposData.filter(repo => !repo.fork);
+        const languages: Record<string, number> = {};
+        let reposWithLanguage = 0;
+        for (const repo of ownedRepos) {
           if (repo.language) {
             languages[repo.language] = (languages[repo.language] || 0) + 1;
+            reposWithLanguage += 1;
           }
         }
-        
-        const totalRepos = Object.keys(languages).length;
         const languageColors = {
           'TypeScript': '#3178c6',
           'JavaScript': '#f7df1e',
@@ -77,25 +105,23 @@ export const GitPanel = () => {
         const languageArray = Object.entries(languages)
           .map(([name, count]) => ({
             name,
-            percentage: Math.round(((count as number) / totalRepos) * 100),
+            percentage: reposWithLanguage
+              ? Math.round(((count as number) / reposWithLanguage) * 100)
+              : 0,
             color: languageColors[name] || '#cccccc'
           }))
           .sort((a, b) => b.percentage - a.percentage)
           .slice(0, 4);
         
         // Get recent repositories
-        const recentRepos = reposData
-          .filter(repo => !repo.fork)
+        const recentRepos = ownedRepos
           .slice(0, 3)
           .map(repo => ({
             name: repo.name,
             description: repo.description || 'No description available',
             stars: repo.stargazers_count || 0,
             language: repo.language || 'Unknown',
-            updated: new Date(repo.updated_at).toLocaleDateString('en-US', {
-              month: 'short',
-              day: 'numeric'
-            }) + ' ago'
+            updated: formatRelativeTime(repo.updated_at)
           }));
         
         setGitStats({

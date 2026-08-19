@@ -1,114 +1,40 @@
-import { Calendar, MapPin, Briefcase, Award, ExternalLink } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  Briefcase,
+  Award,
+  ExternalLink,
+  Cloud,
+} from "lucide-react";
+import { careerTimeline, credentials } from "@/data/careerData";
+import { profile, emailHref } from "@/data/profile";
 
-const experiences = [
-  {
-    id: 1,
-    title: "Senior Full Stack Developer",
-    company: "TechCorp Solutions",
-    location: "San Francisco, CA",
-    period: "2022 - Present",
-    type: "Full-time",
-    description:
-      "Lead developer for high-traffic web applications serving 1M+ users. Architected scalable solutions using React, Node.js, and AWS.",
-    achievements: [
-      "Improved application performance by 40% through optimization",
-      "Led a team of 5 developers on major product releases",
-      "Implemented CI/CD pipeline reducing deployment time by 60%",
-      "Mentored junior developers and conducted code reviews",
-    ],
-    technologies: [
-      "React",
-      "TypeScript",
-      "Node.js",
-      "AWS",
-      "PostgreSQL",
-      "Docker",
-    ],
-  },
-  {
-    id: 2,
-    title: "Full Stack Developer",
-    company: "StartupHub Inc.",
-    location: "Remote",
-    period: "2020 - 2022",
-    type: "Full-time",
-    description:
-      "Developed and maintained multiple client projects, from e-commerce platforms to SaaS applications.",
-    achievements: [
-      "Built 15+ production applications from scratch",
-      "Collaborated with design teams to implement pixel-perfect UIs",
-      "Integrated payment systems and third-party APIs",
-      "Maintained 99.9% uptime across all deployed applications",
-    ],
-    technologies: [
-      "React",
-      "Python",
-      "Django",
-      "MongoDB",
-      "Redis",
-      "Stripe API",
-    ],
-  },
-  {
-    id: 3,
-    title: "Frontend Developer",
-    company: "WebDesign Pro",
-    location: "New York, NY",
-    period: "2019 - 2020",
-    type: "Full-time",
-    description:
-      "Specialized in creating responsive, interactive web interfaces for various industries.",
-    achievements: [
-      "Converted 50+ design mockups to functional websites",
-      "Improved website loading speeds by 35% on average",
-      "Implemented responsive designs supporting all device sizes",
-      "Collaborated with UX designers to enhance user experience",
-    ],
-    technologies: ["JavaScript", "Vue.js", "Sass", "Webpack", "Figma"],
-  },
-  {
-    id: 4,
-    title: "Junior Web Developer",
-    company: "Digital Agency",
-    location: "Boston, MA",
-    period: "2018 - 2019",
-    type: "Full-time",
-    description:
-      "Started my professional journey building websites and learning modern web development practices.",
-    achievements: [
-      "Completed 25+ client projects successfully",
-      "Learned modern JavaScript frameworks and best practices",
-      "Contributed to team knowledge sharing sessions",
-      'Received "Most Improved Developer" award',
-    ],
-    technologies: ["HTML", "CSS", "JavaScript", "jQuery", "PHP", "MySQL"],
-  },
-];
+// Newest first: the experience page reads top down as a reverse timeline.
+const experiences = [...careerTimeline].reverse();
 
-const certifications = [
+// Google Cloud services get their own callout since they carry the current role.
+const cloudStack = [
   {
-    name: "AWS Certified Solutions Architect",
-    issuer: "Amazon Web Services",
-    date: "2023",
-    credential: "AWS-CSA-2023-001",
+    name: "Cloud Run",
+    detail: "Containerized services for the translation pipeline and API",
   },
   {
-    name: "Google Cloud Professional Developer",
-    issuer: "Google Cloud",
-    date: "2022",
-    credential: "GCP-PD-2022-045",
+    name: "Cloud Storage",
+    detail: "Uploaded decks and generated artifacts, scanned on arrival",
   },
   {
-    name: "Meta React Developer Certificate",
-    issuer: "Meta",
-    date: "2021",
-    credential: "META-RD-2021-789",
+    name: "Cloud SQL",
+    detail: "Application data behind the platform",
+  },
+  {
+    name: "Firebase Auth",
+    detail: "Sign-in and session handling across the product",
   },
 ];
 
 export const ExperienceContent = () => {
   return (
-    <div className="min-h-full bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1e1e1e] p-8">
+    <div className="min-h-full bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1e1e1e] p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12 animate-fade-in">
@@ -116,63 +42,99 @@ export const ExperienceContent = () => {
             Professional <span className="text-[#4ec9b0]">Experience</span>
           </h1>
           <p className="text-[#cccccc] text-lg max-w-2xl mx-auto">
-            5+ years of experience building scalable web applications and
-            leading development teams.
+            Software engineer and AI developer, currently building AI products
+            on Google Cloud. Before that, open-source tooling in Vue, freelance
+            AI work, and a design studio I started myself.
           </p>
+        </div>
+
+        {/* Google Cloud focus */}
+        <div className="mb-12 bg-[#252526] border border-[#3e3e42] rounded-lg p-6 animate-fade-in">
+          <div className="flex items-center mb-4">
+            <Cloud className="w-6 h-6 text-[#4285f4] mr-3 flex-shrink-0" />
+            <h2 className="text-xl font-semibold text-white">
+              Working on <span className="text-[#4285f4]">Google Cloud</span>
+            </h2>
+          </div>
+          <p className="text-[#cccccc] mb-6">
+            Day to day I build on Google Cloud with the team at Agile Worx,
+            alongside Firebase for authentication.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {cloudStack.map((service) => (
+              <div
+                key={service.name}
+                className="bg-[#1e1e1e] border border-[#3e3e42] rounded-lg p-4 hover:border-[#4285f4] transition-colors duration-300"
+              >
+                <h3 className="text-white font-medium mb-1">{service.name}</h3>
+                <p className="text-[#858585] text-sm">{service.detail}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Experience Timeline */}
         <div className="relative">
           {/* Timeline line */}
-          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-[#569cd6] opacity-50"></div>
+          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-[#569cd6] opacity-50 hidden sm:block"></div>
 
           {experiences.map((exp, index) => (
             <div
-              key={exp.id}
+              key={`${exp.org}-${exp.period}`}
               className="relative flex items-start mb-12 animate-fade-in"
               style={{ animationDelay: `${index * 200}ms` }}
             >
               {/* Timeline dot */}
-              <div className="absolute left-6 w-4 h-4 bg-[#4ec9b0] rounded-full border-4 border-[#1e1e1e] z-10"></div>
+              <div
+                className={`absolute left-6 w-4 h-4 rounded-full border-4 border-[#1e1e1e] z-10 hidden sm:block ${
+                  exp.current ? "bg-[#4ec9b0]" : "bg-[#569cd6]"
+                }`}
+              ></div>
 
               {/* Content */}
-              <div className="ml-16 bg-[#252526] border border-[#3e3e42] rounded-lg p-6 hover:border-[#569cd6] transition-all duration-300 hover:scale-105 w-full">
-                <div className="flex flex-wrap items-start justify-between mb-4">
+              <div className="sm:ml-16 bg-[#252526] border border-[#3e3e42] rounded-lg p-6 hover:border-[#569cd6] transition-all duration-300 w-full">
+                <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-1">
-                      {exp.title}
-                    </h3>
-                    <div className="flex items-center text-[#4ec9b0] mb-2">
-                      <Briefcase className="w-4 h-4 mr-2" />
-                      <span className="font-medium">{exp.company}</span>
+                    <div className="flex items-center flex-wrap gap-2 mb-1">
+                      <h3 className="text-xl font-semibold text-white">
+                        {exp.role}
+                      </h3>
+                      {exp.current && (
+                        <span className="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-[#4ec9b0]/15 text-[#4ec9b0] border border-[#4ec9b0]/40">
+                          Current
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center text-[#4ec9b0]">
+                      <Briefcase className="w-4 h-4 mr-2 flex-shrink-0" />
+                      <span className="font-medium">{exp.org}</span>
+                      <span className="text-[#858585] text-sm ml-2">
+                        {exp.type}
+                      </span>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="flex items-center text-[#cccccc] mb-1">
-                      <Calendar className="w-4 h-4 mr-2" />
+                  <div className="sm:text-right">
+                    <div className="flex items-center sm:justify-end text-[#cccccc] mb-1">
+                      <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
                       <span className="text-sm">{exp.period}</span>
                     </div>
-                    <div className="flex items-center text-[#cccccc]">
-                      <MapPin className="w-4 h-4 mr-2" />
+                    <div className="flex items-center sm:justify-end text-[#cccccc]">
+                      <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
                       <span className="text-sm">{exp.location}</span>
                     </div>
                   </div>
                 </div>
 
-                <p className="text-[#cccccc] mb-4">{exp.description}</p>
-
                 <div className="mb-4">
-                  <h4 className="text-white font-medium mb-2">
-                    Key Achievements:
-                  </h4>
-                  <ul className="space-y-1">
-                    {exp.achievements.map((achievement, i) => (
+                  <h4 className="text-white font-medium mb-2">What I did</h4>
+                  <ul className="space-y-1.5">
+                    {exp.highlights.map((highlight) => (
                       <li
-                        key={i}
+                        key={highlight}
                         className="text-[#cccccc] text-sm flex items-start"
                       >
                         <span className="text-[#4ec9b0] mr-2">•</span>
-                        {achievement}
+                        <span>{highlight}</span>
                       </li>
                     ))}
                   </ul>
@@ -193,30 +155,33 @@ export const ExperienceContent = () => {
           ))}
         </div>
 
-        {/* Certifications */}
-        <div className="mt-16">
+        {/* Programs & Awards */}
+        <div className="mt-4">
           <h2 className="text-2xl font-semibold text-white mb-8 text-center">
-            Certifications & <span className="text-[#4ec9b0]">Awards</span>
+            Programs & <span className="text-[#4ec9b0]">Awards</span>
           </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {certifications.map((cert, index) => (
+          <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            {credentials.map((credential, index) => (
               <div
-                key={cert.name}
-                className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 hover:border-[#569cd6] transition-all duration-300 hover:scale-105 animate-fade-in"
+                key={credential.name}
+                className="bg-[#252526] border border-[#3e3e42] rounded-lg p-6 hover:border-[#569cd6] transition-all duration-300 animate-fade-in"
                 style={{ animationDelay: `${index * 150}ms` }}
               >
                 <div className="flex items-start justify-between mb-3">
                   <Award className="w-8 h-8 text-[#ffd700] flex-shrink-0" />
                   <span className="text-[#569cd6] text-sm font-mono">
-                    {cert.date}
+                    {credential.date}
                   </span>
                 </div>
-                <h3 className="text-white font-medium mb-2">{cert.name}</h3>
-                <p className="text-[#cccccc] text-sm mb-2">{cert.issuer}</p>
-                <div className="flex items-center text-[#6a9955] text-xs">
-                  <span className="mr-1">ID:</span>
-                  <span className="font-mono">{cert.credential}</span>
-                </div>
+                <h3 className="text-white font-medium mb-1">
+                  {credential.name}
+                </h3>
+                <p className="text-[#4ec9b0] text-sm mb-2">
+                  {credential.issuer}
+                </p>
+                <p className="text-[#858585] text-sm">
+                  {credential.description}
+                </p>
               </div>
             ))}
           </div>
@@ -231,12 +196,15 @@ export const ExperienceContent = () => {
             I'm always interested in new opportunities and challenging projects.
           </p>
           <a
-            href="mailto:Khaled.Salleh@example.com"
+            href={emailHref}
             className="bg-[#4ec9b0] hover:bg-[#3a9b87] text-[#1e1e1e] px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 inline-flex items-center gap-2 font-medium"
           >
             Get In Touch
             <ExternalLink className="w-4 h-4" />
           </a>
+          <p className="text-[#858585] text-sm mt-4 font-mono">
+            {profile.email}
+          </p>
         </div>
       </div>
     </div>

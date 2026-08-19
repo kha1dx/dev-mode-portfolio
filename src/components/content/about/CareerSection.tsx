@@ -1,68 +1,6 @@
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  Clapperboard,
-  Code2,
-  Network,
-  Sparkles,
-  type LucideIcon,
-} from "lucide-react";
-
-interface CareerEntry {
-  period: string;
-  role: string;
-  org: string;
-  description: string;
-  icon: LucideIcon;
-  logo?: string;
-  logoLight?: boolean;
-  tags: string[];
-  current?: boolean;
-}
-
-const careerTimeline: CareerEntry[] = [
-  {
-    period: "2021 – 2023",
-    role: "Freelance Video Editor & Graphic Designer",
-    org: "Innovisionary Creative",
-    description:
-      "Started out freelancing in video editing and graphic design, producing motion graphics and brand identities for clients. Grew it into Innovisionary Creative, my own agency startup.",
-    icon: Clapperboard,
-    logo: "/logos/fiverr.svg",
-    tags: ["Video Editing", "Motion Graphics", "Brand Design"],
-  },
-  {
-    period: "2025",
-    role: "Freelance Software Engineer",
-    org: "Direct Clients",
-    description:
-      "Worked directly with clients building AI wrappers, turning language models into focused products with clean interfaces around them.",
-    icon: Code2,
-    logo: "/logos/freelance-ai.svg",
-    tags: ["React", "Next.js", "OpenAI API", "AI Wrappers"],
-  },
-  {
-    period: "Sep 2025 – Mar 2026",
-    role: "Software Engineering Intern",
-    org: "unyt.org · Berlin / Remote",
-    description:
-      "Built and shipped the Network Inspector module for the DATEX Workbench in Vue 3, giving developers real-time visibility into network traffic inside the IDE.",
-    icon: Network,
-    logo: "/logos/unyt.png",
-    tags: ["Vue 3", "TypeScript", "Open Source"],
-  },
-  {
-    period: "Mar 2026 – Present",
-    role: "Software Engineer",
-    org: "Agile Worx · Cairo",
-    description:
-      "Joined as an AI Developer Intern and was promoted to Software Engineer after three months. I work with the team across frontend, backend, and deployment on Agile Translate, an AI-powered platform that localizes PowerPoint decks from English to Arabic with full RTL and LTR layout transformation.",
-    icon: Sparkles,
-    logo: "/logos/awx-white.png",
-    tags: ["AI Integration", "LLMs", "FastAPI", "Google Cloud"],
-    current: true,
-  },
-];
+import { careerTimeline } from "@/data/careerData";
 
 // Framed logo tile. Hides itself if the asset is missing so a not-yet-added
 // logo never renders as a broken image.
@@ -201,6 +139,7 @@ export const CareerSection = () => {
                           </div>
                           <h4 className="font-clash-display font-medium text-white/90 text-lg mt-1">
                             {item.org}
+                            {item.location ? ` · ${item.location}` : ""}
                           </h4>
                         </div>
                       </div>

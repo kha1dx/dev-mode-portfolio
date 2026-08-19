@@ -52,6 +52,7 @@ export const projectsData: readonly ProjectData[] = [
     title: "Innovisionary Creative",
     icon: "🎬",
     image: "innovisionary-site.jpg",
+    featured: true,
     description: "The creative studio I founded, covering brand identity, video, motion graphics, and campaign work for restaurants, fintech, and creators. I designed and built its site from the ground up.",
     className: "col-span-1",
     size: "medium",
@@ -69,26 +70,6 @@ export const projectsData: readonly ProjectData[] = [
     size: "medium",
     technologies: ["React Native", "Firebase", "Redux", "Expo"],
     githubUrl: "https://github.com/kha1dx/HabitKit"
-  },
-  {
-    id: "KAI",
-    title: "KAI Assistant",
-    icon: "🤖",
-    image: "project4.jpeg",
-    description: "AI-powered personal assistant with natural language processing",
-    className: "col-span-1",
-    size: "medium",
-    technologies: ["Python", "OpenAI API", "Flask", "React"]
-  },
-  {
-    id: "Movies",
-    title: "Movies App",
-    icon: "🎬",
-    image: "project1.jpeg",
-    description: "A modern movie discovery app with ratings, reviews, and watchlist features",
-    className: "col-span-1 md:col-span-2 lg:col-span-1 z-10",
-    size: "medium",
-    technologies: ["React", "TypeScript", "TMDb API", "Tailwind CSS"]
   },
   {
     id: "unyt",
@@ -113,6 +94,26 @@ export const projectsData: readonly ProjectData[] = [
     technologies: ["Next.js", "Node.js", "MongoDB", "Tailwind CSS"],
     status: "live",
     liveUrl: "https://scad.khal1dx.com"
+  },
+  {
+    id: "KAI",
+    title: "KAI Assistant",
+    icon: "🤖",
+    image: "project4.jpeg",
+    description: "AI-powered personal assistant with natural language processing",
+    className: "col-span-1",
+    size: "medium",
+    technologies: ["Python", "OpenAI API", "Flask", "React"]
+  },
+  {
+    id: "Movies",
+    title: "Movies App",
+    icon: "🎬",
+    image: "project1.jpeg",
+    description: "A modern movie discovery app with ratings, reviews, and watchlist features",
+    className: "col-span-1 md:col-span-2 lg:col-span-1 z-10",
+    size: "medium",
+    technologies: ["React", "TypeScript", "TMDb API", "Tailwind CSS"]
   }
 ] as const;
 

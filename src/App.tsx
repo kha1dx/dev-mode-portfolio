@@ -17,6 +17,14 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          {/* One route per editor tab. Keep in sync with FILE_ROUTES in pages/Index. */}
+          <Route path="/chat" element={<Index />} />
+          <Route path="/projects" element={<Index />} />
+          <Route path="/about" element={<Index />} />
+          <Route path="/skills" element={<Index />} />
+          <Route path="/all-projects" element={<Index />} />
+          <Route path="/experience" element={<Index />} />
+          <Route path="/contact" element={<Index />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

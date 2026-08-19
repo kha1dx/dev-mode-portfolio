@@ -28,6 +28,7 @@ export const ProjectCard = React.memo(
     index = 0,
     featured = false,
     status,
+    onClick,
   }: ProjectCardProps) => {
     const [imageLoaded, setImageLoaded] = useState(false);
     const [imageError, setImageError] = useState(false);
@@ -53,7 +54,25 @@ export const ProjectCard = React.memo(
 
     return (
       <div
-        className={`project-item opacity-0 translate-y-8 transition-all duration-700 ease-out group relative overflow-hidden rounded-lg backdrop-blur-sm hover:scale-105 min-h-[300px] flex flex-col ${
+        onClick={onClick}
+        onKeyDown={
+          onClick
+            ? (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onClick();
+                }
+              }
+            : undefined
+        }
+        role={onClick ? "button" : undefined}
+        tabIndex={onClick ? 0 : undefined}
+        aria-label={onClick ? `Open ${title}` : undefined}
+        className={`project-item opacity-0 translate-y-8 transition-all duration-700 ease-out group relative overflow-hidden rounded-lg backdrop-blur-sm hover:scale-105 min-h-[300px] h-full flex flex-col ${
+          onClick
+            ? "cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-400"
+            : ""
+        } ${
           featured
             ? "border-2 border-purple-400/50 bg-white/10 shadow-[0_0_30px_rgba(192,132,252,0.25)] hover:bg-white/15 hover:border-purple-400/70 hover:shadow-[0_0_45px_rgba(192,132,252,0.4)]"
             : "border border-white/20 bg-white/10 hover:bg-white/15 hover:border-white/30"
@@ -139,6 +158,7 @@ export const ProjectCard = React.memo(
                 href={liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 className="flex-1 px-3 py-2 bg-gradient-to-r from-purple-400/20 to-pink-400/20 border border-purple-300/30 text-purple-200 text-sm rounded hover:from-purple-400/30 hover:to-pink-400/30 transition-all duration-300 text-center"
               >
                 {isComingSoon ? "Learn More" : "Live Demo"}
@@ -149,6 +169,7 @@ export const ProjectCard = React.memo(
                 href={githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 className="flex-1 px-3 py-2 bg-white/20 border border-white/30 text-white text-sm rounded hover:bg-white/30 transition-all duration-300 text-center"
               >
                 Code

@@ -5,7 +5,6 @@ import {
   MapPin,
   Github,
   Linkedin,
-  Twitter,
   Send,
   Copy,
   Check,
@@ -14,6 +13,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { profile, emailHref } from "@/data/profile";
 
 export const ContactContent = () => {
   // Apply the app height hook
@@ -117,22 +117,22 @@ export const ContactContent = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "khaledmohamedsalleh@gmail.com",
-      href: "mailto:khaledmohamedsalleh@gmail.com",
+      value: profile.email,
+      href: emailHref,
       color: "text-[#4ec9b0]",
     },
     {
       icon: Phone,
       label: "Phone",
-      value: "+20 1014334387",
-      href: "tel:+201014334387",
+      value: profile.phone,
+      href: profile.phoneHref,
       color: "text-[#569cd6]",
     },
     {
       icon: MapPin,
       label: "Location",
-      value: "Cairo, Egypt",
-      href: "https://maps.google.com/?q=Cairo,+Egypt",
+      value: profile.location,
+      href: profile.mapsUrl,
       color: "text-[#ce9178]",
     },
   ];
@@ -141,20 +141,14 @@ export const ContactContent = () => {
     {
       icon: Github,
       label: "GitHub",
-      href: "https://github.com/kha1dx",
+      href: profile.socials.github,
       color: "hover:text-[#ffffff]",
     },
     {
       icon: Linkedin,
       label: "LinkedIn",
-      href: "https://linkedin.com/in/khal1dx",
+      href: profile.socials.linkedin,
       color: "hover:text-[#0077b5]",
-    },
-    {
-      icon: Twitter,
-      label: "Twitter",
-      href: "https://twitter.com/khal1dx",
-      color: "hover:text-[#1da1f2]",
     },
   ];
 

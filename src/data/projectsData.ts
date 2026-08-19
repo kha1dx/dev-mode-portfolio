@@ -22,11 +22,11 @@ export interface ProjectData {
 
 export const projectsData: readonly ProjectData[] = [
   {
-    id: "SlideWorx",
-    title: "SlideWorx",
+    id: "AgileTranslate",
+    title: "Agile Translate",
     icon: "🌐",
     image: "slideworx.png",
-    description: "AI-powered translation platform that converts PowerPoint decks between English and Arabic — preserving every layout while transforming designs between RTL and LTR. Built at TheAgileWorx.",
+    description: "AI-powered translation platform that converts PowerPoint decks between English and Arabic, preserving every layout while transforming designs between RTL and LTR. Built at TheAgileWorx.",
     className: "col-span-1 md:col-span-3 lg:col-span-3",
     size: "wide",
     featured: true,
@@ -99,7 +99,7 @@ export const projectsData: readonly ProjectData[] = [
     title: "Innovisionary Creative",
     icon: "🎬",
     image: "placeholder.svg",
-    description: "Founded a creative studio delivering video edits, motion graphics, and brand identities — where my freelance career began.",
+    description: "Founded a creative studio delivering video edits, motion graphics, and brand identities, where my freelance career began.",
     className: "col-span-1",
     size: "medium",
     status: "live",

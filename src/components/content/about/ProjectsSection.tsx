@@ -132,7 +132,7 @@ export const ProjectsSection = ({ onNavigate }: ProjectsSectionProps = {}) => {
             </h3>
             <p className="font-clash-display font-light text-white/70 text-base md:text-lg mb-6 max-w-2xl mx-auto">
               I design, build, and scale full-stack web experiences. Tell me
-              what you need — I'll handle the rest.
+              what you need and I'll handle the rest.
             </p>
             <button
               onClick={handleContactClick}

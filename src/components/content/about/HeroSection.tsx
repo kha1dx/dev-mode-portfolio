@@ -248,8 +248,8 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
                 ref={descriptionRef}
                 className="text-base sm:text-lg lg:text-xl text-[#9F9F9F] mb-6 lg:mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed"
               >
-                Full Stack Developer & UI/UX Designer: Crafting seamless digital
-                experiences from concept to deployment with modern technologies.
+                Software engineer and AI developer, taking full-stack products
+                from system design to deployment.
               </p>
               <div
                 ref={buttonsRef}
@@ -331,7 +331,7 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
                 {/* Hero Avatar Image */}
                 <img
                   src="/hero-beard.png"
-                  alt="Khaled Salleh - UI/UX Designer"
+                  alt="Khaled Salleh - Software Engineer & AI Developer"
                   className="w-full h-full object-contain px-2 sm:px-3 lg:px-4"
                   style={{
                     // Fade the bottom of the avatar out to transparent

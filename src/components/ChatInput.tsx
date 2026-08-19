@@ -4,7 +4,7 @@ interface ChatInputProps {
   value: string;
   onChange: (value: string) => void;
   onSend: () => void;
-  /** True while the bot is generating a response. The input stays editable —
+  /** True while the bot is generating a response. The input stays editable,
    *  this only gates sending so the user can keep typing as the model replies. */
   disabled: boolean;
 }

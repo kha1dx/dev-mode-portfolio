@@ -124,8 +124,8 @@ export const AboutMeSection = () => {
               {/* Secondary text */}
               <p className="font-clash-display font-light text-white/80 text-lg md:text-xl leading-relaxed">
                 I build across the stack, from React and Next.js interfaces to
-                Python and FastAPI backends, with a focus on AI integration and
-                Arabic-first, RTL interface engineering.
+                Python and FastAPI backends, with experience in system design,
+                microservices architecture, and AI integration.
               </p>
 
               {/* Call to action */}
@@ -140,6 +140,8 @@ export const AboutMeSection = () => {
                   "React & Next.js",
                   "Python & FastAPI",
                   "AI Integration",
+                  "System Design",
+                  "Google Cloud",
                   "RTL / i18n",
                 ].map((skill, index) => (
                   <span

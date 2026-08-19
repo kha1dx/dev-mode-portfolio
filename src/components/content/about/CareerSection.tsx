@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Clapperboard,
@@ -13,49 +14,87 @@ interface CareerEntry {
   org: string;
   description: string;
   icon: LucideIcon;
+  logo?: string;
+  logoLight?: boolean;
   tags: string[];
   current?: boolean;
 }
 
 const careerTimeline: CareerEntry[] = [
   {
-    period: "2021 — 2022",
+    period: "2021 – 2023",
     role: "Freelance Video Editor & Graphic Designer",
     org: "Innovisionary Creative",
     description:
-      "Started my career in the creative world — editing videos, building motion graphics, and crafting brand identities for clients as the founder of Innovisionary Creative.",
+      "Started out freelancing in video editing and graphic design, producing motion graphics and brand identities for clients. Grew it into Innovisionary Creative, my own agency startup.",
     icon: Clapperboard,
+    logo: "/logos/fiverr.svg",
     tags: ["Video Editing", "Motion Graphics", "Brand Design"],
   },
   {
-    period: "2022 — 2025",
-    role: "Freelance Full-Stack Software Engineer",
-    org: "Fiverr & Direct Clients",
+    period: "2025",
+    role: "Freelance Software Engineer",
+    org: "Direct Clients",
     description:
-      "Transitioned into software engineering, delivering 15+ full-stack web and mobile projects for clients worldwide with 5-star ratings.",
+      "Worked directly with clients building AI wrappers, turning language models into focused products with clean interfaces around them.",
     icon: Code2,
-    tags: ["React", "Node.js", "TypeScript", "Mobile"],
+    logo: "/logos/freelance-ai.svg",
+    tags: ["React", "Next.js", "OpenAI API", "AI Wrappers"],
   },
   {
-    period: "Sep 2025 — Mar 2026",
+    period: "Sep 2025 – Mar 2026",
     role: "Software Engineering Intern",
     org: "unyt.org · Berlin / Remote",
     description:
-      "Built and shipped the \"Network Inspector\" module for the DATEX Workbench in Vue 3, giving developers real-time visibility into network traffic inside the IDE. Managed the full SDLC on an open-source codebase — issue tracking, implementation, and PR reviews.",
+      "Built and shipped the Network Inspector module for the DATEX Workbench in Vue 3, giving developers real-time visibility into network traffic inside the IDE.",
     icon: Network,
+    logo: "/logos/unyt.png",
     tags: ["Vue 3", "TypeScript", "Open Source"],
   },
   {
-    period: "Mar 2026 — Present",
-    role: "AI Developer Intern",
+    period: "Mar 2026 – Present",
+    role: "Software Engineer",
     org: "Agile Worx · Cairo",
     description:
-      "Co-led an AI-powered PPTX localization platform (SlideWorx) that translates decks English → Arabic with full RTL/LTR layout transformation — cutting translation time by 99%+. Built full-stack with Firebase authentication and a Cloud SQL database.",
+      "Joined as an AI Developer Intern and was promoted to Software Engineer after three months. I work with the team across frontend, backend, and deployment on Agile Translate, an AI-powered platform that localizes PowerPoint decks from English to Arabic with full RTL and LTR layout transformation.",
     icon: Sparkles,
-    tags: ["AI Integration", "LLMs", "Firebase", "Cloud SQL"],
+    logo: "/logos/awx-white.png",
+    tags: ["AI Integration", "LLMs", "FastAPI", "Google Cloud"],
     current: true,
   },
 ];
+
+// Framed logo tile. Hides itself if the asset is missing so a not-yet-added
+// logo never renders as a broken image.
+const LogoTile = ({
+  src,
+  org,
+  light,
+}: {
+  src: string;
+  org: string;
+  light?: boolean;
+}) => {
+  const [failed, setFailed] = useState(false);
+  if (failed) return null;
+  return (
+    <div
+      className={`shrink-0 h-14 min-w-[3.5rem] max-w-[7.5rem] px-2.5 py-2 rounded-xl border flex items-center justify-center overflow-hidden shadow-inner shadow-black/20 ${
+        light
+          ? "bg-white/95 border-white/40"
+          : "bg-white/10 backdrop-blur-sm border-white/20"
+      }`}
+    >
+      <img
+        src={src}
+        alt={`${org} logo`}
+        loading="lazy"
+        className="max-h-full max-w-full object-contain"
+        onError={() => setFailed(true)}
+      />
+    </div>
+  );
+};
 
 export const CareerSection = () => {
   const prefersReducedMotion = useReducedMotion();
@@ -79,7 +118,7 @@ export const CareerSection = () => {
 
         {/* Timeline */}
         <div className="relative">
-          {/* Timeline line — left-aligned on mobile, centered on lg */}
+          {/* Timeline line: left-aligned on mobile, centered on lg */}
           <div
             className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-0.5 -translate-x-1/2"
             aria-hidden="true"
@@ -132,7 +171,7 @@ export const CareerSection = () => {
                     </div>
                   </div>
 
-                  {/* Card — alternates sides on lg, single column on mobile */}
+                  {/* Card alternates sides on lg, single column on mobile */}
                   <div
                     className={`pl-16 lg:pl-0 lg:w-1/2 ${
                       isLeft ? "lg:pr-16" : "lg:ml-auto lg:pl-16"
@@ -143,17 +182,28 @@ export const CareerSection = () => {
                       transition={{ duration: 0.3, ease: "easeOut" }}
                       className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20 hover:bg-white/15 hover:border-purple-300/40 hover:shadow-lg hover:shadow-purple-400/10 transition-colors duration-300"
                     >
-                      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                        <h3 className="font-clash-display font-semibold text-white text-xl md:text-2xl">
-                          {item.role}
-                        </h3>
-                        <span className="text-sm font-medium px-3 py-1 bg-gradient-to-r from-purple-400/20 to-pink-400/20 text-purple-200 rounded-full border border-purple-300/30">
-                          {item.period}
-                        </span>
+                      <div className="flex items-start gap-4 mb-3">
+                        {item.logo && (
+                          <LogoTile
+                            src={item.logo}
+                            org={item.org}
+                            light={item.logoLight}
+                          />
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-3">
+                            <h3 className="font-clash-display font-semibold text-white text-xl md:text-2xl flex-1 min-w-0">
+                              {item.role}
+                            </h3>
+                            <span className="shrink-0 whitespace-nowrap text-sm font-medium px-3 py-1 bg-gradient-to-r from-purple-400/20 to-pink-400/20 text-purple-200 rounded-full border border-purple-300/30">
+                              {item.period}
+                            </span>
+                          </div>
+                          <h4 className="font-clash-display font-medium text-white/90 text-lg mt-1">
+                            {item.org}
+                          </h4>
+                        </div>
                       </div>
-                      <h4 className="font-clash-display font-medium text-white/90 text-lg mb-2">
-                        {item.org}
-                      </h4>
                       <p className="font-clash-display font-light text-white/70 text-base leading-relaxed">
                         {item.description}
                       </p>

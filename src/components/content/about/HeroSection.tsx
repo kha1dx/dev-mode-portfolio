@@ -333,6 +333,13 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
                   src="/hero-beard.png"
                   alt="Khaled Salleh - UI/UX Designer"
                   className="w-full h-full object-contain px-2 sm:px-3 lg:px-4"
+                  style={{
+                    // Fade the bottom of the avatar out to transparent
+                    maskImage:
+                      "linear-gradient(to bottom, black 60%, rgba(0,0,0,0.6) 80%, transparent 97%)",
+                    WebkitMaskImage:
+                      "linear-gradient(to bottom, black 60%, rgba(0,0,0,0.6) 80%, transparent 97%)",
+                  }}
                   onError={(e) => {
                     // Fallback to the attached image style if hero-avatar Sallehsn't load
                     console.log("Hero avatar not found, using fallback");

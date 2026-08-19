@@ -67,7 +67,7 @@ export const AboutMeSection = () => {
             {/* Main image with hover effect */}
             <img
               className="w-[380px] sm:w-[455px] h-[470px] sm:h-[567px] object-contain relative z-10 transition-transform duration-300 hover:scale-103 right-10 bottom-10"
-              alt="Shaun Murphy illustration"
+              alt="Khaled Salleh illustration"
               src="/aboutme-beard.png"
             />
 
@@ -117,15 +117,15 @@ export const AboutMeSection = () => {
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 font-semibold">
                   Khaled
                 </span>
-                , a passionate UI/UX designer armed with creativity and a love
-                for problem-solving.
+                , a software engineer and AI developer armed with curiosity and a
+                love for problem-solving.
               </p>
 
               {/* Secondary text */}
               <p className="font-clash-display font-light text-white/80 text-lg md:text-xl leading-relaxed">
-                With a blend of design thinking and user-centric approach, I'm
-                on a mission to create digital experiences that leave a lasting
-                impression.
+                I build across the stack, from React and Next.js interfaces to
+                Python and FastAPI backends, with a focus on AI integration and
+                Arabic-first, RTL interface engineering.
               </p>
 
               {/* Call to action */}
@@ -136,10 +136,11 @@ export const AboutMeSection = () => {
               {/* Skills or quick facts */}
               <div className="flex flex-wrap gap-3 mt-8">
                 {[
-                  "UI/UX Design",
-                  "Problem Solving",
-                  "Creative Thinking",
-                  "User Research",
+                  "TypeScript",
+                  "React & Next.js",
+                  "Python & FastAPI",
+                  "AI Integration",
+                  "RTL / i18n",
                 ].map((skill, index) => (
                   <span
                     key={skill}

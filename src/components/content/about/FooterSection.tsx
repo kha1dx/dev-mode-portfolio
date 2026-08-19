@@ -78,7 +78,7 @@ export const FooterSection = () => {
                 <img
                   className="w-60 sm:w-80 h-auto object-cover filter drop-shadow-lg"
                   alt="Khaled 3D avatar"
-                  src="/footer.png"
+                  src="/footer-beard.png"
                 />
               </div>
               
@@ -125,7 +125,7 @@ export const FooterSection = () => {
                 <img
                   className="w-80 max-w-[460px] lg:max-w-[550px] h-auto object-cover filter drop-shadow-lg"
                   alt="Khaled 3D avatar"
-                  src="/footer.png"
+                  src="/footer-beard.png"
                 />
               </div>
 

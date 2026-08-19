@@ -68,7 +68,7 @@ export const AboutMeSection = () => {
             <img
               className="w-[380px] sm:w-[455px] h-[470px] sm:h-[567px] object-contain relative z-10 transition-transform duration-300 hover:scale-103 right-10 bottom-10"
               alt="Shaun Murphy illustration"
-              src="/aboutme.png"
+              src="/aboutme-beard.png"
             />
 
             {/* Decorative elements with animation */}

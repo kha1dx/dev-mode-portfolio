@@ -330,7 +330,7 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
               >
                 {/* Hero Avatar Image */}
                 <img
-                  src="/hero1.png"
+                  src="/hero-beard.png"
                   alt="Khaled Salleh - UI/UX Designer"
                   className="w-full h-full object-contain px-2 sm:px-3 lg:px-4"
                   onError={(e) => {

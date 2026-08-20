@@ -51,9 +51,13 @@
     <link rel="canonical" href="https://khal1dx.vercel.app/" />
     
     <!-- Favicon and Icons -->
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.json" />
+    <!-- ?v= is a cache buster. Browsers cache favicons far more aggressively
+         than normal assets and a hard refresh does not clear them, so the
+         version has to change whenever the icon does. -->
+    <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" sizes="16x16 32x32 48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
+    <link rel="manifest" href="/manifest.json?v=2" />
     
     <!-- DNS Prefetch and Preconnect -->
     <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
@@ -70,7 +74,7 @@
     <!-- Theme Color -->
     <meta name="theme-color" content="#1e1e1e" />
     <meta name="msapplication-TileColor" content="#1e1e1e" />
-    <meta name="msapplication-config" content="/browserconfig.xml" />
+    <meta name="msapplication-config" content="/browserconfig.xml?v=2" />
     
     <!-- Performance and Security -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.posthog.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.fontshare.com; font-src 'self' https://fonts.gstatic.com https://cdn.fontshare.com; img-src 'self' data: https:; connect-src 'self' https://api.github.com https://nnwbbemvpydtawgyyrfs.supabase.co https://*.posthog.com ws: wss:; worker-src 'self' blob: data:;" />

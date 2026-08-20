@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useRef } from "react";
 import { X, RotateCcw, ArrowUp, Square } from "lucide-react";
 import { usePortfolioChat, SUGGESTIONS } from "../hooks/usePortfolioChat";
 
@@ -52,14 +52,64 @@ const RichText = ({ text }: { text: string }) => (
   </>
 );
 
+const Row = memo(
+  ({ role, content, pending }: { role: string; content: string; pending: boolean }) => {
+    const isUser = role === "user";
+    return (
+      <div className={`flex gap-2.5 sm:gap-3 ${isUser ? "flex-row-reverse" : ""}`}>
+        {!isUser && (
+          <div className="mt-0.5">
+            <Avatar size={28} />
+          </div>
+        )}
+        <div
+          className={`max-w-[88%] sm:max-w-[80%] rounded-2xl px-3.5 py-2.5 text-[0.9rem] leading-relaxed sm:px-4 sm:text-[0.925rem] ${
+            isUser
+              ? "rounded-br-md bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+              : "rounded-bl-md border border-white/[0.08] bg-white/[0.045] text-white/[0.88]"
+          }`}
+        >
+          {pending ? (
+            <span className="flex gap-1 py-1">
+              {[0, 150, 300].map((d) => (
+                <span
+                  key={d}
+                  className="h-1.5 w-1.5 animate-bounce rounded-full bg-white/60"
+                  style={{ animationDelay: `${d}ms` }}
+                />
+              ))}
+            </span>
+          ) : (
+            <RichText text={content} />
+          )}
+        </div>
+      </div>
+    );
+  }
+);
+Row.displayName = "Row";
+
 export const Chatbot = ({ onClose }: ChatbotProps) => {
   const { messages, input, setInput, isStreaming, send, stop, reset } =
     usePortfolioChat();
-  const endRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const stickRef = useRef(true);
+
+  // Track whether the user is parked at the bottom. If they scroll up to read,
+  // we stop following, otherwise every token yanks them back down.
+  const onScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    stickRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 72;
+  }, []);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    const el = scrollRef.current;
+    if (!el || !stickRef.current) return;
+    // Direct assignment, not smooth scrollIntoView: during streaming the smooth
+    // version queues an animation per token and stutters badly on mobile.
+    el.scrollTop = el.scrollHeight;
   }, [messages]);
 
   useEffect(() => {
@@ -90,10 +140,10 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
       {/* one soft violet bloom so it is not flat charcoal */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-28 left-1/2 h-72 w-[34rem] -translate-x-1/2 rounded-full bg-purple-500/12 blur-[90px]"
+        className="pointer-events-none absolute -top-28 left-1/2 hidden h-72 w-[34rem] -translate-x-1/2 rounded-full bg-purple-500/12 blur-[90px] sm:block"
       />
       {/* Header */}
-      <div className="relative z-10 flex h-14 flex-shrink-0 items-center justify-between gap-2 border-b border-white/[0.07] bg-white/[0.02] px-3 sm:px-4 backdrop-blur-md">
+      <div className="relative z-10 flex h-14 flex-shrink-0 items-center justify-between gap-2 border-b border-white/[0.07] bg-white/[0.02] px-3 sm:px-4 sm:backdrop-blur-md">
         <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
           <div className="relative">
             <Avatar size={34} />
@@ -126,44 +176,19 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
       </div>
 
       {/* Messages */}
-      <div className="relative z-10 flex-1 space-y-4 overflow-y-auto overscroll-contain px-3 py-4 sm:px-4 sm:py-5">
-        {messages.map((m) => {
-          const isUser = m.role === "user";
-          const pending = !isUser && !m.content && isStreaming;
-          return (
-            <div
-              key={m.id}
-              className={`flex gap-3 ${isUser ? "flex-row-reverse" : ""}`}
-            >
-              {!isUser && (
-                <div className="mt-0.5">
-                  <Avatar size={28} />
-                </div>
-              )}
-              <div
-                className={`max-w-[88%] sm:max-w-[80%] rounded-2xl px-3.5 py-2.5 text-[0.9rem] leading-relaxed sm:px-4 sm:text-[0.925rem] ${
-                  isUser
-                    ? "rounded-br-md bg-gradient-to-r from-purple-500 to-pink-500 text-white"
-                    : "rounded-bl-md border border-white/[0.08] bg-white/[0.045] text-white/[0.88] backdrop-blur-sm"
-                }`}
-              >
-                {pending ? (
-                  <span className="flex gap-1 py-1">
-                    {[0, 150, 300].map((d) => (
-                      <span
-                        key={d}
-                        className="h-1.5 w-1.5 animate-bounce rounded-full bg-white/60"
-                        style={{ animationDelay: `${d}ms` }}
-                      />
-                    ))}
-                  </span>
-                ) : (
-                  <RichText text={m.content} />
-                )}
-              </div>
-            </div>
-          );
-        })}
+      <div
+        ref={scrollRef}
+        onScroll={onScroll}
+        className="relative z-10 min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-3 py-4 [-webkit-overflow-scrolling:touch] sm:px-4 sm:py-5"
+      >
+        {messages.map((m) => (
+          <Row
+            key={m.id}
+            role={m.role}
+            content={m.content}
+            pending={m.role !== "user" && !m.content && isStreaming}
+          />
+        ))}
 
         {/* Starter prompts */}
         {onlyGreeting && (
@@ -180,11 +205,10 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
           </div>
         )}
 
-        <div ref={endRef} />
       </div>
 
       {/* Composer */}
-      <div className="relative z-10 flex-shrink-0 border-t border-white/[0.07] bg-white/[0.02] p-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] backdrop-blur-md sm:p-3">
+      <div className="relative z-10 flex-shrink-0 border-t border-white/[0.07] bg-white/[0.02] p-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] sm:backdrop-blur-md sm:p-3">
         <div className="flex items-end gap-2 rounded-xl border border-white/[0.1] bg-white/[0.04] px-3 py-2 transition-colors focus-within:border-purple-400/45 focus-within:bg-white/[0.06]">
           <textarea
             ref={inputRef}

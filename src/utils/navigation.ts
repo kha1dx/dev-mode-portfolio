@@ -1,3 +1,5 @@
+import { capture } from "@/lib/posthog";
+
 export interface OpenTarget {
   fileId?: string;
   anchor?: string;
@@ -31,5 +33,7 @@ export const scrollToAnchor = (anchor: string, timeoutMs = 2000) => {
 };
 
 export const openExternal = (href: string) => {
+  // Programmatic opens bypass the delegated anchor listener in lib/posthog.
+  capture("external_link_clicked", { href, source: "app" });
   window.open(href, "_blank", "noopener,noreferrer");
 };

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { ExternalLink, Github } from "lucide-react";
 import { projectsData } from "@/data/projectsData";
 import { ProjectCard } from "./about/ProjectCard";
+import { capture } from "@/lib/posthog";
 
 interface ProjectsOverviewProps {
   onProjectClick?: (projectId: string) => void;
@@ -49,6 +50,10 @@ export const ProjectsOverview = ({ onProjectClick }: ProjectsOverviewProps) => {
   }, []);
 
   const handleProjectClick = (projectId: string) => {
+    capture("project_clicked", {
+      project_id: projectId,
+      title: projectsData.find((p) => p.id === projectId)?.title,
+    });
     // Prefer a caller-supplied handler; otherwise open the project itself.
     // There is no per-project detail view, so the live site is the useful target.
     if (onProjectClick) {

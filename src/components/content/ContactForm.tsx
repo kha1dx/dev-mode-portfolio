@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { capture, captureError } from "@/lib/posthog";
 
 export const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -25,6 +26,8 @@ export const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    // Top of the funnel: everyone who pressed send, valid or not.
+    capture("contact_form_submitted");
 
     try {
       // Validate form data
@@ -34,6 +37,7 @@ export const ContactForm = () => {
         !formData.subject.trim() ||
         !formData.message.trim()
       ) {
+        capture("contact_form_rejected", { reason: "missing_fields" });
         toast({
           title: "Validation Error",
           description: "Please fill in all required fields.",
@@ -46,6 +50,7 @@ export const ContactForm = () => {
       // Email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(formData.email.trim())) {
+        capture("contact_form_rejected", { reason: "invalid_email" });
         toast({
           title: "Invalid Email",
           description: "Please enter a valid email address.",
@@ -88,6 +93,9 @@ export const ContactForm = () => {
         throw new Error(data?.error || "Failed to send message");
       }
 
+      // The conversion that matters on this site.
+      capture("contact_message_sent", { subject: formData.subject.trim() });
+
       toast({
         title: "Message sent successfully!",
         description: "Thank you for your message. I'll get back to you soon.",
@@ -96,6 +104,8 @@ export const ContactForm = () => {
       setFormData({ name: "", email: "", subject: "", message: "" });
     } catch (error: any) {
       console.error("Email Error:", error);
+      captureError(error, { context: "contact_form" });
+      capture("contact_message_failed", { message: error?.message });
       toast({
         title: "Error sending message",
         description:

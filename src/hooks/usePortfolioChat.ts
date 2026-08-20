@@ -1,4 +1,10 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  SUGGESTIONS as CANNED,
+  cannedAnswer,
+  keywordAnswer,
+} from "../data/assistantFallback";
+import { capture } from "@/lib/posthog";
 
 export interface ChatMsg {
   id: string;
@@ -6,22 +12,12 @@ export interface ChatMsg {
   content: string;
 }
 
-import {
-  SUGGESTIONS as CANNED,
-  cannedAnswer,
-  keywordAnswer,
-} from "../data/assistantFallback";
-
 const GREETING =
   "Hey! I'm Khaled's assistant. Ask me anything about his work, his stack, or what he's shipped. I know all of it.";
 
 export const SUGGESTIONS = CANNED.map((s) => s.q);
 
-/** Types a canned answer out so it feels the same as a streamed one. */
-const TYPE_MS = 9;
-
 const uid = () => Math.random().toString(36).slice(2, 10);
-
 const welcome = (): ChatMsg => ({ id: uid(), role: "assistant", content: GREETING });
 
 export function usePortfolioChat() {
@@ -29,8 +25,28 @@ export function usePortfolioChat() {
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
+  const rafRef = useRef<number | null>(null);
+
+  const cancelRaf = () => {
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
+  };
+
+  useEffect(() => () => {
+    cancelRaf();
+    abortRef.current?.abort();
+  }, []);
+
+  const setContent = useCallback((id: string, content: string) => {
+    setMessages((prev) =>
+      prev.map((m) => (m.id === id ? { ...m, content } : m))
+    );
+  }, []);
 
   const stop = useCallback(() => {
+    cancelRaf();
     abortRef.current?.abort();
     abortRef.current = null;
     setIsStreaming(false);
@@ -50,7 +66,14 @@ export function usePortfolioChat() {
       const userMsg: ChatMsg = { id: uid(), role: "user", content: text };
       const replyId = uid();
 
-      // history for the API: everything so far plus this turn, minus the greeting
+      capture("assistant_message_sent", {
+        question: text,
+        length: text.length,
+        // messages starts with the greeting, so subtract it for a real turn count
+        turn: Math.floor(messages.length / 2) + 1,
+        from_suggestion: SUGGESTIONS.includes(text),
+      });
+
       const history = [...messages, userMsg]
         .filter((m, i) => !(i === 0 && m.role === "assistant"))
         .map(({ role, content }) => ({ role, content }));
@@ -63,30 +86,40 @@ export function usePortfolioChat() {
       setInput("");
       setIsStreaming(true);
 
+      /**
+       * Reveal text on a rAF timeline instead of a fixed slice-per-timeout.
+       * The old loop re-rendered every 3 characters, so a 900-character answer
+       * cost ~300 renders of the whole thread. This caps it at one per frame.
+       */
+      const typeOut = (full: string) =>
+        new Promise<void>((resolve) => {
+          const duration = Math.min(1100, 350 + full.length * 0.55);
+          const start = performance.now();
+          const tick = (now: number) => {
+            const p = Math.min(1, (now - start) / duration);
+            setContent(replyId, full.slice(0, Math.round(full.length * p)));
+            if (p < 1) {
+              rafRef.current = requestAnimationFrame(tick);
+            } else {
+              rafRef.current = null;
+              resolve();
+            }
+          };
+          rafRef.current = requestAnimationFrame(tick);
+        });
+
       // Suggestion chips answer instantly and never touch the API.
       const canned = cannedAnswer(text);
       if (canned) {
-        setIsStreaming(true);
-        for (let i = 1; i <= canned.length; i += 3) {
-          setMessages((prev) =>
-            prev.map((m) => (m.id === replyId ? { ...m, content: canned.slice(0, i) } : m))
-          );
-          await new Promise((r) => setTimeout(r, TYPE_MS));
-        }
-        setMessages((prev) =>
-          prev.map((m) => (m.id === replyId ? { ...m, content: canned } : m))
-        );
+        capture("assistant_answered", { source: "canned", question: text });
+        await typeOut(canned);
         setIsStreaming(false);
         return;
       }
 
       const controller = new AbortController();
       abortRef.current = controller;
-
-      const fail = (msg: string) =>
-        setMessages((prev) =>
-          prev.map((m) => (m.id === replyId ? { ...m, content: msg } : m))
-        );
+      const fail = (msg: string) => setContent(replyId, msg);
 
       try {
         const res = await fetch("/api/chat", {
@@ -97,8 +130,6 @@ export function usePortfolioChat() {
         });
 
         if (!res.ok || !res.body) {
-          // Model unreachable: answer from the local keyword bank rather than
-          // showing the visitor an error.
           let msg = keywordAnswer(text);
           try {
             const data = await res.json();
@@ -106,6 +137,10 @@ export function usePortfolioChat() {
               msg = data.error;
             }
           } catch { /* non-JSON body: keep the local answer */ }
+          capture("assistant_fallback_used", {
+            question: text,
+            reason: "http_" + res.status,
+          });
           fail(msg);
           return;
         }
@@ -113,17 +148,43 @@ export function usePortfolioChat() {
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
         let acc = "";
+        let queued = false;
+
+        // Coalesce token updates to one render per frame. Network chunks can
+        // arrive far faster than the screen refreshes.
+        const flush = () => {
+          queued = false;
+          rafRef.current = null;
+          setContent(replyId, acc);
+        };
+
         for (;;) {
           const { done, value } = await reader.read();
           if (done) break;
           acc += decoder.decode(value, { stream: true });
-          setMessages((prev) =>
-            prev.map((m) => (m.id === replyId ? { ...m, content: acc } : m))
-          );
+          if (!queued) {
+            queued = true;
+            rafRef.current = requestAnimationFrame(flush);
+          }
         }
-        if (!acc.trim()) fail(keywordAnswer(text));
+        cancelRaf();
+        setContent(replyId, acc);
+        if (!acc.trim()) {
+          capture("assistant_fallback_used", { question: text, reason: "empty_body" });
+          fail(keywordAnswer(text));
+        } else {
+          capture("assistant_answered", {
+            source: "api",
+            question: text,
+            answer_length: acc.length,
+          });
+        }
       } catch (err) {
         if ((err as Error)?.name !== "AbortError") {
+          capture("assistant_fallback_used", {
+            question: text,
+            reason: (err as Error)?.name || "network_error",
+          });
           fail(keywordAnswer(text));
         }
       } finally {
@@ -131,7 +192,7 @@ export function usePortfolioChat() {
         abortRef.current = null;
       }
     },
-    [input, isStreaming, messages]
+    [input, isStreaming, messages, setContent]
   );
 
   return { messages, input, setInput, isStreaming, send, stop, reset };

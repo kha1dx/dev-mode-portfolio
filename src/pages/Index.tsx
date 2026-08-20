@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { capture } from "@/lib/posthog";
+import useAppHeight from "@/hooks/useAppHeight";
 import { FileExplorer } from "@/components/FileExplorer";
 import { CodeEditor } from "@/components/CodeEditor";
 import { StatusBar } from "@/components/StatusBar";
@@ -124,6 +126,8 @@ const fileIdForPath = (pathname: string) =>
   ROUTE_FILES[pathname] ?? ROUTE_FILES[pathname.replace(/\/+$/, "") || "/"] ?? "about-main";
 
 const Index = () => {
+  // keeps --app-height tracking the visible viewport (mobile chrome + keyboard)
+  useAppHeight();
   const analytics = useAnalytics();
   const location = useLocation();
   const navigate = useNavigate();
@@ -171,6 +175,7 @@ const Index = () => {
   const MAX_VISIBLE_TABS = 4;
 
   const handleFileSelect = (fileId: string) => {
+    capture("file_opened", { file_id: fileId, path: FILE_ROUTES[fileId] ?? "/" });
     setActiveFile(fileId);
     setShowChatbot(false); // Close chatbot when selecting a file
 
@@ -225,9 +230,11 @@ const Index = () => {
       case "chat":
         // idempotent: re-clicking while already in chat keeps you there.
         // Closing is the X in the chat header, or opening any other view.
+        capture("assistant_opened", { source: "dock" });
         setShowChatbot(true);
         break;
       case "terminal":
+        capture("terminal_toggled", { open: !showTerminal, source: "dock" });
         setShowTerminal(!showTerminal);
         break;
     }
@@ -235,8 +242,10 @@ const Index = () => {
 
   const handleActivityChange = (panel: string) => {
     if (panel === "chat") {
+      capture("assistant_opened", { source: "activity_bar" });
       setShowChatbot(true);
     } else if (panel === "terminal") {
+      capture("terminal_toggled", { open: !showTerminal, source: "activity_bar" });
       setShowTerminal(!showTerminal);
     } else {
       // Check if clicking the same panel that's already active
@@ -245,6 +254,7 @@ const Index = () => {
         setSidebarCollapsed(true);
       } else {
         // Different panel or reopening collapsed panel
+        capture("side_panel_opened", { panel });
         setActivePanel(panel);
         setSidebarCollapsed(false);
         setShowChatbot(false);
@@ -256,6 +266,15 @@ const Index = () => {
   // terminal. A target is either an external link, an app action, or a file
   // (optionally a section within it).
   const handleOpenTarget = (target: OpenTarget, query?: string) => {
+    // Search and terminal both funnel through here, so this is the one place
+    // that sees what visitors actually look for.
+    capture("navigation_target_opened", {
+      query: query?.trim() || undefined,
+      file_id: target.fileId,
+      action: target.action,
+      href: target.href,
+    });
+
     if (target.href) {
       openExternal(target.href);
       return;
@@ -368,6 +387,11 @@ const Index = () => {
               tabs={openTabs}
               activeTab={activeFile}
               onTabSelect={(fileId) => {
+                capture("file_opened", {
+                  file_id: fileId,
+                  path: FILE_ROUTES[fileId] ?? "/",
+                  source: "tab",
+                });
                 setActiveFile(fileId);
                 setShowChatbot(false);
               }}

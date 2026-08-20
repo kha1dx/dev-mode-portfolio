@@ -1,0 +1,82 @@
+[
+  {
+    "event": "file_opened",
+    "description": "Visitor opens a portfolio file or editor tab.",
+    "file": "src/pages/Index.tsx"
+  },
+  {
+    "event": "assistant_opened",
+    "description": "Visitor opens the portfolio assistant from the dock or activity bar.",
+    "file": "src/pages/Index.tsx"
+  },
+  {
+    "event": "assistant_message_sent",
+    "description": "Visitor sends an assistant question, tracked without question content.",
+    "file": "src/hooks/usePortfolioChat.ts"
+  },
+  {
+    "event": "assistant_answered",
+    "description": "Assistant successfully produces a canned or API answer.",
+    "file": "src/hooks/usePortfolioChat.ts"
+  },
+  {
+    "event": "assistant_fallback_used",
+    "description": "Assistant uses a local fallback due to an unavailable or empty response.",
+    "file": "src/hooks/usePortfolioChat.ts"
+  },
+  {
+    "event": "terminal_toggled",
+    "description": "Visitor opens or closes the interactive terminal.",
+    "file": "src/pages/Index.tsx"
+  },
+  {
+    "event": "terminal_command_run",
+    "description": "Visitor runs a recognized portfolio terminal command, without command arguments.",
+    "file": "src/components/Terminal.tsx"
+  },
+  {
+    "event": "side_panel_opened",
+    "description": "Visitor opens an explorer, search, git, account, or settings side panel.",
+    "file": "src/pages/Index.tsx"
+  },
+  {
+    "event": "navigation_target_opened",
+    "description": "Visitor opens a search or terminal navigation result, without recording their search text.",
+    "file": "src/pages/Index.tsx"
+  },
+  {
+    "event": "project_clicked",
+    "description": "Visitor selects a project card.",
+    "file": "src/components/content/ProjectsOverview.tsx"
+  },
+  {
+    "event": "contact_form_submitted",
+    "description": "Visitor attempts to submit the contact form.",
+    "file": "src/components/content/ContactForm.tsx"
+  },
+  {
+    "event": "contact_form_rejected",
+    "description": "Client-side validation rejects a contact-form attempt.",
+    "file": "src/components/content/ContactForm.tsx"
+  },
+  {
+    "event": "contact_message_sent",
+    "description": "Contact email is accepted by the sending function.",
+    "file": "src/components/content/ContactForm.tsx"
+  },
+  {
+    "event": "contact_message_failed",
+    "description": "Contact email submission fails after validation.",
+    "file": "src/components/content/ContactForm.tsx"
+  },
+  {
+    "event": "external_link_clicked",
+    "description": "Visitor follows an external or project link.",
+    "file": "src/lib/posthog.ts"
+  },
+  {
+    "event": "email_link_clicked",
+    "description": "Visitor selects an email contact link.",
+    "file": "src/lib/posthog.ts"
+  }
+]

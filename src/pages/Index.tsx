@@ -253,11 +253,14 @@ const Index = () => {
         // Same panel clicked while open - collapse it
         setSidebarCollapsed(true);
       } else {
-        // Different panel or reopening collapsed panel
+        // Different panel or reopening collapsed panel.
+        // The side panel is its own region beside the editor, so opening it
+        // must not tear down whatever the editor is showing. Closing the
+        // assistant here also bounced the route to the active file (usually
+        // "/"), which read as the sidebar sending you home.
         capture("side_panel_opened", { panel });
         setActivePanel(panel);
         setSidebarCollapsed(false);
-        setShowChatbot(false);
       }
     }
   };
@@ -266,13 +269,13 @@ const Index = () => {
   // terminal. A target is either an external link, an app action, or a file
   // (optionally a section within it).
   const handleOpenTarget = (target: OpenTarget, query?: string) => {
-    // Search and terminal both funnel through here, so this is the one place
-    // that sees what visitors actually look for.
+    // Search and terminal both funnel through here. Record the destination,
+    // not the visitor's query, which is user-entered content.
     capture("navigation_target_opened", {
-      query: query?.trim() || undefined,
       file_id: target.fileId,
+      anchor: target.anchor,
       action: target.action,
-      href: target.href,
+      is_external: Boolean(target.href),
     });
 
     if (target.href) {
@@ -321,7 +324,6 @@ const Index = () => {
         event.preventDefault();
         setActivePanel("search");
         setSidebarCollapsed(false);
-        setShowChatbot(false);
       } else if (!event.shiftKey && event.key.toLowerCase() === "b") {
         event.preventDefault();
         setSidebarCollapsed((collapsed) => !collapsed);

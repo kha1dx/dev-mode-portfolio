@@ -94,7 +94,7 @@ export const ContactForm = () => {
       }
 
       // The conversion that matters on this site.
-      capture("contact_message_sent", { subject: formData.subject.trim() });
+      capture("contact_message_sent");
 
       toast({
         title: "Message sent successfully!",
@@ -105,7 +105,9 @@ export const ContactForm = () => {
     } catch (error: any) {
       console.error("Email Error:", error);
       captureError(error, { context: "contact_form" });
-      capture("contact_message_failed", { message: error?.message });
+      capture("contact_message_failed", {
+        error_type: error instanceof Error ? error.name : "unknown_error",
+      });
       toast({
         title: "Error sending message",
         description:

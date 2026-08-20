@@ -67,7 +67,6 @@ export function usePortfolioChat() {
       const replyId = uid();
 
       capture("assistant_message_sent", {
-        question: text,
         length: text.length,
         // messages starts with the greeting, so subtract it for a real turn count
         turn: Math.floor(messages.length / 2) + 1,
@@ -111,7 +110,7 @@ export function usePortfolioChat() {
       // Suggestion chips answer instantly and never touch the API.
       const canned = cannedAnswer(text);
       if (canned) {
-        capture("assistant_answered", { source: "canned", question: text });
+        capture("assistant_answered", { source: "canned" });
         await typeOut(canned);
         setIsStreaming(false);
         return;
@@ -137,10 +136,7 @@ export function usePortfolioChat() {
               msg = data.error;
             }
           } catch { /* non-JSON body: keep the local answer */ }
-          capture("assistant_fallback_used", {
-            question: text,
-            reason: "http_" + res.status,
-          });
+          capture("assistant_fallback_used", { reason: "http_" + res.status });
           fail(msg);
           return;
         }
@@ -170,19 +166,17 @@ export function usePortfolioChat() {
         cancelRaf();
         setContent(replyId, acc);
         if (!acc.trim()) {
-          capture("assistant_fallback_used", { question: text, reason: "empty_body" });
+          capture("assistant_fallback_used", { reason: "empty_body" });
           fail(keywordAnswer(text));
         } else {
           capture("assistant_answered", {
             source: "api",
-            question: text,
             answer_length: acc.length,
           });
         }
       } catch (err) {
         if ((err as Error)?.name !== "AbortError") {
           capture("assistant_fallback_used", {
-            question: text,
             reason: (err as Error)?.name || "network_error",
           });
           fail(keywordAnswer(text));

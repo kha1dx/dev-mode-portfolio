@@ -1,27 +1,15 @@
 import posthog from "posthog-js";
 
-/**
- * PostHog client for the portfolio.
- *
- * Everything here is a no-op when VITE_PUBLIC_POSTHOG_KEY is absent, so local
- * dev and preview builds without the key behave exactly as before instead of
- * throwing or shipping noise into the project.
- */
+const KEY = import.meta.env.VITE_POSTHOG_KEY as string | undefined;
+const HOST = import.meta.env.VITE_POSTHOG_HOST as string | undefined;
 
-const KEY = import.meta.env.VITE_PUBLIC_POSTHOG_KEY as string | undefined;
-const HOST =
-  (import.meta.env.VITE_PUBLIC_POSTHOG_HOST as string | undefined) ??
-  "https://eu.i.posthog.com";
+export const posthogEnabled = Boolean(KEY && HOST);
 
-export const posthogEnabled = Boolean(KEY);
-
-/** Capture that survives a missing key. Use this instead of posthog.capture. */
 export const capture = (event: string, properties?: Record<string, unknown>) => {
   if (!posthogEnabled) return;
   posthog.capture(event, properties);
 };
 
-/** Same guard for exceptions, so error paths never become error sources. */
 export const captureError = (
   error: unknown,
   properties?: Record<string, unknown>
@@ -30,11 +18,6 @@ export const captureError = (
   posthog.captureException(error, properties);
 };
 
-/**
- * Anchors are scattered across the footer, contact panel and project cards.
- * One delegated listener keeps outbound-click tracking in a single place
- * rather than threading a handler through every link component.
- */
 const trackOutboundClicks = () => {
   document.addEventListener(
     "click",
@@ -46,7 +29,7 @@ const trackOutboundClicks = () => {
       const href = anchor.getAttribute("href") ?? "";
 
       if (href.startsWith("mailto:")) {
-        capture("email_link_clicked", { address: href.slice(7) });
+        capture("email_link_clicked");
         return;
       }
 
@@ -64,19 +47,30 @@ const trackOutboundClicks = () => {
 };
 
 export const initPostHog = () => {
-  if (!posthogEnabled) return;
+  if (!KEY) {
+    if (import.meta.env.DEV) {
+      throw new Error(
+        "VITE_POSTHOG_KEY variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once VITE_POSTHOG_KEY is configured"
+      );
+    }
+    return;
+  }
 
-  posthog.init(KEY as string, {
+  if (!HOST) {
+    if (import.meta.env.DEV) {
+      throw new Error(
+        "VITE_POSTHOG_HOST variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once VITE_POSTHOG_HOST is configured"
+      );
+    }
+    return;
+  }
+
+  posthog.init(KEY, {
     api_host: HOST,
-    // Opts into the current default behaviours, notably pageviews on
-    // history changes — which is what this SPA does on every tab switch.
-    defaults: "2026-08-29",
-    // Session replay. Inputs are masked (the contact form carries a name,
-    // email and message); everything else stays readable so replays are
-    // actually worth watching.
-    disable_session_recording: false,
-    session_recording: {
-      maskAllInputs: true,
+    capture_exceptions: {
+      capture_unhandled_errors: true,
+      capture_unhandled_rejections: true,
+      capture_console_errors: false,
     },
   });
 

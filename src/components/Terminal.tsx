@@ -18,6 +18,7 @@ import {
   type TerminalLine,
 } from "@/utils/terminalCommands";
 import type { OpenTarget } from "@/utils/navigation";
+import { capture } from "@/lib/posthog";
 
 interface TerminalProps {
   isVisible: boolean;
@@ -148,6 +149,7 @@ export const Terminal = ({
       return;
     }
 
+    capture("terminal_command_run", { command: command.name });
     command.run(args, { ...context, history: [...history, trimmed] });
   };
 

@@ -1,0 +1,350 @@
+\documentclass[10pt, letterpaper]{article}
+\usepackage{textcomp}
+
+\usepackage[
+    ignoreheadfoot,
+    top=1.1 cm,
+    bottom=1.1 cm,
+    left=1.4 cm,
+    right=1.4 cm,
+    footskip=0.8 cm,
+]{geometry}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{primaryColor}{RGB}{0, 0, 0}
+\usepackage{enumitem}
+\usepackage{fontawesome5}
+\usepackage{amsmath}
+\usepackage[
+    pdftitle={Khaled Mohamed Saleh CV},
+    pdfauthor={Khaled Mohamed Saleh},
+    pdfcreator={LaTeX with RenderCV},
+    colorlinks=true,
+    urlcolor=primaryColor
+]{hyperref}
+\usepackage[pscoord]{eso-pic}
+\usepackage{calc}
+\usepackage{bookmark}
+\usepackage{lastpage}
+\usepackage{changepage}
+\usepackage{paracol}
+\usepackage{ifthen}
+\usepackage{needspace}
+\usepackage{iftex}
+
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+
+\usepackage{charter}
+
+\raggedright
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt}
+\pagestyle{empty}
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\topskip}{0pt}
+\setlength{\columnsep}{0.15cm}
+\pagenumbering{gobble}
+
+\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+
+\titlespacing{\section}{
+    -1pt
+}{
+    0.15 cm
+}{
+    0.10 cm
+}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\small$\bullet$}}$}
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.05 cm,
+        parsep=0.05 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=0 cm + 10pt
+    ]
+}{
+    \end{itemize}
+}
+
+\newenvironment{highlightsforbulletentries}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=10pt
+    ]
+}{
+    \end{itemize}
+}
+
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{
+        0 cm + 0.00001 cm
+    }{
+        0 cm + 0.00001 cm
+    }
+}{
+    \end{adjustwidth}
+}
+
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumn{#2}
+    \setcolumnwidth{\fill, 4.5 cm}
+    \begin{paracol}{2}
+}{
+    \switchcolumn \raggedleft \secondColumn
+    \end{paracol}
+    \endonecolentry
+}
+
+\newenvironment{threecolentry}[3][]{
+    \onecolentry
+    \def\thirdColumn{#3}
+    \setcolumnwidth{, \fill, 4.5 cm}
+    \begin{paracol}{3}
+    {\raggedright #2} \switchcolumn
+}{
+    \switchcolumn \raggedleft \thirdColumn
+    \end{paracol}
+    \endonecolentry
+}
+
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.5}
+}{
+    \par\kern\topsep
+}
+
+\let\hrefWithoutArrow\href
+
+\begin{document}
+    \newcommand{\AND}{\unskip
+        \cleaders\copy\ANDbox\hskip\wd\ANDbox
+        \ignorespaces
+    }
+    \newsavebox\ANDbox
+    \sbox\ANDbox{$|$}
+
+    \begin{header}
+        \fontsize{25 pt}{25 pt}\selectfont Khaled Mohamed Saleh
+        \AND%
+        \fontsize{14}{14} \selectfont {Software Engineer and AI Developer}
+
+        \vspace{5 pt}
+
+        \normalsize
+        \mbox{{\faMapMarker} New Cairo, Egypt}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{mailto:khaledmohamedsalleh@gmail.com}{khaledmohamedsalleh@gmail.com}}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{tel:+201014334387}{+201014334387}}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{LinkedIn: \hrefWithoutArrow{https://www.linkedin.com/in/khal1dx/}{\textcolor{blue}{\underline{Khaled Salleh}}}}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{GitHub: \hrefWithoutArrow{https://github.com/kha1dx}{\textcolor{blue}{\underline{kha1dx}}}}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{Website: \hrefWithoutArrow{https://khal1dx.com}{\textcolor{blue}{\underline{khal1dx.com}}}}%
+    \end{header}
+
+    \vspace{0.2cm}
+
+    % --- SUMMARY ---------------------------------------------------------------
+    \section{Professional Summary}
+
+    \begin{onecolentry}
+        Software engineer and AI developer building full-stack, AI-powered products. I work on system design and microservices: splitting a product into services, designing the APIs and database schema between them, and shipping it to production on Google Cloud. Comfortable across React, Next.js, Vue 3, Python, and FastAPI.
+    \end{onecolentry}
+
+    \vspace{0.1 cm}
+
+    % --- EDUCATION -------------------------------------------------------------
+    \section{Education}
+
+    \begin{twocolentry}{
+        Sep 2022 – Jun 2027 (Expected)
+    }
+        \textbf{German University in Cairo}, B.Sc. in Computer Engineering
+    \end{twocolentry}
+
+    \vspace{0.06 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+            \item \textbf{Relevant Coursework:} System Design, Software Engineering, Computer Networks, Databases, Theory of Computation
+        \end{highlights}
+    \end{onecolentry}
+
+    \vspace{0.08 cm}
+
+    \begin{twocolentry}{
+        Sep 2025 – Feb 2026
+    }
+        \textbf{Semester Abroad}, German International University | Berlin, Germany
+    \end{twocolentry}
+
+    \vspace{0.06 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+            \item Studied Data Structures and C++ in Berlin while interning at unyt.org.
+        \end{highlights}
+    \end{onecolentry}
+
+    % --- EXPERIENCE ------------------------------------------------------------
+    \section{Experience}
+
+    \begin{twocolentry}{
+        Mar 2026 – Present
+    }
+        \textbf{Software Engineer}, Agile Worx | Cairo, Egypt
+    \end{twocolentry}
+
+    \vspace{0.06 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+            \item Joined as Software Engineer Intern, promoted to full-time Software Engineer after three months.
+            \item Build \textbf{Agile Translate}, an AI-powered PowerPoint localization platform, from design to deployment with the team.
+            \item Work across the stack: Next.js frontend, FastAPI services, Google Cloud SQL, and Firebase Auth on Google Cloud.
+            \item Handle API design, database schema, and a translation cache that removes redundant LLM calls.
+        \end{highlights}
+    \end{onecolentry}
+
+    \vspace{0.08 cm}
+
+    \begin{twocolentry}{
+        Sep 2025 – Mar 2026
+    }
+        \textbf{Software Engineering Intern}, unyt.org | Berlin / Remote
+    \end{twocolentry}
+
+    \vspace{0.06 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+            \item Built and shipped the ``Network Inspector'' module for the DATEX Workbench in Vue 3, giving developers real-time visibility into network traffic inside the IDE.
+            \item Managed the full SDLC on an open-source codebase: issue tracking, implementation, and PR reviews.
+        \end{highlights}
+    \end{onecolentry}
+
+    % --- PROJECTS --------------------------------------------------------------
+    \section{Projects}
+
+    \begin{twocolentry}{
+        2026 \hspace{0.5cm} \href{https://www.theagileworx.com/products/slideworx}{\textcolor{blue}{\underline{Live}}}
+    }
+        \textbf{\href{https://www.theagileworx.com/products/slideworx}{\textcolor{blue}{\underline{Agile Translate: AI PowerPoint Localization}}}}
+    \end{twocolentry}
+
+    \vspace{0.06 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+            \item Translates decks between English and Arabic while preserving layout, mirroring the design between LTR and RTL by editing PPTX/OOXML directly.
+            \item Next.js, React, FastAPI, Google Cloud SQL, Firebase Auth, OpenAI API, Google Cloud.
+        \end{highlights}
+    \end{onecolentry}
+
+    \vspace{0.08 cm}
+
+    \begin{twocolentry}{
+        2026 \hspace{0.5cm} \href{https://deema.khal1dx.com}{\textcolor{blue}{\underline{Live}}}
+    }
+        \textbf{\href{https://deema.khal1dx.com}{\textcolor{blue}{\underline{Deema: Bilingual Habit Tracker}}}}
+    \end{twocolentry}
+
+    \vspace{0.06 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+            \item Full-stack habit tracker where an LLM analyzes cross-habit patterns and reports them in plain language.
+            \item Full Arabic and English with mirrored RTL and LTR layouts. Next.js, Supabase, Google OAuth, PWA.
+        \end{highlights}
+    \end{onecolentry}
+
+    \vspace{0.08 cm}
+
+    \begin{twocolentry}{
+        2025 \hspace{0.5cm} \href{https://github.com/kha1dx/Clara/tree/main}{\textcolor{blue}{\underline{GitHub}}}
+    }
+        \textbf{\href{https://clarityai.khal1dx.com}{\textcolor{blue}{\underline{Prompt Studio: AI SaaS}}}}
+    \end{twocolentry}
+
+    \vspace{0.06 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+            \item AI-powered platform that helps users craft and iterate on optimized prompts for LLMs. Built with Next.js, Tailwind CSS, Shadcn UI, Supabase (auth + DB), and the OpenAI API.
+        \end{highlights}
+    \end{onecolentry}
+
+    \vspace{0.08 cm}
+
+    \begin{twocolentry}{
+        2025 \hspace{0.5cm} \href{https://github.com/kha1dx/scad/tree/main}{\textcolor{blue}{\underline{GitHub}}}
+    }
+        \textbf{\href{https://scad-eight.vercel.app/}{\textcolor{blue}{\underline{SCAD Internships Platform (Team Project)}}}}
+    \end{twocolentry}
+
+    \vspace{0.06 cm}
+    \begin{onecolentry}
+        \begin{highlights}
+            \item Platform connecting university students with companies; built core dashboard features in Next.js and React.
+        \end{highlights}
+    \end{onecolentry}
+
+    % --- SKILLS ----------------------------------------------------------------
+    \section{Skills}
+
+    \begin{onecolentry}
+        \textbf{System Design:} Microservices, REST API design, relational schema design, caching strategies, authentication flows
+    \end{onecolentry}
+    \vspace{0.06 cm}
+    \begin{onecolentry}
+        \textbf{Programming Languages:} JavaScript, TypeScript, Python, Java, C, C++, SQL
+    \end{onecolentry}
+    \vspace{0.06 cm}
+    \begin{onecolentry}
+        \textbf{Frameworks \& Libraries:} React, Next.js, Vue 3, FastAPI, Tailwind CSS, Shadcn UI
+    \end{onecolentry}
+    \vspace{0.06 cm}
+    \begin{onecolentry}
+        \textbf{Tools \& Platforms:} Google Cloud (Cloud SQL, Firebase), Docker, Git, PostgreSQL, Supabase, OpenAI API
+    \end{onecolentry}
+    \vspace{0.06 cm}
+    \begin{onecolentry}
+        \textbf{Languages:} Arabic (Native), English (Fluent), German (Intermediate)
+    \end{onecolentry}
+
+    % --- ACHIEVEMENTS ----------------------------------------------------------
+    \section{Achievements}
+
+    \begin{samepage}
+        \begin{twocolentry}{
+            Dec 2024
+        }
+            \textbf{McKinsey Forward Program}
+        \end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            Completed a globally-selective leadership program focused on problem-solving, digital skills, and communication for early-career professionals. \href{https://www.credly.com/badges/13e23e31-1b12-41ff-90d8-7f8193dae3aa/linked_in_profile}{\underline{[Certificate]}}
+        \end{onecolentry}
+    \end{samepage}
+
+\end{document}

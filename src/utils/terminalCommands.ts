@@ -6,6 +6,7 @@ import { profile, emailHref } from "@/data/profile";
 import { searchIndex } from "@/data/searchIndex";
 import { searchDocs, suggestTerms, KIND_LABELS } from "@/utils/searchEngine";
 import type { OpenTarget } from "@/utils/navigation";
+import { downloadCV } from "@/utils/cv";
 
 export type LineTone =
   | "default"
@@ -397,7 +398,7 @@ export const buildCommands = (): CommandSpec[] => {
       aliases: ["cv"],
       run: (_args, ctx) => {
         ctx.print([line("Downloading CV…", "success")]);
-        ctx.open({ href: profile.cvUrl });
+        downloadCV("terminal");
       },
     },
     {

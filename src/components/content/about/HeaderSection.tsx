@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { capture } from "@/lib/posthog";
+import { downloadCV } from "@/utils/cv";
 
 interface HeaderSectionProps {
   onNavigate?: (action: string) => void;
@@ -10,18 +10,7 @@ interface HeaderSectionProps {
 export const HeaderSection = ({ onNavigate }: HeaderSectionProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleDownloadCV = () => {
-    capture("resume_downloaded", { source: "header" });
-    // Google Drive file direct download link
-    const cvUrl =
-      "https://drive.google.com/file/d/1iWom-JuP9H-Q2WzWCf966qLZ8vWoVZOo/view?usp=sharing";
-    const link = document.createElement("a");
-    link.href = cvUrl;
-    link.download = "Khaled_Salleh_CV.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const handleDownloadCV = () => downloadCV("header");
 
   const handleNavigation = (section: string) => {
     setIsMenuOpen(false); // Close mobile menu when navigating

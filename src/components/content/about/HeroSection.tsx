@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import gsap from "gsap";
 import { redirect } from "react-router-dom";
 import { Contact } from "lucide-react";
-import { capture } from "@/lib/posthog";
+import { downloadCV } from "@/utils/cv";
 
 interface HeroSectionProps {
   onNavigate?: (action: string) => void;
@@ -26,18 +26,7 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
     "Mobile Development",
   ];
 
-  const handleDownloadCV = () => {
-    capture("resume_downloaded", { source: "hero" });
-    // Google Drive file direct download link
-    const cvUrl =
-      "https://drive.google.com/uc?export=download&id=1o6bglo83JzITmzZQkOsxPg4POQeLaVox";
-    const link = document.createElement("a");
-    link.href = cvUrl;
-    link.download = "Khaled_Salleh_CV.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const handleDownloadCV = () => downloadCV("hero");
 
   const handleContactClick = () => {
     if (onNavigate) {

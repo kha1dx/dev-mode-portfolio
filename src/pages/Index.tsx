@@ -18,6 +18,8 @@ import {
   type OpenTarget,
 } from "@/utils/navigation";
 import { clearPageHighlights, highlightInPage } from "@/utils/highlightInPage";
+import { downloadCV } from "@/utils/cv";
+import { profile } from "@/data/profile";
 
 export interface FileItem {
   id: string;
@@ -279,7 +281,10 @@ const Index = () => {
     });
 
     if (target.href) {
-      openExternal(target.href);
+      // The CV is our own file, so hand it over as a download rather than
+      // bouncing the visitor into a PDF viewer tab.
+      if (target.href === profile.cvUrl) downloadCV("search");
+      else openExternal(target.href);
       return;
     }
 

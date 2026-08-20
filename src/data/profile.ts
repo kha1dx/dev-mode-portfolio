@@ -10,8 +10,9 @@ export const profile = {
   phone: "+20 1014334387",
   phoneHref: "tel:+201014334387",
   mapsUrl: "https://maps.google.com/?q=Cairo,+Egypt",
-  cvUrl:
-    "https://drive.google.com/uc?export=download&id=1o6bglo83JzITmzZQkOsxPg4POQeLaVox",
+  // Served from public/. Keep this in sync with resume/cv.tex by re-running
+  // pdflatex and copying cv.pdf over public/Khaled_Salleh_CV.pdf.
+  cvUrl: "/Khaled_Salleh_CV.pdf",
   socials: {
     github: "https://github.com/kha1dx",
     linkedin: "https://linkedin.com/in/khal1dx",

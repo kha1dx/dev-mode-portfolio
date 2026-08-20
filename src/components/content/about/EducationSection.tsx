@@ -29,18 +29,14 @@ export const EducationSection = () => {
       id="education"
       className="py-16 lg:py-24 relative overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-12 lg:mb-16">
           <h2 className="font-clash-display font-semibold text-white text-4xl md:text-5xl lg:text-6xl tracking-tight leading-tight mb-4">
             Education
           </h2>
           <div className="relative">
-            <img
-              className="w-[280px] h-0.5"
-              alt="Separator"
-              src="/group-8.png"
-            />
+            <div className="h-0.5 w-[180px] sm:w-[280px] rounded-full bg-gradient-to-r from-purple-400 via-pink-400 to-transparent" />
           </div>
         </div>
 

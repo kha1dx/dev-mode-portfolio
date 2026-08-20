@@ -347,7 +347,7 @@ const Index = () => {
         />
 
         {/* Main Content */}
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-1 min-w-0 overflow-hidden">
           {/* Side Panel */}
           <SidePanel
             activePanel={activePanel}
@@ -363,7 +363,7 @@ const Index = () => {
           />
 
           {/* Editor Area */}
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 min-w-0 flex flex-col">
             <TabBar
               tabs={openTabs}
               activeTab={activeFile}
@@ -407,8 +407,10 @@ const Index = () => {
       {/* Status Bar */}
       <StatusBar activeFile={activeFile} portfolioFiles={portfolioFiles} />
 
-      {/* Dock */}
-      <Dock onNavigate={handleDockNavigation} />
+      {/* Dock. Hidden while the assistant is open: it is fixed over the viewport
+          and would sit on top of the chat composer, which is the one control
+          the user needs there. The chat has its own close button. */}
+      {!showChatbot && <Dock onNavigate={handleDockNavigation} />}
     </div>
   );
 };

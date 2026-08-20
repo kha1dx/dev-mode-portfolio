@@ -27,18 +27,14 @@ export const AboutMeSection = () => {
       id="about"
       className="py-16 lg:py-24 relative overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-12 lg:mb-16">
           <h2 className="font-clash-display font-semibold text-white text-4xl md:text-5xl lg:text-6xl tracking-tight leading-tight mb-4">
             About Me
           </h2>
           <div className="relative">
-            <img
-              className="w-[280px] h-0.5"
-              alt="Separator"
-              src="/group-8.png"
-            />
+            <div className="h-0.5 w-[180px] sm:w-[280px] rounded-full bg-gradient-to-r from-purple-400 via-pink-400 to-transparent" />
           </div>
         </div>
 
@@ -66,14 +62,14 @@ export const AboutMeSection = () => {
 
             {/* Main image with hover effect */}
             <img
-              className="w-[380px] sm:w-[455px] h-[470px] sm:h-[567px] object-contain relative z-10 transition-transform duration-300 hover:scale-103 right-10 bottom-10"
+              className="w-full max-w-[300px] sm:max-w-[455px] h-auto object-contain relative z-10 transition-transform duration-300 hover:scale-105 sm:right-10 sm:bottom-10"
               alt="Khaled Salleh illustration"
               src="/aboutme-beard.png"
             />
 
             {/* Decorative elements with animation */}
             <svg
-              className="absolute w-[48px] sm:w-[61px] h-[48px] sm:h-[61px] top-0 left-[210px] sm:left-[268px] z-20 animate-spin text-white-300"
+              className="absolute w-[48px] sm:w-[61px] h-[48px] sm:h-[61px] top-0 left-[210px] sm:left-[268px] z-20 animate-spin text-white/80"
               style={{ animationDuration: "8s" }}
               fill="currentColor"
               viewBox="0 0 24 24"
@@ -103,7 +99,7 @@ export const AboutMeSection = () => {
 
           {/* Text Content */}
           <div
-            className={`flex flex-col justify-start -mt-16 transform transition-all duration-1000 delay-300 ${
+            className={`flex flex-col justify-start mt-4 lg:-mt-16 transform transition-all duration-1000 delay-300 ${
               isVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-8 opacity-0"

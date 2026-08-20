@@ -186,8 +186,8 @@ export const StatsSection = () => {
   );
 
   return (
-    <div ref={sectionRef} className="flex justify-center py-10 sm:py-14">
-      <div className="flex flex-wrap justify-center items-center gap-10 lg:gap-0">
+    <div ref={sectionRef} className="flex justify-center px-4 py-8 sm:px-6 sm:py-14">
+      <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-10 lg:gap-0">
         {statsData.map((stat, index) => (
           <React.Fragment key={index}>
             <div className="group text-center px-4 lg:px-12 transition-all duration-300">
@@ -195,7 +195,7 @@ export const StatsSection = () => {
                 {/* The animated foreground number */}
                 <div
                   ref={(el) => (numberRefs.current[index] = el)}
-                  className="stat-number relative z-10 bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-400 bg-clip-text text-transparent font-clash-display font-bold text-[80px] lg:text-[120px] text-center whitespace-nowrap transition-transform duration-300 group-hover:scale-105"
+                  className="stat-number relative z-10 bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-400 bg-clip-text text-transparent font-clash-display font-bold text-[56px] xs:text-[64px] sm:text-[80px] lg:text-[120px] text-center whitespace-nowrap transition-transform duration-300 group-hover:scale-105"
                   aria-label={`${stat.value}${stat.suffix} ${stat.description}`}
                   style={{ willChange: "transform, opacity" }}
                 >

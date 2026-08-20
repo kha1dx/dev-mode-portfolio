@@ -225,7 +225,7 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
   return (
     <div
       ref={heroRef}
-      className="relative min-h-screen flex items-center px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-16 overflow-x-clip"
+      className="relative min-h-[100svh] flex items-center px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-16 overflow-x-clip"
     >
       <div className="max-w-6xl mx-auto w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
@@ -234,7 +234,7 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
             <div>
               <h1
                 ref={titleRef}
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-9xl font-bold text-white mb-4 lg:mb-6"
+                className="text-[2.5rem] leading-[1.05] xs:text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-4 lg:mb-6 break-words"
               >
                 <span className="italic text-[#FFB000] text-2xl sm:text-3xl lg:text-5xl">
                   I'm
@@ -261,7 +261,7 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
                       .getElementById("projects")
                       ?.scrollIntoView({ behavior: "smooth" })
                   }
-                  className="w-full sm:w-48 lg:w-60 h-12 sm:h-14 lg:h-[77px] rounded-lg lg:rounded-[17.26px] border-none bg-[linear-gradient(179deg,rgba(255,255,255,0.5)_0%,rgba(58,58,58,0.5)_100%)] relative text-white px-4 lg:px-8 py-3 transition-all duration-300 hover:scale-105"
+                  className="w-full sm:w-48 lg:w-60 h-14 sm:h-14 lg:h-[77px] rounded-lg lg:rounded-[17.26px] border-none bg-[linear-gradient(179deg,rgba(255,255,255,0.5)_0%,rgba(58,58,58,0.5)_100%)] relative text-white px-4 lg:px-8 py-3 transition-all duration-300 hover:scale-105"
                 >
                   <span className="text-lg sm:text-xl lg:text-[33.2px] font-normal text-center text-white">
                     Projects
@@ -272,7 +272,7 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
                 </Button>
                 <Button
                   onClick={handleContactClick}
-                  className="w-full sm:w-48 lg:w-60 h-12 sm:h-14 lg:h-[77px] rounded-lg lg:rounded-[17.26px] border-none bg-[linear-gradient(179deg,rgba(255,255,255,0.5)_0%,rgba(58,58,58,0.5)_100%)] relative text-white px-4 lg:px-8 py-3 transition-all duration-300 hover:scale-105"
+                  className="w-full sm:w-48 lg:w-60 h-14 sm:h-14 lg:h-[77px] rounded-lg lg:rounded-[17.26px] border-none bg-[linear-gradient(179deg,rgba(255,255,255,0.5)_0%,rgba(58,58,58,0.5)_100%)] relative text-white px-4 lg:px-8 py-3 transition-all duration-300 hover:scale-105"
                 >
                   <span className="text-lg sm:text-xl lg:text-[33.2px] font-normal text-center text-white">
                     Contact Me
@@ -326,7 +326,7 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
 
               <div
                 ref={avatarRef}
-                className="w-90 h-90 sm:w-80 sm:h-80 lg:w-[480px] lg:h-[480px] relative z-10"
+                className="w-56 h-56 xs:w-64 xs:h-64 sm:w-80 sm:h-80 lg:w-[480px] lg:h-[480px] relative z-10 mx-auto"
               >
                 {/* Hero Avatar Image */}
                 <img

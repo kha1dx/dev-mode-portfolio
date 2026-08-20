@@ -13,7 +13,7 @@ interface AboutContentProps {
 
 export const AboutContent = ({ onNavigate }: AboutContentProps) => {
   return (
-    <div className="min-h-screen overflow-x-clip bg-gradient-to-br from-black via-[#2D2A8C]/30 to-[#FFB000]/20 text-white">
+    <div className="min-h-screen overflow-x-clip bg-gradient-to-br from-black via-[#2D2A8C]/30 to-[#FFB000]/20 text-white pb-24 sm:pb-28 lg:pb-32">
       <HeaderSection onNavigate={onNavigate} />
       <HeroSection onNavigate={onNavigate} />
       <AboutMeSection />

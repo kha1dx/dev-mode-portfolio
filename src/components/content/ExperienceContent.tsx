@@ -34,7 +34,7 @@ const cloudStack = [
 
 export const ExperienceContent = () => {
   return (
-    <div className="min-h-full bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1e1e1e] p-4 sm:p-6 md:p-8">
+    <div className="min-h-full bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1e1e1e] p-4 sm:p-6 md:p-8 pb-24 sm:pb-28 lg:pb-32">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12 animate-fade-in">

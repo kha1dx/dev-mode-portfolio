@@ -18,6 +18,15 @@ export default {
 			}
 		},
 		extend: {
+			screens: {
+				// small phones: 360-430px viewports need a step below sm (640px)
+				xs: '475px'
+			},
+			fontFamily: {
+				// 41 components use font-clash-display; without this the class was
+				// a no-op and every heading fell back to the default sans.
+				'clash-display': ['"Clash Display"', 'ui-sans-serif', 'system-ui', 'sans-serif']
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',

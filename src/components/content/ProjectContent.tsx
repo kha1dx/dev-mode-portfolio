@@ -46,19 +46,15 @@ export const ProjectContent = ({ projectId }: ProjectContentProps) => {
   }, []);
 
   return (
-    <div className="min-h-full bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] py-16 lg:py-24 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-8">
+    <div className="min-h-full bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] py-16 lg:py-24 relative overflow-hidden pb-24 sm:pb-28 lg:pb-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-12 lg:mb-16 text-center">
           <h1 className="section-heading opacity-0 translate-y-8 transition-all duration-700 ease-out font-clash-display font-semibold text-white text-4xl md:text-5xl lg:text-6xl tracking-tight leading-tight mb-4">
             All Projects
           </h1>
           <div className="relative flex justify-center mb-6">
-            <img
-              className="w-[280px] h-0.5"
-              alt="Separator"
-              src="/group-8.png"
-            />
+            <div className="h-0.5 w-[180px] sm:w-[280px] rounded-full bg-gradient-to-r from-purple-400 via-pink-400 to-transparent" />
           </div>
           <p className="section-subtitle opacity-0 translate-y-8 transition-all duration-700 ease-out font-clash-display font-light text-white/70 text-lg max-w-3xl mx-auto">
             A comprehensive showcase of my development journey, featuring full-stack applications, mobile apps, and innovative solutions built with modern technologies.

@@ -93,15 +93,15 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
         className="pointer-events-none absolute -top-28 left-1/2 h-72 w-[34rem] -translate-x-1/2 rounded-full bg-purple-500/12 blur-[90px]"
       />
       {/* Header */}
-      <div className="relative z-10 flex h-14 flex-shrink-0 items-center justify-between border-b border-white/[0.07] bg-white/[0.02] px-4 backdrop-blur-md">
-        <div className="flex items-center gap-3">
+      <div className="relative z-10 flex h-14 flex-shrink-0 items-center justify-between gap-2 border-b border-white/[0.07] bg-white/[0.02] px-3 sm:px-4 backdrop-blur-md">
+        <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
           <div className="relative">
             <Avatar size={34} />
             <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-[#0a0d13] bg-emerald-400" />
           </div>
-          <div className="leading-tight">
-            <div className="text-sm font-semibold text-white">Ask about Khaled</div>
-            <div className="font-mono text-[10.5px] tracking-tight text-white/40">
+          <div className="min-w-0 leading-tight">
+            <div className="truncate text-sm font-semibold text-white">Ask about Khaled</div>
+            <div className="truncate font-mono text-[10.5px] tracking-tight text-white/40">
               {isStreaming ? "thinking…" : "ai assistant · trained on his CV"}
             </div>
           </div>
@@ -126,7 +126,7 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
       </div>
 
       {/* Messages */}
-      <div className="relative z-10 flex-1 space-y-4 overflow-y-auto px-4 py-5">
+      <div className="relative z-10 flex-1 space-y-4 overflow-y-auto overscroll-contain px-3 py-4 sm:px-4 sm:py-5">
         {messages.map((m) => {
           const isUser = m.role === "user";
           const pending = !isUser && !m.content && isStreaming;
@@ -141,7 +141,7 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
                 </div>
               )}
               <div
-                className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-[0.925rem] leading-relaxed ${
+                className={`max-w-[88%] sm:max-w-[80%] rounded-2xl px-3.5 py-2.5 text-[0.9rem] leading-relaxed sm:px-4 sm:text-[0.925rem] ${
                   isUser
                     ? "rounded-br-md bg-gradient-to-r from-purple-500 to-pink-500 text-white"
                     : "rounded-bl-md border border-white/[0.08] bg-white/[0.045] text-white/[0.88] backdrop-blur-sm"
@@ -167,7 +167,7 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
 
         {/* Starter prompts */}
         {onlyGreeting && (
-          <div className="flex flex-wrap gap-2 pl-10 pt-1">
+          <div className="flex flex-wrap gap-2 pt-1 sm:pl-10">
             {SUGGESTIONS.map((q) => (
               <button
                 key={q}
@@ -184,7 +184,7 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
       </div>
 
       {/* Composer */}
-      <div className="relative z-10 flex-shrink-0 border-t border-white/[0.07] bg-white/[0.02] p-3 backdrop-blur-md">
+      <div className="relative z-10 flex-shrink-0 border-t border-white/[0.07] bg-white/[0.02] p-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] backdrop-blur-md sm:p-3">
         <div className="flex items-end gap-2 rounded-xl border border-white/[0.1] bg-white/[0.04] px-3 py-2 transition-colors focus-within:border-purple-400/45 focus-within:bg-white/[0.06]">
           <textarea
             ref={inputRef}
@@ -197,14 +197,14 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
                 send();
               }
             }}
-            placeholder="Ask about his projects, stack, experience…"
-            className="max-h-[140px] flex-1 resize-none bg-transparent py-1 text-sm text-white placeholder:text-white/35 focus:outline-none"
+            placeholder="Ask about his projects, stack…"
+            className="max-h-[120px] min-w-0 flex-1 resize-none bg-transparent py-1 text-base text-white placeholder:text-white/35 focus:outline-none sm:max-h-[140px] sm:text-sm"
           />
           <button
             onClick={() => (isStreaming ? stop() : send())}
             disabled={!isStreaming && !input.trim()}
             aria-label={isStreaming ? "Stop" : "Send"}
-            className="mb-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-purple-400 to-pink-400 text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
+            className="mb-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full sm:h-8 sm:w-8 bg-gradient-to-r from-purple-400 to-pink-400 text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
           >
             {isStreaming ? (
               <Square className="h-3 w-3 fill-current" />
@@ -213,7 +213,7 @@ export const Chatbot = ({ onClose }: ChatbotProps) => {
             )}
           </button>
         </div>
-        <p className="mt-2 text-center text-[10.5px] text-white/30">
+        <p className="mt-2 hidden text-center text-[10.5px] text-white/30 sm:block">
           AI can make mistakes. For anything important, email{" "}
           <a
             className="underline decoration-white/20 underline-offset-2 hover:text-white/60"

@@ -2,7 +2,7 @@ import { skillCategories, currentlyWorkingWith } from '@/data/skillsData';
 
 export const SkillsContent = () => {
   return (
-    <div className="min-h-full bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1e1e1e] p-8">
+    <div className="min-h-full bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#1e1e1e] p-8 pb-24 sm:pb-28 lg:pb-32">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12 animate-fade-in">

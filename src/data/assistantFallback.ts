@@ -97,7 +97,7 @@ You can see it at **innovisionary.khal1dx.com**.
 It matters for his engineering work too: he came to code from design, which is why the things he builds actually look finished.`,
   },
   {
-    keys: ["stack", "tech", "skill", "language", "framework", "tool", "know"],
+    keys: ["stack", "tech", "skill", "language", "framework", "tool", "knows", "know how"],
     answer: `**Frontend:** TypeScript, React, Next.js, Vue 3, Tailwind
 **Backend:** Python, FastAPI, Node.js
 **Data:** PostgreSQL, Google Cloud SQL, Supabase
@@ -107,7 +107,12 @@ It matters for his engineering work too: he came to code from design, which is w
 Plus system design, microservices architecture, and Arabic/RTL internationalisation. He also works in Java, C++ and C from his Computer Engineering degree.`,
   },
   {
-    keys: ["hire", "why", "good", "recruit", "candidate", "strength", "stand out"],
+    keys: [
+      "hire", "recruit", "candidate", "strength", "stand out",
+      // "good"/"why" on their own used to hijack unrelated questions
+      // ("why does he like Vue"), so they only count as phrases here.
+      "good at", "best at", "why should", "why him", "why khaled",
+    ],
     answer: `Short version: **he ships, and the things he ships are hard.**
 
 - Multiple products live right now: Agile Translate, Deema, SCAD Internships, his studio site
@@ -132,7 +137,7 @@ He also spent a **semester abroad at the German International University in Berl
 He's a graduate of the **McKinsey Forward Program**.`,
   },
   {
-    keys: ["experience", "work", "career", "job", "intern", "unyt", "history", "background"],
+    keys: ["experience", "career", "job", "intern", "unyt", "history", "background", "worked at", "work experience", "employ"],
     answer: `- **Mar 2026 – now** — Software Engineer at **Agile Worx**, Cairo. Joined as an AI Developer Intern, promoted after three months
 - **Sep 2025 – Mar 2026** — Software Engineering Intern at **unyt.org** (Berlin/remote). Built and shipped the Network Inspector module for the DATEX Workbench in Vue 3
 - **2025** — Freelance software engineer, building AI wrappers for direct clients
@@ -190,30 +195,71 @@ export function cannedAnswer(text: string): string | null {
   return hit ? hit.a : null;
 }
 
-/** Always returns something sensible. Used when the model is unreachable. */
-export function keywordAnswer(text: string): string {
+const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/**
+ * A key counts only when it starts on a word boundary. Substring matching let
+ * short keys fire from inside unrelated words, which is how a question about
+ * one topic came back with an answer about another. Anchoring only the start
+ * keeps the deliberate stems working: "translat" still catches "translation".
+ */
+const hits = (haystack: string, key: string) =>
+  new RegExp(`\\b${escape(key)}`).test(haystack);
+
+/**
+ * A single short generic word is not enough evidence to pick a topic. Roughly
+ * "one distinctive term, or two weak ones".
+ */
+const MIN_SCORE = 5;
+
+export interface LocalAnswer {
+  text: string;
+  /** False when nothing matched and `text` is the generic catch-all. */
+  matched: boolean;
+}
+
+/**
+ * Always returns something sensible. Used when the model is unreachable.
+ *
+ * `matched` lets the caller be honest: a matched answer is written to a topic
+ * rather than to the question, so it needs to be framed as such instead of
+ * being presented as a direct reply.
+ */
+export function localAnswer(text: string): LocalAnswer {
   const t = norm(text);
 
   if (GREET.test(t) && t.length < 20) {
-    return "Hey! Ask me anything about Khaled's work, his stack, or what he's shipped.";
+    return {
+      text: "Hey! Ask me anything about Khaled's work, his stack, or what he's shipped.",
+      matched: true,
+    };
   }
   if (THANKS.test(t) && t.length < 25) {
-    return "Anytime. If you want to take it further, he's at **khaledmohamedsalleh@gmail.com**.";
+    return {
+      text: "Anytime. If you want to take it further, he's at **khaledmohamedsalleh@gmail.com**.",
+      matched: true,
+    };
   }
 
   const scored = RULES.map((r) => ({
     r,
-    score: r.keys.reduce((n, k) => (t.includes(k) ? n + k.length : n), 0),
+    score: r.keys.reduce((n, k) => (hits(t, k) ? n + k.length : n), 0),
   }))
-    .filter((x) => x.score > 0)
+    .filter((x) => x.score >= MIN_SCORE)
     .sort((a, b) => b.score - a.score);
 
-  if (scored.length) return scored[0].r.answer;
-  if (WHO.test(t)) return WHO_ANSWER;
+  if (scored.length) return { text: scored[0].r.answer, matched: true };
+  if (WHO.test(t)) return { text: WHO_ANSWER, matched: true };
 
-  return `I can't reach my model right now, so I'm answering from memory.
+  return {
+    matched: false,
+    text: `I can't reach my model right now, so I'm answering from memory and I don't have a good match for that one.
 
 Khaled is a **software engineer and AI developer** in Cairo, currently at Agile Worx. He builds AI-powered products with React, Next.js, Python and FastAPI, and specialises in Arabic and RTL engineering.
 
-Try asking about his **projects**, his **stack**, his **AI work**, or his **experience**. For anything specific, email **khaledmohamedsalleh@gmail.com**.`;
+Try asking about his **projects**, his **stack**, his **AI work**, or his **experience**, or ask me again in a moment and I should be back. For anything specific, email **khaledmohamedsalleh@gmail.com**.`,
+  };
 }
+
+/** Back-compat wrapper for callers that only want the text. */
+export const keywordAnswer = (text: string): string => localAnswer(text).text;

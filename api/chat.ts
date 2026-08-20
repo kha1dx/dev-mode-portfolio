@@ -12,16 +12,45 @@ import { SYSTEM_PROMPT } from "./_knowledge";
  * current Flash model, so it survives deprecations; the pinned ones behind it
  * are there for when the alias is saturated. The free tier returns 503
  * "experiencing high demand" fairly often, which is what this chain is for.
+ *
+ * The tail is deliberately older/lighter models. They are less contended than
+ * the current Flash, so when the front of the chain is saturated they are the
+ * ones that actually answer. A slightly weaker real answer beats a canned one.
  */
-const MODELS = (process.env.CHAT_MODEL || "gemini-flash-latest,gemini-3.6-flash,gemini-3.5-flash-lite")
+const MODELS = (
+  process.env.CHAT_MODEL ||
+  "gemini-flash-latest,gemini-3.6-flash,gemini-3.5-flash-lite,gemini-flash-lite-latest,gemini-2.5-flash"
+)
   .split(",")
   .map((m) => m.trim())
   .filter(Boolean);
 
-const RETRYABLE = new Set([429, 500, 502, 503, 504]);
+const RETRYABLE = new Set([408, 429, 500, 502, 503, 504]);
+/** Attempts per model before moving down the chain. */
+const ATTEMPTS = 3;
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const MAX_HISTORY = 12;
 const MAX_CHARS = 1500;
+
+/**
+ * Under load the Gemini free tier sometimes answers a perfectly valid model
+ * with a bare 404 and an empty body — the same request succeeds seconds later.
+ * A genuinely wrong model name always comes back with a NOT_FOUND JSON body,
+ * so the empty body is what separates "overloaded" from "does not exist".
+ */
+const isTransient = (status: number, body: string) =>
+  RETRYABLE.has(status) || (status === 404 && body.trim() === "");
+
+/** Exponential backoff with jitter, so retries do not sync up across visitors. */
+const backoff = (attempt: number) =>
+  Math.round((400 * 2 ** attempt) * (0.75 + Math.random() * 0.5));
+
+/**
+ * Ceiling on the whole model/retry matrix. Working through every model at full
+ * backoff would take longer than a visitor will sit and watch a blank bubble;
+ * past this point the local answer is the better product.
+ */
+const BUDGET_MS = 9_000;
 
 type Role = "user" | "assistant";
 interface InMessage { role: Role; content: string; }
@@ -99,8 +128,14 @@ export default async function handler(req: Request): Promise<Response> {
   });
 
   let upstream: Response | null = null;
+  let lastStatus = 0;
+  const deadline = Date.now() + BUDGET_MS;
   outer: for (const model of MODELS) {
-    for (let attempt = 0; attempt < 2; attempt++) {
+    for (let attempt = 0; attempt < ATTEMPTS; attempt++) {
+      if (Date.now() > deadline) {
+        console.error("[chat] gave up: budget exhausted");
+        break outer;
+      }
       try {
         const res = await fetch(
           `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${key}`,
@@ -110,21 +145,27 @@ export default async function handler(req: Request): Promise<Response> {
           upstream = res;
           break outer;
         }
+        lastStatus = res.status;
         const detail = await res.text().catch(() => "");
         console.error(`[chat] ${model} attempt ${attempt + 1}: ${res.status} ${detail.slice(0, 160)}`);
-        if (!RETRYABLE.has(res.status)) break; // 400/404: next model, no retry
-        await sleep(400 * (attempt + 1));
+        // A hard error (bad key, bad model name, malformed body) will not fix
+        // itself; go straight to the next model instead of burning the budget.
+        if (!isTransient(res.status, detail)) break;
+        await sleep(backoff(attempt));
       } catch (err) {
         console.error(`[chat] ${model} network error`, err);
-        await sleep(400 * (attempt + 1));
+        await sleep(backoff(attempt));
       }
     }
   }
 
   if (!upstream) {
     // Every model and retry failed. The client answers from its local
-    // keyword bank instead of showing an error.
-    return json({ error: "upstream_unavailable", fallback: true }, 503);
+    // keyword bank instead of showing an error, and says so out loud.
+    return json(
+      { error: "upstream_unavailable", fallback: true, upstreamStatus: lastStatus },
+      503
+    );
   }
 
   // Re-emit Gemini's SSE as a bare text stream the client can just append.

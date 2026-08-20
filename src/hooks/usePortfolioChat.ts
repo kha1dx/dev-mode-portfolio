@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   SUGGESTIONS as CANNED,
   cannedAnswer,
-  keywordAnswer,
+  localAnswer,
 } from "../data/assistantFallback";
 import { capture } from "@/lib/posthog";
 
@@ -14,6 +14,14 @@ export interface ChatMsg {
 
 const GREETING =
   "Hey! I'm Khaled's assistant. Ask me anything about his work, his stack, or what he's shipped. I know all of it.";
+
+/**
+ * Prefixed to keyword-bank answers. Those answers are written to a topic, not
+ * to the question, so without this line a near-miss reads as a confident reply
+ * to something the visitor never asked.
+ */
+const OFFLINE_NOTE =
+  "_I can't reach my model right now, so here's what I know on the closest topic._";
 
 export const SUGGESTIONS = CANNED.map((s) => s.q);
 
@@ -107,18 +115,31 @@ export function usePortfolioChat() {
           rafRef.current = requestAnimationFrame(tick);
         });
 
-      // Suggestion chips answer instantly and never touch the API.
-      const canned = cannedAnswer(text);
-      if (canned) {
-        capture("assistant_answered", { source: "canned" });
-        await typeOut(canned);
-        setIsStreaming(false);
-        return;
-      }
-
       const controller = new AbortController();
       abortRef.current = controller;
-      const fail = (msg: string) => setContent(replyId, msg);
+
+      /**
+       * The model is always tried first, suggestion chips included, so a
+       * visitor gets an answer to the question they actually asked. Only when
+       * the model is unreachable do we drop to the local banks, and then we
+       * say so rather than passing pre-written copy off as a fresh answer.
+       *
+       * Order matters: a chip has an exact hand-written answer, so it beats
+       * keyword matching. Keyword matching is last because it can only ever
+       * approximate the question.
+       */
+      const fallback = async (reason: string) => {
+        capture("assistant_fallback_used", { reason });
+        const canned = cannedAnswer(text);
+        if (canned) {
+          await typeOut(canned);
+          return;
+        }
+        const local = localAnswer(text);
+        await typeOut(
+          local.matched ? `${OFFLINE_NOTE}\n\n${local.text}` : local.text
+        );
+      };
 
       try {
         const res = await fetch("/api/chat", {
@@ -129,15 +150,23 @@ export function usePortfolioChat() {
         });
 
         if (!res.ok || !res.body) {
-          let msg = keywordAnswer(text);
+          // A server-authored message (misconfigured key, rate limit) is a real
+          // answer and should be shown as-is. "upstream_unavailable" is not; it
+          // just means every model was busy, which is what the local banks are for.
+          let serverMsg: string | null = null;
           try {
             const data = await res.json();
             if (data?.error && data.error !== "upstream_unavailable" && !data.fallback) {
-              msg = data.error;
+              serverMsg = data.error;
             }
-          } catch { /* non-JSON body: keep the local answer */ }
-          capture("assistant_fallback_used", { reason: "http_" + res.status });
-          fail(msg);
+          } catch { /* non-JSON body: fall through to the local banks */ }
+
+          if (serverMsg) {
+            capture("assistant_fallback_used", { reason: "server_message" });
+            setContent(replyId, serverMsg);
+          } else {
+            await fallback("http_" + res.status);
+          }
           return;
         }
 
@@ -166,8 +195,7 @@ export function usePortfolioChat() {
         cancelRaf();
         setContent(replyId, acc);
         if (!acc.trim()) {
-          capture("assistant_fallback_used", { reason: "empty_body" });
-          fail(keywordAnswer(text));
+          await fallback("empty_body");
         } else {
           capture("assistant_answered", {
             source: "api",
@@ -176,10 +204,7 @@ export function usePortfolioChat() {
         }
       } catch (err) {
         if ((err as Error)?.name !== "AbortError") {
-          capture("assistant_fallback_used", {
-            reason: (err as Error)?.name || "network_error",
-          });
-          fail(keywordAnswer(text));
+          await fallback((err as Error)?.name || "network_error");
         }
       } finally {
         setIsStreaming(false);

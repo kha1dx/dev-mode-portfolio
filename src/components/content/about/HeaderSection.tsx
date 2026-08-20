@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { capture } from "@/lib/posthog";
 
 interface HeaderSectionProps {
   onNavigate?: (action: string) => void;
@@ -10,6 +11,7 @@ export const HeaderSection = ({ onNavigate }: HeaderSectionProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleDownloadCV = () => {
+    capture("resume_downloaded", { source: "header" });
     // Google Drive file direct download link
     const cvUrl =
       "https://drive.google.com/file/d/1iWom-JuP9H-Q2WzWCf966qLZ8vWoVZOo/view?usp=sharing";

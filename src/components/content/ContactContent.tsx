@@ -14,6 +14,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { profile, emailHref } from "@/data/profile";
+import { capture, captureError } from "@/lib/posthog";
 
 export const ContactContent = () => {
   // Apply the app height hook
@@ -81,6 +82,7 @@ export const ContactContent = () => {
         );
       }
 
+      capture("contact_message_sent");
       setSubmitSuccess(true);
       setFormData({ name: "", email: "", subject: "", message: "", budget: "" });
 
@@ -91,6 +93,10 @@ export const ContactContent = () => {
 
       setTimeout(() => setSubmitSuccess(false), 3000);
     } catch (error: any) {
+      captureError(error, { context: "contact_content_form" });
+      capture("contact_message_failed", {
+        error_type: error instanceof Error ? error.name : "unknown_error",
+      });
       console.error("Email Error:", error);
       toast({
         title: "Error sending message",
@@ -106,6 +112,7 @@ export const ContactContent = () => {
   const copyToClipboard = async (text: string, field: string) => {
     try {
       await navigator.clipboard.writeText(text);
+      capture("contact_detail_copied", { contact_type: field.toLowerCase() });
       setCopiedField(field);
       setTimeout(() => setCopiedField(""), 2000);
     } catch (err) {

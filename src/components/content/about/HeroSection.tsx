@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import gsap from "gsap";
 import { redirect } from "react-router-dom";
 import { Contact } from "lucide-react";
+import { capture } from "@/lib/posthog";
 
 interface HeroSectionProps {
   onNavigate?: (action: string) => void;
@@ -26,6 +27,7 @@ export const HeroSection = ({ onNavigate }: HeroSectionProps = {}) => {
   ];
 
   const handleDownloadCV = () => {
+    capture("resume_downloaded", { source: "hero" });
     // Google Drive file direct download link
     const cvUrl =
       "https://drive.google.com/uc?export=download&id=1o6bglo83JzITmzZQkOsxPg4POQeLaVox";
